@@ -15,6 +15,7 @@ namespace buffkinz {
             struct Vertex {
                 glm::vec3 position;
                 glm::vec3 color;
+                glm::vec3 normal;
 
                 static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
                 static std::vector<VkVertexInputAttributeDescription> getAttribueDescriptions();
@@ -27,8 +28,7 @@ namespace buffkinz {
             BuffkinzModel &operator = (const BuffkinzModel &) = delete;
 
             void bind(VkCommandBuffer commandBuffer);
-            void draw(VkCommandBuffer commandBuffer);
-            void loadModels();
+            void draw(VkCommandBuffer commandBuffer, uint32_t firstIndex, int32_t vertexOffset);
             
         private: 
 
@@ -42,6 +42,6 @@ namespace buffkinz {
             VkDeviceMemory indexBufferMemory;
             uint32_t vertexCount;
             std::vector<uint32_t> indicesModel;
-            const std::string MODEL_PATH = "model/DolBarriersuit.obj";
+            
     };
 }

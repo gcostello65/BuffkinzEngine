@@ -11,6 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <string>
 #include <chrono>
+#include <glm/gtc/matrix_inverse.hpp>
 
 namespace buffkinz {
 
@@ -71,6 +72,13 @@ namespace buffkinz {
                     attrib.vertices[3 * index.vertex_index + 2]
                 };
 
+                vertex.normal = {
+                    attrib.normals[3 * index.normal_index + 0],
+                    attrib.normals[3 * index.normal_index + 1],
+                    attrib.normals[3 * index.normal_index + 2]
+                };
+
+
                 // vertex.texCoord = {
                 //     attrib.texcoords[2 * index.texcoord_index + 0],
                 //     attrib.texcoords[2 * index.texcoord_index + 1]
@@ -83,9 +91,47 @@ namespace buffkinz {
             }
         }
 
+        vertexOffset = i;
+        indexOffset = i;
+
+        
+        // std::string temp = "../model/sword.obj";
+        // if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, temp.c_str())) {
+        //     throw std::runtime_error(warn + err);
+        // }
+
+        // i = 0;
+        // for (const auto& shape : shapes) {
+        //     for (const auto& index : shape.mesh.indices) {
+        //         BuffkinzModel::Vertex vertex{};
+        //         vertex.position  = {
+        //             attrib.vertices[3 * index.vertex_index + 0],
+        //             attrib.vertices[3 * index.vertex_index + 1],
+        //             attrib.vertices[3 * index.vertex_index + 2]
+        //         };
+
+        //         vertex.normal = {
+        //             attrib.normals[3 * index.normal_index + 0],
+        //             attrib.normals[3 * index.normal_index + 1],
+        //             attrib.normals[3 * index.normal_index + 2]
+        //         };
+
+
+        //         // vertex.texCoord = {
+        //         //     attrib.texcoords[2 * index.texcoord_index + 0],
+        //         //     attrib.texcoords[2 * index.texcoord_index + 1]
+        //         // };
+                
+        //         vertex.color = {(i % 3) * 1.0f, (i % 3) * 1.0f, (i % 3) * 1.0f};
+        //         i++;
+        //         vertices.push_back(vertex);
+        //         indices.push_back(indices.size());
+        //     }
+        // }
+
 
         buffkinzModel = std::make_unique<BuffkinzModel>(buffkinzDevice, vertices, indices);
-}
+    }   
 
     void BuffkinzApp::createDescriptorSetLayout() {
         VkDescriptorSetLayoutBinding uboLayoutBinding{};
@@ -282,7 +328,7 @@ namespace buffkinz {
             vkCmdBindDescriptorSets(commandBuffers[imageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[imageIndex], 0, nullptr);    
 
             buffkinzModel->bind(commandBuffers[imageIndex]);
-            buffkinzModel->draw(commandBuffers[imageIndex]);
+            buffkinzModel->draw(commandBuffers[imageIndex], 0, 0);
 
             vkCmdEndRenderPass(commandBuffers[imageIndex]);
             if (vkEndCommandBuffer(commandBuffers[imageIndex]) != VK_SUCCESS) {
@@ -297,12 +343,14 @@ namespace buffkinz {
         float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
         BuffkinzApp::UniformBufferObject ubo{};
-        ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -9.0f, 0.0f));
+        ubo.model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -9.0f, 0.0f));
 
+        ubo.lightTransform = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-        ubo.view = glm::lookAt(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        ubo.view = glm::lookAt(glm::vec3(-20.0f, 10.0f, -15.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
         ubo.proj = glm::perspective(glm::radians(60.0f), buffkinzSwapChain->width() / (float) buffkinzSwapChain->height(), 0.1f, 100.0f);
+
         ubo.proj[1][1] *= -1;
 
 

@@ -53,8 +53,8 @@ namespace buffkinz {
     vkFreeMemory(buffkinzDevice.device(), stagingBufferMemory, nullptr);
     }
 
-    void BuffkinzModel::draw(VkCommandBuffer commandBuffer) {
-        vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indicesModel.size()), 1, 0, 0, 0);
+    void BuffkinzModel::draw(VkCommandBuffer commandBuffer, uint32_t firstIndex, int32_t vertexOffset) {
+        vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indicesModel.size()), 1, firstIndex, vertexOffset, 0);
     }
     void BuffkinzModel::bind(VkCommandBuffer commandBuffer) {
         VkBuffer buffers[] = {vertexBuffer};
@@ -72,7 +72,7 @@ namespace buffkinz {
     }
     
     std::vector<VkVertexInputAttributeDescription> BuffkinzModel::Vertex::getAttribueDescriptions() {
-         std::vector<VkVertexInputAttributeDescription> attributeDescriptions(2);
+         std::vector<VkVertexInputAttributeDescription> attributeDescriptions(3);
          attributeDescriptions[0].binding = 0;
          attributeDescriptions[0].location = 0;
          attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
@@ -82,6 +82,12 @@ namespace buffkinz {
          attributeDescriptions[1].location = 1;
          attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
          attributeDescriptions[1].offset = offsetof(Vertex, color);
+
+         attributeDescriptions[2].binding = 0;
+         attributeDescriptions[2].location = 2;
+         attributeDescriptions[2].format = VK_FORMAT_R32G32B32_SFLOAT;
+         attributeDescriptions[2].offset = offsetof(Vertex, normal);
+
          return attributeDescriptions;
     }
 }

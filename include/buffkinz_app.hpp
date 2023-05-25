@@ -18,10 +18,11 @@ namespace buffkinz {
                 glm::mat4 model;
                 glm::mat4 view;
                 glm::mat4 proj;
+                glm::mat4 lightTransform;
         };
         
-            static constexpr int WIDTH = 800;
-            static constexpr int HEIGHT = 600;
+            static constexpr int WIDTH = 1920;
+            static constexpr int HEIGHT = 1080;
 
             BuffkinzApp();
             ~BuffkinzApp();
@@ -62,6 +63,8 @@ namespace buffkinz {
 
             std::vector<VkDescriptorSet> descriptorSets;
             const std::string MODEL_PATH = "../model/DolBarriersuit.obj";
+            int32_t vertexOffset;
+            uint32_t indexOffset;
 
     };
 }
