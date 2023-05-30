@@ -1,0 +1,4 @@
+/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir
+/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug/CMakeFiles/shaders.dir
+/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug/CMakeFiles/rebuild_cache.dir

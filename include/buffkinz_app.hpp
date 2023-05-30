@@ -65,7 +65,7 @@ namespace buffkinz {
             VkDescriptorPool descriptorPool;
 
             std::vector<VkDescriptorSet> descriptorSets;
-            const std::string MODEL_PATH = "../model/DolBarriersuit.obj";
+            const std::string MODEL_PATH = "../model/env.obj";
             int32_t vertexOffset;
             uint32_t indexOffset;
             Scene::Camera camera{};

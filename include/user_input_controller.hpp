@@ -19,7 +19,7 @@ namespace buffkinz {
         float moveSpeed = 0.1f;
 
         InputTypes inputs{};
-        void keyMovement(GLFWwindow* window, Scene::Camera& camera);
+        void keyMovement(GLFWwindow* window, float dt, Scene::Camera& camera);
         };
         
 }

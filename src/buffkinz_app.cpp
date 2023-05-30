@@ -7,6 +7,7 @@
 
 #define GLM_FORCE_RADIANS
 #define TINYOBJLOADER_IMPLEMENTATION
+
 #include <tiny_obj_loader.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -46,24 +47,32 @@ namespace buffkinz {
     }
 
     void BuffkinzApp::run() {
+
+        auto currentTime = std::chrono::high_resolution_clock::now();
+
         while (!buffkinzWindow.shouldClose()) {
             glfwPollEvents();
+
+            auto newTime = std::chrono::high_resolution_clock::now();
+            float frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
+            currentTime = newTime;
+
             glfwSetInputMode(buffkinzWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        
-            controller.keyMovement(buffkinzWindow.getWindow(), camera);
-            
+
+            controller.keyMovement(buffkinzWindow.getWindow(), frameTime, camera);
+
             drawFrame();
             vkDeviceWaitIdle(buffkinzDevice.device());
         }
     }
 
     void BuffkinzApp::loadModels() {
-        std::vector<BuffkinzModel::Vertex> vertices;
-        std::vector<uint32_t> indices;
+        std::vector <BuffkinzModel::Vertex> vertices;
+        std::vector <uint32_t> indices;
 
         tinyobj::attrib_t attrib;
-        std::vector<tinyobj::shape_t> shapes;
-        std::vector<tinyobj::material_t> materials;
+        std::vector <tinyobj::shape_t> shapes;
+        std::vector <tinyobj::material_t> materials;
         std::string warn, err;
 
         if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, MODEL_PATH.c_str())) {
@@ -71,19 +80,19 @@ namespace buffkinz {
         }
 
         int i = 0;
-        for (const auto& shape : shapes) {
-            for (const auto& index : shape.mesh.indices) {
+        for (const auto &shape: shapes) {
+            for (const auto &index: shape.mesh.indices) {
                 BuffkinzModel::Vertex vertex{};
-                vertex.position  = {
-                    attrib.vertices[3 * index.vertex_index + 0],
-                    attrib.vertices[3 * index.vertex_index + 1],
-                    attrib.vertices[3 * index.vertex_index + 2]
+                vertex.position = {
+                        attrib.vertices[3 * index.vertex_index + 0],
+                        attrib.vertices[3 * index.vertex_index + 1],
+                        attrib.vertices[3 * index.vertex_index + 2]
                 };
 
                 vertex.normal = {
-                    attrib.normals[3 * index.normal_index + 0],
-                    attrib.normals[3 * index.normal_index + 1],
-                    attrib.normals[3 * index.normal_index + 2]
+                        attrib.normals[3 * index.normal_index + 0],
+                        attrib.normals[3 * index.normal_index + 1],
+                        attrib.normals[3 * index.normal_index + 2]
                 };
 
 
@@ -91,7 +100,7 @@ namespace buffkinz {
                 //     attrib.texcoords[2 * index.texcoord_index + 0],
                 //     attrib.texcoords[2 * index.texcoord_index + 1]
                 // };
-                
+
                 vertex.color = {(i % 3) * 1.0f, (i % 3) * 1.0f, (i % 3) * 1.0f};
                 i++;
                 vertices.push_back(vertex);
@@ -102,7 +111,7 @@ namespace buffkinz {
         vertexOffset = i;
         indexOffset = i;
 
-        
+
         // std::string temp = "../model/sword.obj";
         // if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, temp.c_str())) {
         //     throw std::runtime_error(warn + err);
@@ -129,7 +138,7 @@ namespace buffkinz {
         //         //     attrib.texcoords[2 * index.texcoord_index + 0],
         //         //     attrib.texcoords[2 * index.texcoord_index + 1]
         //         // };
-                
+
         //         vertex.color = {(i % 3) * 1.0f, (i % 3) * 1.0f, (i % 3) * 1.0f};
         //         i++;
         //         vertices.push_back(vertex);
@@ -139,7 +148,7 @@ namespace buffkinz {
 
 
         buffkinzModel = std::make_unique<BuffkinzModel>(buffkinzDevice, vertices, indices);
-    }   
+    }
 
     void BuffkinzApp::createDescriptorSetLayout() {
         VkDescriptorSetLayoutBinding uboLayoutBinding{};
@@ -154,7 +163,8 @@ namespace buffkinz {
         layoutInfo.bindingCount = 1;
         layoutInfo.pBindings = &uboLayoutBinding;
 
-        if (vkCreateDescriptorSetLayout(buffkinzDevice.device(), &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
+        if (vkCreateDescriptorSetLayout(buffkinzDevice.device(), &layoutInfo, nullptr, &descriptorSetLayout) !=
+            VK_SUCCESS) {
             throw std::runtime_error("failed to create descriptor set layout!");
         }
     }
@@ -167,9 +177,11 @@ namespace buffkinz {
         uniformBuffersMapped.resize(buffkinzSwapChain->imageCount());
 
         for (size_t i = 0; i < buffkinzSwapChain->imageCount(); i++) {
-        buffkinzDevice.createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i]);
+            buffkinzDevice.createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                                        uniformBuffers[i], uniformBuffersMemory[i]);
 
-        vkMapMemory(buffkinzDevice.device(), uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
+            vkMapMemory(buffkinzDevice.device(), uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
         }
     }
 
@@ -180,7 +192,8 @@ namespace buffkinz {
         pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
         pipelineLayoutInfo.pushConstantRangeCount = 0;
         pipelineLayoutInfo.pPushConstantRanges = nullptr;
-        if (vkCreatePipelineLayout(buffkinzDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
+        if (vkCreatePipelineLayout(buffkinzDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) !=
+            VK_SUCCESS) {
             throw std::runtime_error("failed to create pipeline layout!");
         }
     }
@@ -195,10 +208,10 @@ namespace buffkinz {
         pipelineConfig.renderPass = buffkinzSwapChain->getRenderPass();
         pipelineConfig.pipelineLayout = pipelineLayout;
         buffkinzPipeline = std::make_unique<BuffkinzPipeline>(
-            buffkinzDevice,
-            "./shaders/simple_shader.vert.spv",
-            "./shaders/simple_shader.frag.spv",
-            pipelineConfig);
+                buffkinzDevice,
+                "./shaders/simple_shader.vert.spv",
+                "./shaders/simple_shader.frag.spv",
+                pipelineConfig);
     }
 
     void BuffkinzApp::recreateSwapChain() {
@@ -212,19 +225,21 @@ namespace buffkinz {
         if (buffkinzSwapChain == nullptr) {
             buffkinzSwapChain = std::make_unique<BuffkinzSwapChain>(buffkinzDevice, extent);
         } else {
-            buffkinzSwapChain = std::make_unique<BuffkinzSwapChain>(buffkinzDevice, extent, std::move(buffkinzSwapChain));
+            buffkinzSwapChain = std::make_unique<BuffkinzSwapChain>(buffkinzDevice, extent,
+                                                                    std::move(buffkinzSwapChain));
             if (buffkinzSwapChain->imageCount() != commandBuffers.size()) {
                 freeCommandBuffers();
                 createCommandBuffers();
             }
-        }  
+        }
         createPipeline();
 
-    
+
     }
 
     void BuffkinzApp::freeCommandBuffers() {
-        vkFreeCommandBuffers(buffkinzDevice.device(), buffkinzDevice.getCommandPool(), static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
+        vkFreeCommandBuffers(buffkinzDevice.device(), buffkinzDevice.getCommandPool(),
+                             static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
         commandBuffers.clear();
     }
 
@@ -245,7 +260,7 @@ namespace buffkinz {
     void BuffkinzApp::createDescriptorPool() {
         VkDescriptorPoolSize poolSize{};
         poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        poolSize.descriptorCount = static_cast<uint32_t>(buffkinzSwapChain->imageCount());     
+        poolSize.descriptorCount = static_cast<uint32_t>(buffkinzSwapChain->imageCount());
 
         VkDescriptorPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
@@ -260,7 +275,7 @@ namespace buffkinz {
     }
 
     void BuffkinzApp::createDescriptorSets() {
-        std::vector<VkDescriptorSetLayout> layouts(buffkinzSwapChain->imageCount(), descriptorSetLayout);
+        std::vector <VkDescriptorSetLayout> layouts(buffkinzSwapChain->imageCount(), descriptorSetLayout);
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
         allocInfo.descriptorPool = descriptorPool;
@@ -299,49 +314,50 @@ namespace buffkinz {
 
     void BuffkinzApp::recordCommandBuffer(int imageIndex) {
         VkCommandBufferBeginInfo beginInfo{};
-            beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
-            if (vkBeginCommandBuffer(commandBuffers[imageIndex], &beginInfo) != VK_SUCCESS) {
-                throw std::runtime_error("failed to begin recording command buffer");
-            }
+        if (vkBeginCommandBuffer(commandBuffers[imageIndex], &beginInfo) != VK_SUCCESS) {
+            throw std::runtime_error("failed to begin recording command buffer");
+        }
 
 
-            VkRenderPassBeginInfo renderPassInfo{};
-            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            renderPassInfo.renderPass = buffkinzSwapChain->getRenderPass();
-            renderPassInfo.framebuffer = buffkinzSwapChain->getFrameBuffer(imageIndex);
-            renderPassInfo.renderArea.offset = {0,0};
-            renderPassInfo.renderArea.extent = buffkinzSwapChain->getSwapChainExtent();
+        VkRenderPassBeginInfo renderPassInfo{};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        renderPassInfo.renderPass = buffkinzSwapChain->getRenderPass();
+        renderPassInfo.framebuffer = buffkinzSwapChain->getFrameBuffer(imageIndex);
+        renderPassInfo.renderArea.offset = {0, 0};
+        renderPassInfo.renderArea.extent = buffkinzSwapChain->getSwapChainExtent();
 
-            std::array<VkClearValue, 2> clearValues{};
-            clearValues[0].color = {0.1f, 0.1f, 0.1f, 0.1f};
-            clearValues[1].depthStencil = {1.0f, 0};
-            renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-            renderPassInfo.pClearValues = clearValues.data();
+        std::array<VkClearValue, 2> clearValues{};
+        clearValues[0].color = {0.1f, 0.1f, 0.1f, 0.1f};
+        clearValues[1].depthStencil = {1.0f, 0};
+        renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+        renderPassInfo.pClearValues = clearValues.data();
 
-            vkCmdBeginRenderPass(commandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdBeginRenderPass(commandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-            VkViewport viewport{};
-            viewport.x = 0.0f;
-            viewport.y = 0.0f;
-            viewport.width = static_cast<float>(buffkinzSwapChain->getSwapChainExtent().width);
-            viewport.height = static_cast<float>(buffkinzSwapChain->getSwapChainExtent().height);
-            viewport.minDepth = 0.0f;
-            viewport.maxDepth = 1.0f;
-            VkRect2D scissor{{0, 0}, buffkinzSwapChain->getSwapChainExtent()};
-            vkCmdSetViewport(commandBuffers[imageIndex], 0, 1, &viewport);
-            vkCmdSetScissor(commandBuffers[imageIndex], 0, 1, &scissor);
+        VkViewport viewport{};
+        viewport.x = 0.0f;
+        viewport.y = 0.0f;
+        viewport.width = static_cast<float>(buffkinzSwapChain->getSwapChainExtent().width);
+        viewport.height = static_cast<float>(buffkinzSwapChain->getSwapChainExtent().height);
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+        VkRect2D scissor{{0, 0}, buffkinzSwapChain->getSwapChainExtent()};
+        vkCmdSetViewport(commandBuffers[imageIndex], 0, 1, &viewport);
+        vkCmdSetScissor(commandBuffers[imageIndex], 0, 1, &scissor);
 
-            buffkinzPipeline->bind(commandBuffers[imageIndex]);
-            vkCmdBindDescriptorSets(commandBuffers[imageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[imageIndex], 0, nullptr);    
+        buffkinzPipeline->bind(commandBuffers[imageIndex]);
+        vkCmdBindDescriptorSets(commandBuffers[imageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1,
+                                &descriptorSets[imageIndex], 0, nullptr);
 
-            buffkinzModel->bind(commandBuffers[imageIndex]);
-            buffkinzModel->draw(commandBuffers[imageIndex], 0, 0);
+        buffkinzModel->bind(commandBuffers[imageIndex]);
+        buffkinzModel->draw(commandBuffers[imageIndex], 0, 0);
 
-            vkCmdEndRenderPass(commandBuffers[imageIndex]);
-            if (vkEndCommandBuffer(commandBuffers[imageIndex]) != VK_SUCCESS) {
-                throw std::runtime_error("failed to record command buffer");
-            }
+        vkCmdEndRenderPass(commandBuffers[imageIndex]);
+        if (vkEndCommandBuffer(commandBuffers[imageIndex]) != VK_SUCCESS) {
+            throw std::runtime_error("failed to record command buffer");
+        }
     }
 
     void BuffkinzApp::updateUniformBuffer(int imageIndex) {
@@ -351,15 +367,16 @@ namespace buffkinz {
         float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
         BuffkinzApp::UniformBufferObject ubo{};
-        ubo.model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -9.0f, -40.0f));
+        ubo.model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -9.0f, 40.0f));
+        //* glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-        // ubo.lightTransform = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-                ubo.lightTransform = glm::mat4(1);
+        ubo.lightTransform = glm::rotate(glm::mat4(1.0f), time * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 
         ubo.view = glm::lookAt(camera.position, camera.position + camera.lookDir, camera.up);
 
-        ubo.proj = glm::perspective(glm::radians(60.0f), buffkinzSwapChain->width() / (float) buffkinzSwapChain->height(), 0.1f, 100.0f);
+        ubo.proj = glm::perspective(glm::radians(60.0f),
+                                    buffkinzSwapChain->width() / (float) buffkinzSwapChain->height(), 0.1f, 100.0f);
 
         ubo.proj[1][1] *= -1;
 
@@ -381,7 +398,7 @@ namespace buffkinz {
             throw std::runtime_error("failed to acquire swap chain image");
         }
 
-        
+
         recordCommandBuffer(imageIndex);
 
         VkSubmitInfo submitInfo{};
