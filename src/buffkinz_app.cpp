@@ -1,4 +1,5 @@
 #include <buffkinz_app.hpp>
+#include "user_input_controller.hpp"
 
 #include <stdexcept>
 #include<array>
@@ -18,6 +19,9 @@ namespace buffkinz {
     BuffkinzApp::BuffkinzApp() {
 
         loadModels();
+        camera.position = glm::vec3(0.0f, 0.0f, 0.0f);
+        camera.lookDir = glm::vec3(0.0f, 0.0f, 1.0f);
+        camera.up = glm::vec3(0.0f, 1.0f, 0.0f);
         createDescriptorSetLayout();
         createPipelineLayout();
         recreateSwapChain();
@@ -44,6 +48,10 @@ namespace buffkinz {
     void BuffkinzApp::run() {
         while (!buffkinzWindow.shouldClose()) {
             glfwPollEvents();
+            glfwSetInputMode(buffkinzWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        
+            controller.keyMovement(buffkinzWindow.getWindow(), camera);
+            
             drawFrame();
             vkDeviceWaitIdle(buffkinzDevice.device());
         }
@@ -306,7 +314,7 @@ namespace buffkinz {
             renderPassInfo.renderArea.extent = buffkinzSwapChain->getSwapChainExtent();
 
             std::array<VkClearValue, 2> clearValues{};
-            clearValues[0].color = {0.0f, 0.0f, 0.0f, 0.0f};
+            clearValues[0].color = {0.1f, 0.1f, 0.1f, 0.1f};
             clearValues[1].depthStencil = {1.0f, 0};
             renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
             renderPassInfo.pClearValues = clearValues.data();
@@ -343,11 +351,13 @@ namespace buffkinz {
         float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
         BuffkinzApp::UniformBufferObject ubo{};
-        ubo.model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -9.0f, 0.0f));
+        ubo.model = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -9.0f, -40.0f));
 
-        ubo.lightTransform = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        // ubo.lightTransform = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+                ubo.lightTransform = glm::mat4(1);
 
-        ubo.view = glm::lookAt(glm::vec3(-20.0f, 10.0f, -15.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+        ubo.view = glm::lookAt(camera.position, camera.position + camera.lookDir, camera.up);
 
         ubo.proj = glm::perspective(glm::radians(60.0f), buffkinzSwapChain->width() / (float) buffkinzSwapChain->height(), 0.1f, 100.0f);
 

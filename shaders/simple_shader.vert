@@ -14,10 +14,10 @@ layout(set = 0, binding = 0) uniform UniformBufferObject {
 layout(location = 0) out vec3 fragColor;
 
 void main() {
-    vec4 light = vec4(-1.0 / sqrt(2.0), 0.0, 1.0 / sqrt(2.0), 0.0);
+    vec4 light = vec4(0.0, 0.0, -1.0, 0.0);
     vec4 positionTrans = ubo.proj * ubo.view * ubo.model * vec4(position, 1.0);
 
-    mat4 transformNormal = transpose(inverse(ubo.view * ubo.model));
+    mat4 transformNormal = transpose(inverse(ubo.model));
     vec4 normalTrans = transformNormal * vec4(normal, 0.0);
     vec4 lightTrans = ubo.lightTransform * light;
     gl_Position = positionTrans;
@@ -25,5 +25,5 @@ void main() {
     vec4 normalizedNormalTrans = normalTrans / sqrt(normalTrans.x * normalTrans.x + normalTrans.y * normalTrans.y + normalTrans.z * normalTrans.z);
     
     float shade = dot(normalizedNormalTrans, lightTrans);
-    fragColor = vec3(shade * 1.0, shade * (102.0 / 255.0), 0.0);
+    fragColor = vec3((shade * 1.0) + 0.2, (shade * 1.0) + 0.2, (shade * 1.0) + 0.2);
 }

@@ -1,10 +1,12 @@
 #pragma once
 
 #include "buffkinz_window.hpp"
+#include "user_input_controller.hpp"
 #include "buffkinz_pipeline.hpp"
 #include "buffkinz_device.hpp"
 #include "buffkinz_swap_chain.hpp"
 #include "buffkinz_model.hpp"
+#include "scene.hpp"
 
 #include <vector>
 #include <memory>
@@ -46,6 +48,7 @@ namespace buffkinz {
             void createDescriptorSetLayout();
             void createUniformBuffers();  
             void updateUniformBuffer(int imageIndex);
+            
 
             std::vector<VkBuffer> uniformBuffers;
             std::vector<VkDeviceMemory> uniformBuffersMemory;
@@ -65,6 +68,8 @@ namespace buffkinz {
             const std::string MODEL_PATH = "../model/DolBarriersuit.obj";
             int32_t vertexOffset;
             uint32_t indexOffset;
+            Scene::Camera camera{};
 
+            UserInputController controller;
     };
 }

@@ -23,6 +23,9 @@ namespace buffkinz {
             void resetWindowResizedFlag() {framebufferResized = false;}
 
             void createWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
+            GLFWwindow* getWindow() {
+                return window;
+            }
 
         private:
             static void framebufferResizeCallback(GLFWwindow *window, int width, int height);
@@ -33,6 +36,7 @@ namespace buffkinz {
             bool framebufferResized = false;
 
             std::string windowName;
+            
             GLFWwindow *window;
     };
 }
