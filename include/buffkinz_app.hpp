@@ -7,6 +7,7 @@
 #include "buffkinz_swap_chain.hpp"
 #include "buffkinz_model.hpp"
 #include "scene.hpp"
+#include "game_object.hpp"
 
 #include <vector>
 #include <memory>
@@ -14,14 +15,7 @@
 namespace buffkinz {
 
     class BuffkinzApp {
-        public: 
-
-        struct UniformBufferObject {
-                glm::mat4 model;
-                glm::mat4 view;
-                glm::mat4 proj;
-                glm::mat4 lightTransform;
-        };
+        public:
         
             static constexpr int WIDTH = 1920;
             static constexpr int HEIGHT = 1080;
@@ -35,7 +29,7 @@ namespace buffkinz {
             void run();
 
         private: 
-            void loadModels();
+            void loadGameObjects(std::vector<std::string> objFilePaths);
             void createPipelineLayout();
             void createPipeline();
             void createDescriptorPool();
@@ -47,7 +41,8 @@ namespace buffkinz {
             void recordCommandBuffer(int imageIndex);
             void createDescriptorSetLayout();
             void createUniformBuffers();  
-            void updateUniformBuffer(int imageIndex);
+            void updateUniformBuffer(int imageIndex, GameObject &object);
+            void renderGameObjects(VkCommandBuffer commandBuffer, VkDescriptorSet descriptorSet, int imageIndex);
             
 
             std::vector<VkBuffer> uniformBuffers;
@@ -60,7 +55,7 @@ namespace buffkinz {
             std::unique_ptr<BuffkinzPipeline> buffkinzPipeline;
             VkPipelineLayout pipelineLayout;
             std::vector<VkCommandBuffer> commandBuffers;
-            std::unique_ptr<BuffkinzModel> buffkinzModel;
+            std::vector<GameObject> gameObjects;
             VkDescriptorSetLayout descriptorSetLayout;
             VkDescriptorPool descriptorPool;
 

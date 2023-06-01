@@ -5,38 +5,40 @@
 #include <glm/gtx/quaternion.hpp>
 #include <algorithm>
 #include<glm/common.hpp>
-#define GLM_FORCE_RADIANS
 
+#define GLM_FORCE_RADIANS
 
 
 namespace buffkinz {
 
-    void UserInputController::keyMovement(GLFWwindow* window, float dt, Scene::Camera& camera) {
-        float angleMult = 0.8f;
+    void UserInputController::keyMovement(GLFWwindow *window, float dt, Scene::Camera &camera) {
+        float angleMult = 1.0f;
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
 
-        if ((float)xpos != 0.0f || (float)ypos != 0.0f) {
+        if ((float) xpos != 0.0f || (float) ypos != 0.0f) {
 
-        glm::quat currentLook = glm::quat(0.0f,  camera.lookDir.x,  camera.lookDir.y, camera.lookDir.z);
+            glm::quat currentLook = glm::quat(0.0f, camera.lookDir.x, camera.lookDir.y, camera.lookDir.z);
 
-        int width, height;
-        glfwGetWindowSize(window, &width, &height);
+            int width, height;
+            glfwGetWindowSize(window, &width, &height);
 
-        glm::vec3 displacement = -glm::normalize(glm::cross(camera.lookDir, camera.up)) * ((float)xpos) +
-                glm::normalize(glm::cross(glm::cross(camera.lookDir, camera.up), camera.lookDir)) * ((float)ypos);
+            glm::vec3 displacement = -glm::normalize(glm::cross(camera.lookDir, camera.up)) * ((float) xpos) +
+                                     glm::normalize(glm::cross(glm::cross(camera.lookDir, camera.up), camera.lookDir)) *
+                                     ((float) ypos);
 
-        glm::vec3 rotationAxis = glm::normalize(glm::cross(camera.lookDir, displacement));
+            glm::vec3 rotationAxis = glm::normalize(glm::cross(camera.lookDir, displacement));
 
-        float rotationAngle = glm::log(glm::dot(displacement, displacement)) * dt * angleMult;
-        std::cout << "rotationAngle: " << rotationAngle<<std::endl;
-        if (rotationAngle > 0.0f && rotationAngle < 1.5f) {
-        glm::quat rotationQuat = glm::angleAxis(rotationAngle, rotationAxis);
+            float displacementAngle = glm::log(glm::dot(displacement, displacement));
+            float rotationAngle = displacementAngle * dt * angleMult;
+            std::cout << "rotationAngle: " << rotationAngle << std::endl;
+            if (rotationAngle > 0.0f && rotationAngle < 1.5f) {
+                glm::quat rotationQuat = glm::angleAxis(rotationAngle, rotationAxis);
 
-        glm::quat result = glm::inverse(rotationQuat) * currentLook * rotationQuat;
+                glm::quat result = glm::inverse(rotationQuat) * currentLook * rotationQuat;
 
-        camera.lookDir = glm::vec3(result.x, result.y, result.z);
-        }
+                camera.lookDir = glm::vec3(result.x, result.y, result.z);
+            }
         }
         glfwSetCursorPos(window, 0, 0);
 
@@ -57,11 +59,15 @@ namespace buffkinz {
         }
 
         if (glfwGetKey(window, inputs.moveUp)) {
-            camera.position = camera.position + glm::normalize(glm::cross(glm::cross(camera.lookDir, camera.up), camera.lookDir)) * moveSpeed;
+            camera.position = camera.position +
+                              glm::normalize(glm::cross(glm::cross(camera.lookDir, camera.up), camera.lookDir)) *
+                              moveSpeed;
         }
 
         if (glfwGetKey(window, inputs.moveDown)) {
-            camera.position = camera.position - glm::normalize(glm::cross(glm::cross(camera.lookDir, camera.up), camera.lookDir)) * moveSpeed;
+            camera.position = camera.position -
+                              glm::normalize(glm::cross(glm::cross(camera.lookDir, camera.up), camera.lookDir)) *
+                              moveSpeed;
         }
     }
 }

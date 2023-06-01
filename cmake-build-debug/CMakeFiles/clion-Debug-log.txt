@@ -1,4 +1,4 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S /Users/gregcostello/Documents/dev/c++/BuffkinzEngine -B /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -S /Users/gregcostello/Documents/dev/c++/BuffkinzEngine -B /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug
 -- The C compiler identification is AppleClang 13.1.6.13160021
 -- The CXX compiler identification is AppleClang 13.1.6.13160021
 -- Detecting C compiler ABI info
@@ -15,20 +15,4 @@
 -- Found Vulkan, Including and Linking now
 -- Configuring done
 -- Generating done
-CMake Error:
-  Running
-
-   '/Applications/CLion.app/Contents/bin/ninja/mac/ninja' '-C' '/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug' '-t' 'recompact'
-
-  failed with:
-
-   ninja: warning: phony target 'shaders' names itself as an input; ignoring [-w phonycycle=warn]
-
-  ninja: error: build.ninja:221: multiple rules generate shaders [-w
-  dupbuild=err]
-
-  
-
-
-
-CMake Generate step failed.  Build files cannot be regenerated correctly.
+-- Build files have been written to: /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug

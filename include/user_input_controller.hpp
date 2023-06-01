@@ -16,7 +16,7 @@ namespace buffkinz {
             int moveDown = GLFW_KEY_Q;
         };
 
-        float moveSpeed = 0.1f;
+        float moveSpeed = 0.05f;
 
         InputTypes inputs{};
         void keyMovement(GLFWwindow* window, float dt, Scene::Camera& camera);

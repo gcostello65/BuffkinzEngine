@@ -14,7 +14,7 @@ file(GLOB SHADERS
   ${SHADER_SOURCE_DIR}/*.frag)
 file(GLOB_RECURSE HDRS "include/*.hpp")
 
-add_executable(${PROJECT_NAME} ${CPP_SOURCES} ${VERT_SHADERS})
+add_executable(${PROJECT_NAME} ${CPP_SOURCES} ${VERT_SHADERS} src/game_object.cpp include/game_object.hpp)
 
 add_custom_command(
   COMMAND
