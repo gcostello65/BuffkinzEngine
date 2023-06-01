@@ -22,26 +22,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d01993c-b318-429b-82c3-465ed50da4e9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeCCompiler.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeCCompiler.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeCXXCompiler.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeCXXCompiler.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_C.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_C.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_CXX.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-Debug-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-Debug-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/rules.ninja" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/buffkinz_app.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/buffkinz_app.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/buffkinz_model.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/buffkinz_model.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/user_input_controller.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/user_input_controller.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shaders/simple_shader.vert" beforeDir="false" afterPath="$PROJECT_DIR$/shaders/simple_shader.vert" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/buffkinz_app.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/buffkinz_app.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/buffkinz_device.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/buffkinz_device.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/buffkinz_model.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/buffkinz_model.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game_object.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/game_object.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/user_input_controller.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/user_input_controller.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +107,7 @@
       <updated>1685478620024</updated>
       <workItem from="1685478621084" duration="160000" />
       <workItem from="1685478786577" duration="18955000" />
-      <workItem from="1685634578052" duration="78000" />
+      <workItem from="1685634578052" duration="309000" />
     </task>
     <servers />
   </component>
