@@ -19,7 +19,7 @@ namespace buffkinz {
 
     BuffkinzApp::BuffkinzApp() {
 
-        loadGameObjects({"../model/env.obj", "../model/DolBarriersuit.obj"});
+        loadGameObjects({"../model/sir_buffkinz2.0_notexture.obj"});
         camera.position = glm::vec3(0.0f, 0.0f, 0.0f);
         camera.lookDir = glm::vec3(0.0f, 0.0f, 1.0f);
         camera.up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -83,6 +83,7 @@ namespace buffkinz {
             shapes.clear();
             materials.clear();
 
+
             if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, objFile.c_str())) {
                 throw std::runtime_error(warn + err);
             }
@@ -105,7 +106,7 @@ namespace buffkinz {
 
                      vertex.texCoord = {
                          attrib.texcoords[2 * index.texcoord_index + 0],
-                         attrib.texcoords[2 * index.texcoord_index + 1]
+                         1.0 - attrib.texcoords[2 * index.texcoord_index + 1]
                      };
 
                     vertices.push_back(vertex);
@@ -114,7 +115,7 @@ namespace buffkinz {
             }
 
 
-            auto buffkinzModel = std::make_shared<BuffkinzModel>(buffkinzDevice, vertices, indices);
+            auto buffkinzModel = std::make_shared<BuffkinzModel>(buffkinzDevice, vertices, indices, "../model/sir_buff_2.png");
             auto object = GameObject::createGameObject();
             object.model = buffkinzModel;
             object.position = glm::vec3(0.0f, 0.0f , 40.0f);
@@ -131,10 +132,19 @@ namespace buffkinz {
         uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
         uboLayoutBinding.pImmutableSamplers = nullptr; // Optional
 
+        VkDescriptorSetLayoutBinding samplerLayoutBinding{};
+        samplerLayoutBinding.binding = 1;
+        samplerLayoutBinding.descriptorCount = 1;
+        samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        samplerLayoutBinding.pImmutableSamplers = nullptr;
+        samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+        std::array<VkDescriptorSetLayoutBinding, 2> bindings = {uboLayoutBinding, samplerLayoutBinding};
+
         VkDescriptorSetLayoutCreateInfo layoutInfo{};
         layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        layoutInfo.bindingCount = 1;
-        layoutInfo.pBindings = &uboLayoutBinding;
+        layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
+        layoutInfo.pBindings = bindings.data();
 
         if (vkCreateDescriptorSetLayout(buffkinzDevice.device(), &layoutInfo, nullptr, &descriptorSetLayout) !=
             VK_SUCCESS) {
@@ -231,14 +241,16 @@ namespace buffkinz {
     }
 
     void BuffkinzApp::createDescriptorPool() {
-        VkDescriptorPoolSize poolSize{};
-        poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-        poolSize.descriptorCount = static_cast<uint32_t>(buffkinzSwapChain->imageCount());
+        std::array<VkDescriptorPoolSize, 2> poolSizes{};
+        poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+        poolSizes[0].descriptorCount = static_cast<uint32_t>(buffkinzSwapChain->imageCount());
+        poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        poolSizes[1].descriptorCount = static_cast<uint32_t>(buffkinzSwapChain->imageCount());
 
         VkDescriptorPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        poolInfo.poolSizeCount = 1;
-        poolInfo.pPoolSizes = &poolSize;
+        poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
+        poolInfo.pPoolSizes = poolSizes.data();
         poolInfo.maxSets = static_cast<uint32_t>(buffkinzSwapChain->imageCount());
 
         if (vkCreateDescriptorPool(buffkinzDevice.device(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
@@ -266,20 +278,33 @@ namespace buffkinz {
             bufferInfo.offset = 0;
             bufferInfo.range = sizeof(GameObject::UniformBufferObject);
 
-            VkWriteDescriptorSet descriptorWrite{};
-            descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            descriptorWrite.dstSet = descriptorSets[i];
-            descriptorWrite.dstBinding = 0;
-            descriptorWrite.dstArrayElement = 0;
+            VkDescriptorImageInfo imageInfo{};
+            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            imageInfo.imageView = gameObjects[0].model->getTextureImageView();
+            imageInfo.sampler = gameObjects[0].model->textureSampler;
 
-            descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-            descriptorWrite.descriptorCount = 1;
+            std::array<VkWriteDescriptorSet, 2> descriptorWrites{};
+            descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            descriptorWrites[0].dstSet = descriptorSets[i];
+            descriptorWrites[0].dstBinding = 0;
+            descriptorWrites[0].dstArrayElement = 0;
 
-            descriptorWrite.pBufferInfo = &bufferInfo;
-            descriptorWrite.pImageInfo = nullptr; // Optional
-            descriptorWrite.pTexelBufferView = nullptr; // Optional
+            descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+            descriptorWrites[0].descriptorCount = 1;
 
-            vkUpdateDescriptorSets(buffkinzDevice.device(), 1, &descriptorWrite, 0, nullptr);
+            descriptorWrites[0].pBufferInfo = &bufferInfo;
+            descriptorWrites[0].pImageInfo = nullptr; // Optional
+            descriptorWrites[0].pTexelBufferView = nullptr; // Optional
+
+            descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            descriptorWrites[1].dstSet = descriptorSets[i];
+            descriptorWrites[1].dstBinding = 1;
+            descriptorWrites[1].dstArrayElement = 0;
+            descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            descriptorWrites[1].descriptorCount = 1;
+            descriptorWrites[1].pImageInfo = &imageInfo;
+
+            vkUpdateDescriptorSets(buffkinzDevice.device(), static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
         }
 
 
@@ -352,14 +377,15 @@ namespace buffkinz {
         auto currentTime = std::chrono::high_resolution_clock::now();
         float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
-        if (object.getId() == 1) {
-            object.ubo.model =  glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(object.position.x + 13.0f, object.position.y - 3.0f, object.position.z)), glm::vec3(0.1f, 0.1f, 0.1f)) * glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        } else {
-            object.ubo.model = glm::translate(glm::mat4(1.0f), object.position);
+//        if (object.getId() == 1) {
+            object.ubo.model = glm::mat4(1.0f);
+                    //glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 20.0)), glm::vec3(1.0f, 1.0f, 1.0f)) * glm::rotate(glm::mat4(1.0f), glm::degrees(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+//        } else {
+//            object.ubo.model = glm::translate(glm::mat4(1.0f), object.position);
 //                    * glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        }
+//        }
 
-        object.ubo.lightTransform = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        object.ubo.lightTransform = glm::rotate(glm::mat4(1.0f), time * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
         object.ubo.view = glm::lookAt(camera.position, camera.position + camera.lookDir, camera.up);
 

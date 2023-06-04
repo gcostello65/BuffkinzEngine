@@ -3,7 +3,7 @@
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 color;
 layout(location = 2) in vec3 normal;
-
+layout(location = 3) in vec2 texCoord;
 
 layout(set = 0, binding = 0) uniform UniformBufferObject {
     mat4 model;
@@ -13,9 +13,11 @@ layout(set = 0, binding = 0) uniform UniformBufferObject {
 } ubo;
 
 layout(location = 0) out vec3 fragColor;
+layout(location = 1) out vec2 fragTexCoord;
+layout(location = 2) out float shade;
 
 void main() {
-    vec4 light = vec4(0.0, 100.0, 100.0, 0.0);
+    vec4 light = vec4(0.0, 0.0, -30.0, 0.0);
     vec4 positionTrans = ubo.proj * ubo.view * ubo.model * vec4(position, 1.0);
 
     mat4 transformNormal = transpose(inverse(ubo.model));
@@ -25,6 +27,7 @@ void main() {
 
     vec4 normalizedNormalTrans = normalTrans / sqrt(normalTrans.x * normalTrans.x + normalTrans.y * normalTrans.y + normalTrans.z * normalTrans.z);
     
-    float shade = dot(normalizedNormalTrans, normalize(lightTrans - ubo.model * vec4(position, 1.0)));
-    fragColor = vec3((shade * 1.0) + 0.0, (shade * 1.0) + 0.0, (shade * 1.0) + 0.0);
+    shade = dot(normalizedNormalTrans, normalize(lightTrans - ubo.model * vec4(position, 1.0))) + 0.5;
+
+    fragTexCoord = texCoord;
 }

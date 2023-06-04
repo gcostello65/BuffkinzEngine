@@ -23,6 +23,24 @@
   <component name="ChangeListManager">
     <list default="true" id="3d01993c-b318-429b-82c3-465ed50da4e9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/BuffkinzEngine" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/BuffkinzEngine" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/compiler_depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/compiler_depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/compiler_depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/compiler_depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_app.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_app.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_device.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_device.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_device.cpp.o.d" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_device.cpp.o.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_model.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_model.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_pipeline.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_pipeline.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_swap_chain.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/buffkinz_swap_chain.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir/src/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/buffkinz_device.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/buffkinz_device.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/buffkinz_model.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/buffkinz_model.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shaders/simple_shader.frag" beforeDir="false" afterPath="$PROJECT_DIR$/shaders/simple_shader.frag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shaders/simple_shader.vert" beforeDir="false" afterPath="$PROJECT_DIR$/shaders/simple_shader.vert" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/buffkinz_app.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/buffkinz_app.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/buffkinz_device.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/buffkinz_device.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/buffkinz_model.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/buffkinz_model.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +74,7 @@
     "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/CMakeLists.txt",
+    "last_opened_file_path": "/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/model",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -67,6 +85,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/model" />
       <recent name="$PROJECT_DIR$/textures" />
       <recent name="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/shaders.dir/shaders" />
     </key>
@@ -107,7 +126,7 @@
       <updated>1685478620024</updated>
       <workItem from="1685478621084" duration="160000" />
       <workItem from="1685478786577" duration="18955000" />
-      <workItem from="1685634578052" duration="309000" />
+      <workItem from="1685634578052" duration="18555000" />
     </task>
     <servers />
   </component>
@@ -125,98 +144,133 @@
       <breakpoints>
         <line-breakpoint type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
-          <line>322</line>
+          <line>347</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_model.cpp</url>
-          <line>64</line>
+          <line>134</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_model.cpp</url>
-          <line>65</line>
+          <line>135</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_model.cpp</url>
-          <line>50</line>
+          <line>120</line>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_model.cpp</url>
-          <line>51</line>
+          <line>121</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
         <line-breakpoint type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_model.cpp</url>
-          <line>54</line>
+          <line>124</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_model.cpp</url>
-          <line>55</line>
+          <line>125</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
-          <line>115</line>
+          <line>116</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
-          <line>116</line>
+          <line>117</line>
           <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
-          <line>328</line>
+          <line>353</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_model.cpp</url>
-          <line>62</line>
+          <line>132</line>
           <option name="timeStamp" value="37" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_model.cpp</url>
-          <line>63</line>
+          <line>133</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
-          <line>339</line>
+          <line>364</line>
           <option name="timeStamp" value="41" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
-          <line>336</line>
+          <line>361</line>
           <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
-          <line>343</line>
+          <line>368</line>
           <option name="timeStamp" value="43" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
-          <line>344</line>
+          <line>369</line>
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
-          <line>120</line>
+          <line>121</line>
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
-          <line>355</line>
+          <line>380</line>
           <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
-          <line>129</line>
+          <line>130</line>
           <option name="timeStamp" value="47" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
+          <line>90</line>
+          <option name="timeStamp" value="49" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/buffkinz_app.cpp</url>
+          <line>306</line>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/buffkinz_device.cpp</url>
+          <line>479</line>
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/buffkinz_model.cpp</url>
+          <line>32</line>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/buffkinz_model.cpp</url>
+          <line>33</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/buffkinz_model.cpp</url>
+          <line>30</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/buffkinz_device.cpp</url>
+          <line>583</line>
+          <option name="timeStamp" value="58" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

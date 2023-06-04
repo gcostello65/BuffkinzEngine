@@ -1078,7 +1078,8 @@ CMakeFiles/BuffkinzEngine.dir/src/buffkinz_device.cpp.o: /Users/gregcostello/Doc
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__hash_table \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/cmath \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/math.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/math.h
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/math.h \
+  /Users/gregcostello/Documents/tinobjloader/stb_image.h
 
 CMakeFiles/BuffkinzEngine.dir/src/buffkinz_model.cpp.o: /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/buffkinz_model.cpp \
   /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_model.hpp \
