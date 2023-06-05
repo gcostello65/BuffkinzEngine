@@ -15,6 +15,14 @@
 #include <chrono>
 #include <glm/gtc/matrix_inverse.hpp>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <algorithm>
+#include<glm/common.hpp>
+
+#define GLM_FORCE_RADIANS
+
 namespace buffkinz {
 
     BuffkinzApp::BuffkinzApp() {
@@ -43,24 +51,22 @@ namespace buffkinz {
             vkDestroyBuffer(buffkinzDevice.device(), uniformBuffers[i], nullptr);
             vkFreeMemory(buffkinzDevice.device(), uniformBuffersMemory[i], nullptr);
         }
-
     }
 
     void BuffkinzApp::run() {
 
         auto currentTime = std::chrono::high_resolution_clock::now();
-
+        float frameTime = 0.0f;
         while (!buffkinzWindow.shouldClose()) {
             glfwPollEvents();
-
             auto newTime = std::chrono::high_resolution_clock::now();
-            float frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
-            std::cout << "Frame time: " << frameTime << std::endl;
+             frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
+//            std::cout << "Frame time: " << frameTime << std::endl;
             currentTime = newTime;
 
             glfwSetInputMode(buffkinzWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-            controller.keyMovement(buffkinzWindow.getWindow(), frameTime, camera);
+            controller.keyMovement(buffkinzWindow.getWindow(), (float &) frameTime, camera);
 
             drawFrame();
             vkDeviceWaitIdle(buffkinzDevice.device());
@@ -327,7 +333,7 @@ namespace buffkinz {
         renderPassInfo.renderArea.extent = buffkinzSwapChain->getSwapChainExtent();
 
         std::array<VkClearValue, 2> clearValues{};
-        clearValues[0].color = {0.1f, 0.1f, 0.1f, 0.1f};
+        clearValues[0].color = {114.f/255.f, 149.f/255.f, 183.f/255.f, 1.0f};
         clearValues[1].depthStencil = {1.0f, 0};
         renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
         renderPassInfo.pClearValues = clearValues.data();
@@ -393,6 +399,13 @@ namespace buffkinz {
                                     buffkinzSwapChain->width() / (float) buffkinzSwapChain->height(), 0.1f, 100.0f);
 
         object.ubo.proj[1][1] *= -1;
+
+//        std::cout << "rotation angle: " << camera.rotAngle << std::endl;
+//        glm::quat rotationQuat = glm::angleAxis(camera.rotAngle, camera.rotationAxis);
+//
+//        glm::quat result = glm::inverse(rotationQuat) * camera.lookDir * rotationQuat;
+//
+//        camera.lookDir = glm::vec3(result.x, result.y, result.z);
 
 
         memcpy((char*)uniformBuffersMapped[imageIndex] + sizeof(object.ubo) * object.getId(), &object.ubo, sizeof(object.ubo));

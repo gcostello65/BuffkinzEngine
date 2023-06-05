@@ -636,7 +636,73 @@ CMakeFiles/BuffkinzEngine.dir/src/buffkinz_app.cpp.o: /Users/gregcostello/Docume
   /opt/homebrew/include/glm/detail/setup.hpp \
   /opt/homebrew/include/glm/mat2x2.hpp \
   /opt/homebrew/include/glm/mat3x3.hpp \
-  /opt/homebrew/include/glm/gtc/matrix_inverse.inl
+  /opt/homebrew/include/glm/gtc/matrix_inverse.inl \
+  /opt/homebrew/include/glm/gtc/quaternion.hpp \
+  /opt/homebrew/include/glm/gtc/constants.hpp \
+  /opt/homebrew/include/glm/gtc/matrix_transform.hpp \
+  /opt/homebrew/include/glm/ext/vector_relational.hpp \
+  /opt/homebrew/include/glm/detail/qualifier.hpp \
+  /opt/homebrew/include/glm/ext/vector_relational.inl \
+  /opt/homebrew/include/glm/vector_relational.hpp \
+  /opt/homebrew/include/glm/common.hpp \
+  /opt/homebrew/include/glm/detail/type_float.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_common.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_geometric.hpp \
+  /opt/homebrew/include/glm/exponential.hpp \
+  /opt/homebrew/include/glm/ext/vector_relational.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_geometric.inl \
+  /opt/homebrew/include/glm/ext/quaternion_common.inl \
+  /opt/homebrew/include/glm/ext/quaternion_float.hpp \
+  /opt/homebrew/include/glm/detail/type_quat.hpp \
+  /opt/homebrew/include/glm/detail/type_mat3x3.hpp \
+  /opt/homebrew/include/glm/detail/type_mat4x4.hpp \
+  /opt/homebrew/include/glm/detail/type_vec3.hpp \
+  /opt/homebrew/include/glm/detail/type_vec4.hpp \
+  /opt/homebrew/include/glm/ext/vector_relational.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_relational.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_relational.inl \
+  /opt/homebrew/include/glm/gtc/constants.hpp \
+  /opt/homebrew/include/glm/gtc/matrix_transform.hpp \
+  /opt/homebrew/include/glm/detail/type_quat.inl \
+  /opt/homebrew/include/glm/trigonometric.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_geometric.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_float_precision.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_double.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_double_precision.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_relational.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_geometric.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_trigonometric.hpp \
+  /opt/homebrew/include/glm/ext/scalar_constants.hpp \
+  /opt/homebrew/include/glm/ext/vector_relational.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_trigonometric.inl \
+  /opt/homebrew/include/glm/ext/quaternion_transform.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_transform.inl \
+  /opt/homebrew/include/glm/detail/type_mat3x3.hpp \
+  /opt/homebrew/include/glm/detail/type_mat4x4.hpp \
+  /opt/homebrew/include/glm/detail/type_vec3.hpp \
+  /opt/homebrew/include/glm/detail/type_vec4.hpp \
+  /opt/homebrew/include/glm/gtc/quaternion.inl \
+  /opt/homebrew/include/glm/exponential.hpp \
+  /opt/homebrew/include/glm/gtc/epsilon.hpp \
+  /opt/homebrew/include/glm/detail/qualifier.hpp \
+  /opt/homebrew/include/glm/gtc/epsilon.inl \
+  /opt/homebrew/include/glm/vector_relational.hpp \
+  /opt/homebrew/include/glm/common.hpp \
+  /opt/homebrew/include/glm/gtx/quaternion.hpp \
+  /opt/homebrew/include/glm/glm.hpp \
+  /opt/homebrew/include/glm/gtc/constants.hpp \
+  /opt/homebrew/include/glm/gtc/quaternion.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_exponential.hpp \
+  /opt/homebrew/include/glm/ext/quaternion_exponential.inl \
+  /opt/homebrew/include/glm/gtx/norm.hpp \
+  /opt/homebrew/include/glm/geometric.hpp \
+  /opt/homebrew/include/glm/gtx/quaternion.hpp \
+  /opt/homebrew/include/glm/gtx/component_wise.hpp \
+  /opt/homebrew/include/glm/detail/setup.hpp \
+  /opt/homebrew/include/glm/detail/qualifier.hpp \
+  /opt/homebrew/include/glm/gtx/component_wise.inl \
+  /opt/homebrew/include/glm/gtx/norm.inl \
+  /opt/homebrew/include/glm/gtx/quaternion.inl
 
 CMakeFiles/BuffkinzEngine.dir/src/buffkinz_device.cpp.o: /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/buffkinz_device.cpp \
   /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_device.hpp \
@@ -4835,6 +4901,16 @@ CMakeFiles/BuffkinzEngine.dir/src/user_input_controller.cpp.o: /Users/gregcostel
   /opt/homebrew/include/glm/gtx/quaternion.inl
 
 
+/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/renderer.cpp:
+
+/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/main.cpp:
+
+/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/buffkinz_window.cpp:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__hash_table:
+
+/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/buffkinz_device.cpp:
+
 /opt/homebrew/include/glm/gtx/norm.inl:
 
 /opt/homebrew/include/glm/gtx/component_wise.inl:
@@ -4862,16 +4938,6 @@ CMakeFiles/BuffkinzEngine.dir/src/user_input_controller.cpp.o: /Users/gregcostel
 /opt/homebrew/include/glm/ext/vector_relational.hpp:
 
 /opt/homebrew/include/glm/gtc/quaternion.hpp:
-
-/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/renderer.cpp:
-
-/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/main.cpp:
-
-/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/buffkinz_window.cpp:
-
-/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__hash_table:
-
-/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/buffkinz_device.cpp:
 
 /opt/homebrew/include/glm/ext/quaternion_float_precision.hpp:
 
@@ -5911,9 +5977,9 @@ CMakeFiles/BuffkinzEngine.dir/src/user_input_controller.cpp.o: /Users/gregcostel
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/stdint.h:
 
-/opt/homebrew/include/glm/ext/quaternion_double.hpp:
-
 /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/game_object.cpp:
+
+/opt/homebrew/include/glm/ext/quaternion_double.hpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__memory/shared_ptr.h:
 

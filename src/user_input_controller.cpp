@@ -11,7 +11,7 @@
 
 namespace buffkinz {
 
-    void UserInputController::keyMovement(GLFWwindow *window, float dt, Scene::Camera &camera) {
+    void UserInputController::keyMovement(GLFWwindow *window, float& dt, Scene::Camera &camera) {
         float angleMult = 1.0f;
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);

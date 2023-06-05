@@ -14,20 +14,22 @@ layout(set = 0, binding = 0) uniform UniformBufferObject {
 
 layout(location = 0) out vec3 fragColor;
 layout(location = 1) out vec2 fragTexCoord;
-layout(location = 2) out float shade;
+layout(location = 2) out vec3 normalTrans;
+layout(location = 3) out vec4 positionModelTrans;
+layout(location = 4) out vec3 lightTrans;
 
 void main() {
-    vec4 light = vec4(0.0, 0.0, -30.0, 0.0);
-    vec4 positionTrans = ubo.proj * ubo.view * ubo.model * vec4(position, 1.0);
+    positionModelTrans = ubo.model * vec4(position, 1.0);
+    vec4 positionTrans = ubo.proj * ubo.view * positionModelTrans;
 
-    mat4 transformNormal = transpose(inverse(ubo.model));
-    vec4 normalTrans = transformNormal * vec4(normal, 0.0);
-    vec4 lightTrans = ubo.lightTransform * light;
     gl_Position = positionTrans;
 
-    vec4 normalizedNormalTrans = normalTrans / sqrt(normalTrans.x * normalTrans.x + normalTrans.y * normalTrans.y + normalTrans.z * normalTrans.z);
-    
-    shade = dot(normalizedNormalTrans, normalize(lightTrans - ubo.model * vec4(position, 1.0))) + 0.5;
+    vec3 light = vec3(0.0, 0.0, -30.0);
+    lightTrans = mat3(ubo.lightTransform) * light;
+
+
+    mat3 transformNormal = transpose(inverse(mat3(ubo.model)));
+    normalTrans = transformNormal * normal;
 
     fragTexCoord = texCoord;
 }
