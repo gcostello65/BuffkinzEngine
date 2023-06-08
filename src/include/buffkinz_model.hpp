@@ -41,10 +41,6 @@ namespace buffkinz {
 
         ~BuffkinzModel();
 
-        BuffkinzModel(const BuffkinzModel &) = delete;
-
-        BuffkinzModel &operator=(const BuffkinzModel &) = delete;
-
         void bind(VkCommandBuffer commandBuffer);
 
         void draw(VkCommandBuffer commandBuffer, uint32_t firstIndex, int32_t vertexOffset);

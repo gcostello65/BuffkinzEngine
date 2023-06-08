@@ -20,9 +20,6 @@ class BuffkinzSwapChain {
   BuffkinzSwapChain(buffkinz::BuffkinzDevice &deviceRef, VkExtent2D windowExtent, std::shared_ptr<BuffkinzSwapChain> previous);
   ~BuffkinzSwapChain();
 
-  BuffkinzSwapChain(const BuffkinzSwapChain &) = delete;
-  BuffkinzSwapChain& operator=(const BuffkinzSwapChain &) = delete;
-
   VkFramebuffer getFrameBuffer(int index) { return swapChainFramebuffers[index]; }
   VkRenderPass getRenderPass() { return renderPass; }
   

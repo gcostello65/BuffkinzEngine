@@ -35,15 +35,6 @@ namespace buffkinz {
 
         ~BuffkinzDevice();
 
-        // Not copyable or movable
-        BuffkinzDevice(const BuffkinzDevice &) = delete;
-
-        BuffkinzDevice &operator=(const BuffkinzDevice &) = delete;
-
-        BuffkinzDevice(BuffkinzDevice &&) = delete;
-
-        BuffkinzDevice &operator=(BuffkinzDevice &&) = delete;
-
         VkImage getTextureImage() {
             return textureImage;
         }

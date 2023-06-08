@@ -23,6 +23,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/BuffkinzEngine.dir/src/scene.cpp.o.d"
   "CMakeFiles/BuffkinzEngine.dir/src/user_input_controller.cpp.o"
   "CMakeFiles/BuffkinzEngine.dir/src/user_input_controller.cpp.o.d"
+  "CMakeFiles/BuffkinzEngine.dir/src/vulkan/vulkan_init.cpp.o"
+  "CMakeFiles/BuffkinzEngine.dir/src/vulkan/vulkan_init.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

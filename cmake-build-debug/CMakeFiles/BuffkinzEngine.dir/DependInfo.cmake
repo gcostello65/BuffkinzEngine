@@ -19,6 +19,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/renderer.cpp" "CMakeFiles/BuffkinzEngine.dir/src/renderer.cpp.o" "gcc" "CMakeFiles/BuffkinzEngine.dir/src/renderer.cpp.o.d"
   "/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/scene.cpp" "CMakeFiles/BuffkinzEngine.dir/src/scene.cpp.o" "gcc" "CMakeFiles/BuffkinzEngine.dir/src/scene.cpp.o.d"
   "/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/user_input_controller.cpp" "CMakeFiles/BuffkinzEngine.dir/src/user_input_controller.cpp.o" "gcc" "CMakeFiles/BuffkinzEngine.dir/src/user_input_controller.cpp.o.d"
+  "/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/vulkan/vulkan_init.cpp" "CMakeFiles/BuffkinzEngine.dir/src/vulkan/vulkan_init.cpp.o" "gcc" "CMakeFiles/BuffkinzEngine.dir/src/vulkan/vulkan_init.cpp.o.d"
   )
 
 # Targets to which this target links.

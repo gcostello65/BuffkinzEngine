@@ -12,9 +12,6 @@ namespace buffkinz {
             BuffkinzWindow(int w, int h, std::string name);
             ~BuffkinzWindow();
 
-            BuffkinzWindow(const BuffkinzWindow &) = delete;
-            BuffkinzWindow &operator = (const BuffkinzWindow &) = delete;
-
             bool shouldClose() { return glfwWindowShouldClose(window); };
             VkExtent2D getExtent() {return {static_cast<uint32_t>(width), static_cast<uint32_t>(height)}; }
 

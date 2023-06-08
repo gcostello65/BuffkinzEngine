@@ -30,12 +30,6 @@ namespace buffkinz {
         glm::vec3 color{};
         UniformBufferObject ubo;
 
-
-        GameObject(const GameObject &) = delete;
-        GameObject &operator = (const GameObject &) = delete;
-        GameObject(GameObject &&) = default;
-        GameObject &operator = (GameObject &&) = default;
-
     private:
         GameObject(id_t objId) :id{objId} {}
         id_t id;

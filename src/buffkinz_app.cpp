@@ -1,8 +1,9 @@
 #include <buffkinz_app.hpp>
 #include "user_input_controller.hpp"
+#include "vulkan_init.h"
 
 #include <stdexcept>
-#include<array>
+#include <array>
 #include <iostream>
 
 #define GLM_FORCE_RADIANS
@@ -13,22 +14,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <string>
 #include <chrono>
-#include <glm/gtc/matrix_inverse.hpp>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <algorithm>
-#include<glm/common.hpp>
+#include <glm/common.hpp>
 #include <unordered_map>
 
 #define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/gtx/hash.hpp>
 
-#define GLM_FORCE_RADIANS
-
 namespace std {
-    template <>
+    template<>
     struct hash<buffkinz::BuffkinzModel::Vertex> {
         size_t operator()(buffkinz::BuffkinzModel::Vertex const &vertex) const {
             size_t seed = 0;
@@ -41,30 +36,25 @@ namespace std {
 namespace buffkinz {
 
     BuffkinzApp::BuffkinzApp() {
-
+        vulkan = VulkanInit();
         loadGameObjects({"../model/sir_buffkinz2_more_geometry.obj"});
         camera.position = glm::vec3(0.0f, 0.0f, 0.0f);
         camera.lookDir = glm::vec3(0.0f, 0.0f, 1.0f);
         camera.up = glm::vec3(0.0f, 1.0f, 0.0f);
-        createDescriptorSetLayout();
-        createPipelineLayout();
-        recreateSwapChain();
+
+        //Uniform buffers should be done on a scene by scene level.
         createUniformBuffers();
         createDescriptorPool();
         createDescriptorSets();
-        createCommandBuffers();
     }
 
     BuffkinzApp::~BuffkinzApp() {
-        vkDestroyPipelineLayout(buffkinzDevice.device(), pipelineLayout, nullptr);
+        vkDestroyDescriptorPool(vulkan.device.device(), descriptorPool, nullptr);
 
-        vkDestroyDescriptorPool(buffkinzDevice.device(), descriptorPool, nullptr);
-
-        vkDestroyDescriptorSetLayout(buffkinzDevice.device(), descriptorSetLayout, nullptr);
-
-        for (size_t i = 0; i < buffkinzSwapChain->imageCount(); i++) {
-            vkDestroyBuffer(buffkinzDevice.device(), uniformBuffers[i], nullptr);
-            vkFreeMemory(buffkinzDevice.device(), uniformBuffersMemory[i], nullptr);
+        vkDestroyDescriptorSetLayout(vulkan.device.device(), descriptorSetLayout, nullptr);
+        for (size_t i = 0; i < vulkan.swapChain->imageCount(); i++) {
+            vkDestroyBuffer(vulkan.device.device(), uniformBuffers[i], nullptr);
+            vkFreeMemory(vulkan.device.device(), uniformBuffersMemory[i], nullptr);
         }
     }
 
@@ -72,19 +62,18 @@ namespace buffkinz {
 
         auto currentTime = std::chrono::high_resolution_clock::now();
         float frameTime = 0.0f;
-        while (!buffkinzWindow.shouldClose()) {
+        while (!vulkan.window.shouldClose()) {
             glfwPollEvents();
             auto newTime = std::chrono::high_resolution_clock::now();
-             frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
-//            std::cout << "Frame time: " << frameTime << std::endl;
+            frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
             currentTime = newTime;
 
-            glfwSetInputMode(buffkinzWindow.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetInputMode(vulkan.window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-            controller.keyMovement(buffkinzWindow.getWindow(), (float &) frameTime, camera);
+            controller.keyMovement(vulkan.window.getWindow(), (float &) frameTime, camera);
 
             drawFrame();
-            vkDeviceWaitIdle(buffkinzDevice.device());
+            vkDeviceWaitIdle(vulkan.device.device());
         }
     }
 
@@ -98,68 +87,67 @@ namespace buffkinz {
         std::string warn, err;
         int i = 0;
 
-        for (std::string objFile : objFilePaths) {
+        for (std::string objFile: objFilePaths) {
 
 //            for (int k = 0; k < 2; k++) {
 //                for (int l = 0; l < 2; l++) {
-                    vertices.clear();
-                    indices.clear();
-                    shapes.clear();
-                    materials.clear();
+            vertices.clear();
+            indices.clear();
+            shapes.clear();
+            materials.clear();
 
 
-                    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, objFile.c_str())) {
-                        throw std::runtime_error(warn + err);
+            if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, objFile.c_str())) {
+                throw std::runtime_error(warn + err);
+            }
+
+            std::unordered_map<BuffkinzModel::Vertex, uint32_t> uniqueVertices{};
+
+            for (const auto &shape: shapes) {
+                for (const auto &index: shape.mesh.indices) {
+                    BuffkinzModel::Vertex vertex{};
+                    vertex.position = {
+                            attrib.vertices[3 * index.vertex_index + 0],
+                            attrib.vertices[3 * index.vertex_index + 1],
+                            attrib.vertices[3 * index.vertex_index + 2]
+                    };
+
+                    vertex.color = {
+                            1.0f, 1.0f, 1.0f
+                    };
+
+                    vertex.normal = {
+                            attrib.normals[3 * index.normal_index + 0],
+                            attrib.normals[3 * index.normal_index + 1],
+                            attrib.normals[3 * index.normal_index + 2]
+                    };
+
+
+                    vertex.texCoord = {
+                            attrib.texcoords[2 * index.texcoord_index + 0],
+                            1.0 - attrib.texcoords[2 * index.texcoord_index + 1]
+                    };
+
+
+                    if (uniqueVertices.count(vertex) == 0) {
+                        uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
+                        vertices.push_back(vertex);
                     }
 
-                    std::unordered_map<BuffkinzModel::Vertex, uint32_t> uniqueVertices{};
-
-                    for (const auto &shape: shapes) {
-                        for (const auto &index: shape.mesh.indices) {
-                            BuffkinzModel::Vertex vertex{};
-                            vertex.position = {
-                                    attrib.vertices[3 * index.vertex_index + 0],
-                                    attrib.vertices[3 * index.vertex_index + 1],
-                                    attrib.vertices[3 * index.vertex_index + 2]
-                            };
-
-                            vertex.color = {
-                                    1.0f, 1.0f, 1.0f
-                            };
-
-                            vertex.normal = {
-                                    attrib.normals[3 * index.normal_index + 0],
-                                    attrib.normals[3 * index.normal_index + 1],
-                                    attrib.normals[3 * index.normal_index + 2]
-                            };
-
-
-                            vertex.texCoord = {
-                                    attrib.texcoords[2 * index.texcoord_index + 0],
-                                    1.0 - attrib.texcoords[2 * index.texcoord_index + 1]
-                            };
-
-
-                            if (uniqueVertices.count(vertex) == 0) {
-                                uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
-                                vertices.push_back(vertex);
-                            }
-
-                            indices.push_back(uniqueVertices[vertex]);
-                        }
-                    }
-
-
-
-                    auto object = GameObject::createGameObject();
-                    auto buffkinzModel = std::make_shared<BuffkinzModel>(buffkinzDevice, vertices, indices,
-                                                                         "../model/sir_buff_2.png");
-                    object.model = buffkinzModel;
-//                    object.position = glm::vec3(0.0f, 5.0f * (float)k, 5.0f * (float)l);
-                    object.position = glm::vec3(0.0f, i * 20.0f, 5.0f);
-                    gameObjects.push_back(std::move(object));
-                    i++;
+                    indices.push_back(uniqueVertices[vertex]);
                 }
+            }
+
+
+            auto object = GameObject::createGameObject();
+            auto buffkinzModel = std::make_shared<BuffkinzModel>(buffkinzDevice, vertices, indices,
+                                                                 "../model/sir_buff_2.png");
+            object.model = buffkinzModel;
+//                    object.position = glm::vec3(0.0f, 5.0f * (float)k, 5.0f * (float)l);
+            object.position = glm::vec3(0.0f, i * 20.0f, 5.0f);
+            gameObjects.push_back(std::move(object));
+            i++;
+        }
 //            }
 //        }
     }
@@ -205,78 +193,6 @@ namespace buffkinz {
                                         uniformBuffers[i], uniformBuffersMemory[i]);
 
             vkMapMemory(buffkinzDevice.device(), uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
-        }
-    }
-
-    void BuffkinzApp::createPipelineLayout() {
-        VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
-        pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-        pipelineLayoutInfo.setLayoutCount = 1;
-        pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
-        pipelineLayoutInfo.pushConstantRangeCount = 0;
-        pipelineLayoutInfo.pPushConstantRanges = nullptr;
-        if (vkCreatePipelineLayout(buffkinzDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) !=
-            VK_SUCCESS) {
-            throw std::runtime_error("failed to create pipeline layout!");
-        }
-    }
-
-    void BuffkinzApp::createPipeline() {
-        assert(buffkinzSwapChain != nullptr && "Cannot create pipeline before swap chain");
-        assert(pipelineLayout != nullptr && "Cannot create pipeline before pipeline layout");
-
-        PipelineConfigInfo pipelineConfig{};
-
-        BuffkinzPipeline::defaultPipelineConfigInfo(pipelineConfig);
-        pipelineConfig.renderPass = buffkinzSwapChain->getRenderPass();
-        pipelineConfig.pipelineLayout = pipelineLayout;
-        buffkinzPipeline = std::make_unique<BuffkinzPipeline>(
-                buffkinzDevice,
-                "./shaders/simple_shader.vert.spv",
-                "./shaders/simple_shader.frag.spv",
-                pipelineConfig);
-    }
-
-    void BuffkinzApp::recreateSwapChain() {
-        auto extent = buffkinzWindow.getExtent();
-        while (extent.width == 0 || extent.height == 0) {
-            extent = buffkinzWindow.getExtent();
-            glfwWaitEvents();
-        }
-
-        vkDeviceWaitIdle(buffkinzDevice.device());
-        if (buffkinzSwapChain == nullptr) {
-            buffkinzSwapChain = std::make_unique<BuffkinzSwapChain>(buffkinzDevice, extent);
-        } else {
-            buffkinzSwapChain = std::make_unique<BuffkinzSwapChain>(buffkinzDevice, extent,
-                                                                    std::move(buffkinzSwapChain));
-            if (buffkinzSwapChain->imageCount() != commandBuffers.size()) {
-                freeCommandBuffers();
-                createCommandBuffers();
-            }
-        }
-        createPipeline();
-
-
-    }
-
-    void BuffkinzApp::freeCommandBuffers() {
-        vkFreeCommandBuffers(buffkinzDevice.device(), buffkinzDevice.getCommandPool(),
-                             static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
-        commandBuffers.clear();
-    }
-
-    void BuffkinzApp::createCommandBuffers() {
-        commandBuffers.resize(buffkinzSwapChain->imageCount());
-
-        VkCommandBufferAllocateInfo allocInfo{};
-        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandPool = buffkinzDevice.getCommandPool();
-        allocInfo.commandBufferCount = static_cast<uint32_t>(commandBuffers.size());
-
-        if (vkAllocateCommandBuffers(buffkinzDevice.device(), &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
-            throw std::runtime_error("failed to allocate command buffers");
         }
     }
 
@@ -345,7 +261,8 @@ namespace buffkinz {
             descriptorWrites[1].descriptorCount = 1;
             descriptorWrites[1].pImageInfo = &imageInfo;
 
-            vkUpdateDescriptorSets(buffkinzDevice.device(), static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
+            vkUpdateDescriptorSets(buffkinzDevice.device(), static_cast<uint32_t>(descriptorWrites.size()),
+                                   descriptorWrites.data(), 0, nullptr);
         }
 
 
@@ -368,7 +285,7 @@ namespace buffkinz {
         renderPassInfo.renderArea.extent = buffkinzSwapChain->getSwapChainExtent();
 
         std::array<VkClearValue, 2> clearValues{};
-        clearValues[0].color = {114.f/255.f, 149.f/255.f, 183.f/255.f, 1.0f};
+        clearValues[0].color = {114.f / 255.f, 149.f / 255.f, 183.f / 255.f, 1.0f};
         clearValues[1].depthStencil = {1.0f, 0};
         renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
         renderPassInfo.pClearValues = clearValues.data();
@@ -419,18 +336,21 @@ namespace buffkinz {
         float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
 //        if (object.getId() == 1) {
-            object.ubo.model = glm::scale(glm::translate(glm::mat4(1.0f), object.position), glm::vec3(1.0f, 1.0f, 1.0f)) * glm::rotate(glm::mat4(1.0f), glm::degrees(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        object.ubo.model = glm::scale(glm::translate(glm::mat4(1.0f), object.position), glm::vec3(1.0f, 1.0f, 1.0f)) *
+                           glm::rotate(glm::mat4(1.0f), glm::degrees(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 //        } else {
 //            object.ubo.model = glm::translate(glm::mat4(1.0f), object.position);
 //                    * glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 //        }
 
-        object.ubo.lightTransform = glm::rotate(glm::mat4(1.0f), time * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        object.ubo.lightTransform = glm::rotate(glm::mat4(1.0f), time * glm::radians(45.0f),
+                                                glm::vec3(0.0f, 1.0f, 0.0f));
 
         object.ubo.view = glm::lookAt(camera.position, camera.position + camera.lookDir, camera.up);
 
         object.ubo.proj = glm::perspective(glm::radians(60.0f),
-                                    buffkinzSwapChain->width() / (float) buffkinzSwapChain->height(), 0.1f, 100.0f);
+                                           buffkinzSwapChain->width() / (float) buffkinzSwapChain->height(), 0.1f,
+                                           100.0f);
 
         object.ubo.proj[1][1] *= -1;
 
@@ -442,7 +362,9 @@ namespace buffkinz {
 //        camera.lookDir = glm::vec3(result.x, result.y, result.z);
         object.ubo.viewDir = camera.lookDir;
 
-        memcpy((char*)uniformBuffersMapped[imageIndex] + buffkinzDevice.properties.limits.minUniformBufferOffsetAlignment * object.getId(), &object.ubo, sizeof(object.ubo));
+        memcpy((char *) uniformBuffersMapped[imageIndex] +
+               buffkinzDevice.properties.limits.minUniformBufferOffsetAlignment * object.getId(), &object.ubo,
+               sizeof(object.ubo));
     }
 
     void BuffkinzApp::drawFrame() {
@@ -450,7 +372,7 @@ namespace buffkinz {
         auto result = buffkinzSwapChain->acquireNextImage(&imageIndex);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR) {
-            recreateSwapChain();
+            vulkan.recreateSwapChain();
             return;
         }
 
@@ -467,7 +389,7 @@ namespace buffkinz {
         result = buffkinzSwapChain->submitCommandBuffers(&commandBuffers[imageIndex], &imageIndex);
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || buffkinzWindow.wasWindowResized()) {
             buffkinzWindow.resetWindowResizedFlag();
-            recreateSwapChain();
+            vulkan.recreateSwapChain();
             return;
         }
         if (result != VK_SUCCESS) {

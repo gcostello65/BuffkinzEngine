@@ -8,9 +8,6 @@
 namespace buffkinz {
 
     struct PipelineConfigInfo {
-    PipelineConfigInfo(const PipelineConfigInfo&) = delete;
-    PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
-
     VkPipelineViewportStateCreateInfo viewportInfo;
     VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
     VkPipelineRasterizationStateCreateInfo rasterizationInfo;
@@ -29,9 +26,6 @@ namespace buffkinz {
         public: 
             BuffkinzPipeline(BuffkinzDevice &device, const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo);
             ~BuffkinzPipeline();
-
-            BuffkinzPipeline(const BuffkinzPipeline&) = delete;
-            BuffkinzPipeline& operator = (const BuffkinzPipeline) = delete;
 
             void bind(VkCommandBuffer commandBuffer);
 

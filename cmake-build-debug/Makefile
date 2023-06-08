@@ -406,6 +406,30 @@ src/user_input_controller.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/user_input_controller.cpp.s
 .PHONY : src/user_input_controller.cpp.s
 
+src/vulkan/vulkan_init.o: src/vulkan/vulkan_init.cpp.o
+.PHONY : src/vulkan/vulkan_init.o
+
+# target to build an object file
+src/vulkan/vulkan_init.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/vulkan/vulkan_init.cpp.o
+.PHONY : src/vulkan/vulkan_init.cpp.o
+
+src/vulkan/vulkan_init.i: src/vulkan/vulkan_init.cpp.i
+.PHONY : src/vulkan/vulkan_init.i
+
+# target to preprocess a source file
+src/vulkan/vulkan_init.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/vulkan/vulkan_init.cpp.i
+.PHONY : src/vulkan/vulkan_init.cpp.i
+
+src/vulkan/vulkan_init.s: src/vulkan/vulkan_init.cpp.s
+.PHONY : src/vulkan/vulkan_init.s
+
+# target to generate assembly for a file
+src/vulkan/vulkan_init.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/vulkan/vulkan_init.cpp.s
+.PHONY : src/vulkan/vulkan_init.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -449,6 +473,9 @@ help:
 	@echo "... src/user_input_controller.o"
 	@echo "... src/user_input_controller.i"
 	@echo "... src/user_input_controller.s"
+	@echo "... src/vulkan/vulkan_init.o"
+	@echo "... src/vulkan/vulkan_init.i"
+	@echo "... src/vulkan/vulkan_init.s"
 .PHONY : help
 
 
