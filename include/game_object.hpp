@@ -14,6 +14,7 @@ namespace buffkinz {
             glm::mat4 view;
             glm::mat4 proj;
             glm::mat4 lightTransform;
+            glm::vec3 viewDir;
         };
         using id_t = unsigned int;
 

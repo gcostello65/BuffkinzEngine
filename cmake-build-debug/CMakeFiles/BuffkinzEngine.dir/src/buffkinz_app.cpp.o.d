@@ -700,4 +700,36 @@ CMakeFiles/BuffkinzEngine.dir/src/buffkinz_app.cpp.o: \
   /opt/homebrew/include/glm/gtx/../detail/qualifier.hpp \
   /opt/homebrew/include/glm/gtx/component_wise.inl \
   /opt/homebrew/include/glm/gtx/norm.inl \
-  /opt/homebrew/include/glm/gtx/quaternion.inl
+  /opt/homebrew/include/glm/gtx/quaternion.inl \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/unordered_map \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__hash_table \
+  /opt/homebrew/include/glm/gtx/hash.hpp \
+  /opt/homebrew/include/glm/gtx/../vec2.hpp \
+  /opt/homebrew/include/glm/gtx/../vec3.hpp \
+  /opt/homebrew/include/glm/gtx/../vec4.hpp \
+  /opt/homebrew/include/glm/gtx/../gtc/vec1.hpp \
+  /opt/homebrew/include/glm/gtc/../ext/vector_bool1.hpp \
+  /opt/homebrew/include/glm/./ext/../detail/type_vec1.hpp \
+  /opt/homebrew/include/glm/gtc/../ext/vector_bool1_precision.hpp \
+  /opt/homebrew/include/glm/gtc/../ext/vector_float1.hpp \
+  /opt/homebrew/include/glm/gtc/../ext/vector_float1_precision.hpp \
+  /opt/homebrew/include/glm/gtc/../ext/vector_double1.hpp \
+  /opt/homebrew/include/glm/gtc/../ext/vector_double1_precision.hpp \
+  /opt/homebrew/include/glm/gtc/../ext/vector_int1.hpp \
+  /opt/homebrew/include/glm/gtc/../ext/vector_int1_sized.hpp \
+  /opt/homebrew/include/glm/./ext/../ext/vector_int1.hpp \
+  /opt/homebrew/include/glm/gtc/../ext/vector_uint1.hpp \
+  /opt/homebrew/include/glm/gtc/../ext/vector_uint1_sized.hpp \
+  /opt/homebrew/include/glm/./ext/../ext/vector_uint1.hpp \
+  /opt/homebrew/include/glm/gtx/../gtx/dual_quaternion.hpp \
+  /opt/homebrew/include/glm/gtx/dual_quaternion.inl \
+  /opt/homebrew/include/glm/gtx/../mat2x2.hpp \
+  /opt/homebrew/include/glm/gtx/../mat2x3.hpp \
+  /opt/homebrew/include/glm/gtx/../mat2x4.hpp \
+  /opt/homebrew/include/glm/gtx/../mat3x2.hpp \
+  /opt/homebrew/include/glm/gtx/../mat3x3.hpp \
+  /opt/homebrew/include/glm/gtx/../mat3x4.hpp \
+  /opt/homebrew/include/glm/gtx/../mat4x2.hpp \
+  /opt/homebrew/include/glm/gtx/../mat4x3.hpp \
+  /opt/homebrew/include/glm/gtx/../mat4x4.hpp \
+  /opt/homebrew/include/glm/gtx/hash.inl

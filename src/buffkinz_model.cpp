@@ -2,6 +2,8 @@
 #include <cassert>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/hash.hpp>
 
 namespace buffkinz {
     BuffkinzModel::BuffkinzModel(BuffkinzDevice& device, const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices, const char* filePath) : buffkinzDevice{device} {
@@ -13,6 +15,8 @@ namespace buffkinz {
         createTextureSampler();
         indicesModel = indices;
     }
+
+
 
     BuffkinzModel::~BuffkinzModel() {
         vkDestroyBuffer(buffkinzDevice.device(), vertexBuffer, nullptr);

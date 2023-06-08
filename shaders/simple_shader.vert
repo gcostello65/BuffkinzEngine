@@ -10,6 +10,7 @@ layout(set = 0, binding = 0) uniform UniformBufferObject {
     mat4 view;
     mat4 proj;
     mat4 lightTransform;
+    vec3 viewDir;
 } ubo;
 
 layout(location = 0) out vec3 fragColor;
@@ -24,7 +25,7 @@ void main() {
 
     gl_Position = positionTrans;
 
-    vec3 light = vec3(0.0, 0.0, -30.0);
+    vec3 light = vec3(0.0, 0.0, -90.0);
     lightTrans = mat3(ubo.lightTransform) * light;
 
 

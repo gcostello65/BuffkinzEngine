@@ -20,14 +20,29 @@
 #include <glm/gtx/quaternion.hpp>
 #include <algorithm>
 #include<glm/common.hpp>
+#include <unordered_map>
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/hash.hpp>
 
 #define GLM_FORCE_RADIANS
+
+namespace std {
+    template <>
+    struct hash<buffkinz::BuffkinzModel::Vertex> {
+        size_t operator()(buffkinz::BuffkinzModel::Vertex const &vertex) const {
+            size_t seed = 0;
+            buffkinz::hashCombine(seed, vertex.position, vertex.color, vertex.normal, vertex.texCoord);
+            return seed;
+        }
+    };
+}
 
 namespace buffkinz {
 
     BuffkinzApp::BuffkinzApp() {
 
-        loadGameObjects({"../model/sir_buffkinz2.0_notexture.obj"});
+        loadGameObjects({"../model/sir_buffkinz2_more_geometry.obj"});
         camera.position = glm::vec3(0.0f, 0.0f, 0.0f);
         camera.lookDir = glm::vec3(0.0f, 0.0f, 1.0f);
         camera.up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -84,50 +99,69 @@ namespace buffkinz {
         int i = 0;
 
         for (std::string objFile : objFilePaths) {
-            vertices.clear();
-            indices.clear();
-            shapes.clear();
-            materials.clear();
+
+//            for (int k = 0; k < 2; k++) {
+//                for (int l = 0; l < 2; l++) {
+                    vertices.clear();
+                    indices.clear();
+                    shapes.clear();
+                    materials.clear();
 
 
-            if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, objFile.c_str())) {
-                throw std::runtime_error(warn + err);
-            }
+                    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, objFile.c_str())) {
+                        throw std::runtime_error(warn + err);
+                    }
 
-            for (const auto &shape: shapes) {
-                for (const auto &index: shape.mesh.indices) {
-                    BuffkinzModel::Vertex vertex{};
-                    vertex.position = {
-                            attrib.vertices[3 * index.vertex_index + 0],
-                            attrib.vertices[3 * index.vertex_index + 1],
-                            attrib.vertices[3 * index.vertex_index + 2]
-                    };
+                    std::unordered_map<BuffkinzModel::Vertex, uint32_t> uniqueVertices{};
 
-                    vertex.normal = {
-                            attrib.normals[3 * index.normal_index + 0],
-                            attrib.normals[3 * index.normal_index + 1],
-                            attrib.normals[3 * index.normal_index + 2]
-                    };
+                    for (const auto &shape: shapes) {
+                        for (const auto &index: shape.mesh.indices) {
+                            BuffkinzModel::Vertex vertex{};
+                            vertex.position = {
+                                    attrib.vertices[3 * index.vertex_index + 0],
+                                    attrib.vertices[3 * index.vertex_index + 1],
+                                    attrib.vertices[3 * index.vertex_index + 2]
+                            };
+
+                            vertex.color = {
+                                    1.0f, 1.0f, 1.0f
+                            };
+
+                            vertex.normal = {
+                                    attrib.normals[3 * index.normal_index + 0],
+                                    attrib.normals[3 * index.normal_index + 1],
+                                    attrib.normals[3 * index.normal_index + 2]
+                            };
 
 
-                     vertex.texCoord = {
-                         attrib.texcoords[2 * index.texcoord_index + 0],
-                         1.0 - attrib.texcoords[2 * index.texcoord_index + 1]
-                     };
+                            vertex.texCoord = {
+                                    attrib.texcoords[2 * index.texcoord_index + 0],
+                                    1.0 - attrib.texcoords[2 * index.texcoord_index + 1]
+                            };
 
-                    vertices.push_back(vertex);
-                    indices.push_back(indices.size());
+
+                            if (uniqueVertices.count(vertex) == 0) {
+                                uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
+                                vertices.push_back(vertex);
+                            }
+
+                            indices.push_back(uniqueVertices[vertex]);
+                        }
+                    }
+
+
+
+                    auto object = GameObject::createGameObject();
+                    auto buffkinzModel = std::make_shared<BuffkinzModel>(buffkinzDevice, vertices, indices,
+                                                                         "../model/sir_buff_2.png");
+                    object.model = buffkinzModel;
+//                    object.position = glm::vec3(0.0f, 5.0f * (float)k, 5.0f * (float)l);
+                    object.position = glm::vec3(0.0f, i * 20.0f, 5.0f);
+                    gameObjects.push_back(std::move(object));
+                    i++;
                 }
-            }
-
-
-            auto buffkinzModel = std::make_shared<BuffkinzModel>(buffkinzDevice, vertices, indices, "../model/sir_buff_2.png");
-            auto object = GameObject::createGameObject();
-            object.model = buffkinzModel;
-            object.position = glm::vec3(0.0f, 0.0f , 40.0f);
-            gameObjects.push_back(std::move(object));
-            i++;
-        }
+//            }
+//        }
     }
 
     void BuffkinzApp::createDescriptorSetLayout() {
@@ -135,7 +169,7 @@ namespace buffkinz {
         uboLayoutBinding.binding = 0;
         uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
         uboLayoutBinding.descriptorCount = 1;
-        uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        uboLayoutBinding.stageFlags = VK_SHADER_STAGE_ALL;
         uboLayoutBinding.pImmutableSamplers = nullptr; // Optional
 
         VkDescriptorSetLayoutBinding samplerLayoutBinding{};
@@ -159,7 +193,7 @@ namespace buffkinz {
     }
 
     void BuffkinzApp::createUniformBuffers() {
-        VkDeviceSize bufferSize = sizeof(GameObject::UniformBufferObject) * gameObjects.size();
+        VkDeviceSize bufferSize = buffkinzDevice.properties.limits.minUniformBufferOffsetAlignment * 100;
         std::cout << "Image count: " + std::to_string(static_cast<int>(buffkinzSwapChain->imageCount())) + "\n";
         uniformBuffers.resize(buffkinzSwapChain->imageCount());
         uniformBuffersMemory.resize(buffkinzSwapChain->imageCount());
@@ -278,11 +312,12 @@ namespace buffkinz {
             throw std::runtime_error("failed to allocate descriptor sets!");
         }
 
+        std::cout << "image number: " << buffkinzSwapChain->imageCount() << std::endl;
         for (size_t i = 0; i < buffkinzSwapChain->imageCount(); i++) {
             VkDescriptorBufferInfo bufferInfo{};
             bufferInfo.buffer = uniformBuffers[i];
             bufferInfo.offset = 0;
-            bufferInfo.range = sizeof(GameObject::UniformBufferObject);
+            bufferInfo.range = buffkinzDevice.properties.limits.minUniformBufferOffsetAlignment;
 
             VkDescriptorImageInfo imageInfo{};
             imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -296,7 +331,7 @@ namespace buffkinz {
             descriptorWrites[0].dstArrayElement = 0;
 
             descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-            descriptorWrites[0].descriptorCount = 1;
+            descriptorWrites[0].descriptorCount = gameObjects.size();
 
             descriptorWrites[0].pBufferInfo = &bufferInfo;
             descriptorWrites[0].pImageInfo = nullptr; // Optional
@@ -367,7 +402,7 @@ namespace buffkinz {
         buffkinzPipeline->bind(commandBuffer);
         for (auto &obj: gameObjects) {
             updateUniformBuffer(imageIndex, obj);
-            uint32_t dynamicOffset = obj.getId() * static_cast<uint32_t>(sizeof(obj.ubo));
+            uint32_t dynamicOffset = obj.getId() * buffkinzDevice.properties.limits.minUniformBufferOffsetAlignment;
             vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1,
                                     &descriptorSet, 1,
                                     &dynamicOffset);
@@ -384,8 +419,7 @@ namespace buffkinz {
         float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
 //        if (object.getId() == 1) {
-            object.ubo.model = glm::mat4(1.0f);
-                    //glm::scale(glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 20.0)), glm::vec3(1.0f, 1.0f, 1.0f)) * glm::rotate(glm::mat4(1.0f), glm::degrees(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            object.ubo.model = glm::scale(glm::translate(glm::mat4(1.0f), object.position), glm::vec3(1.0f, 1.0f, 1.0f)) * glm::rotate(glm::mat4(1.0f), glm::degrees(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 //        } else {
 //            object.ubo.model = glm::translate(glm::mat4(1.0f), object.position);
 //                    * glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -406,9 +440,9 @@ namespace buffkinz {
 //        glm::quat result = glm::inverse(rotationQuat) * camera.lookDir * rotationQuat;
 //
 //        camera.lookDir = glm::vec3(result.x, result.y, result.z);
+        object.ubo.viewDir = camera.lookDir;
 
-
-        memcpy((char*)uniformBuffersMapped[imageIndex] + sizeof(object.ubo) * object.getId(), &object.ubo, sizeof(object.ubo));
+        memcpy((char*)uniformBuffersMapped[imageIndex] + buffkinzDevice.properties.limits.minUniformBufferOffsetAlignment * object.getId(), &object.ubo, sizeof(object.ubo));
     }
 
     void BuffkinzApp::drawFrame() {

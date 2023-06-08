@@ -4,51 +4,74 @@
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
+
 #include <glm/glm.hpp>
 
 #include <vector>
 
 namespace buffkinz {
+
+    template <typename T, typename... Rest>
+    void hashCombine(std::size_t& seed, const T& v, const Rest&... rest) {
+        seed ^= std::hash<T>{}(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        (hashCombine(seed, rest), ...);
+    };
+
     class BuffkinzModel {
-        public: 
+    public:
 
-            struct Vertex {
-                glm::vec3 position;
-                glm::vec3 color;
-                glm::vec3 normal;
-                glm::vec2 texCoord;
+        struct Vertex {
+            glm::vec3 position;
+            glm::vec3 color;
+            glm::vec3 normal;
+            glm::vec2 texCoord;
 
-                static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
-                static std::vector<VkVertexInputAttributeDescription> getAttribueDescriptions();
-            };
+            static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
 
-            BuffkinzModel(BuffkinzDevice& buffkinzDevice, const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices, const char* filePath);
-            ~BuffkinzModel();
+            static std::vector<VkVertexInputAttributeDescription> getAttribueDescriptions();
 
-            BuffkinzModel(const BuffkinzModel &) = delete;
-            BuffkinzModel &operator = (const BuffkinzModel &) = delete;
+            bool operator==(const Vertex &other) const {
+                return position == other.position && color == other.color && normal == other.normal && texCoord == other.texCoord;
+            }
 
-            void bind(VkCommandBuffer commandBuffer);
-            void draw(VkCommandBuffer commandBuffer, uint32_t firstIndex, int32_t vertexOffset);
-            VkImageView getTextureImageView() {return textureImageView;}
+        };
+
+        BuffkinzModel(BuffkinzDevice &buffkinzDevice, const std::vector<Vertex> &vertices,
+                      const std::vector<uint32_t> &indices, const char *filePath);
+
+        ~BuffkinzModel();
+
+        BuffkinzModel(const BuffkinzModel &) = delete;
+
+        BuffkinzModel &operator=(const BuffkinzModel &) = delete;
+
+        void bind(VkCommandBuffer commandBuffer);
+
+        void draw(VkCommandBuffer commandBuffer, uint32_t firstIndex, int32_t vertexOffset);
+
+        VkImageView getTextureImageView() { return textureImageView; }
+
         VkSampler textureSampler;
 
     private:
 
-            void createVertexBuffers(const std::vector<Vertex> &vertices);
-            void createIndexBuffers(const std::vector<uint32_t> &indices);
-            void createTextureImageView(char const* filePath);
-            void createTextureSampler();
+        void createVertexBuffers(const std::vector<Vertex> &vertices);
 
-            BuffkinzDevice& buffkinzDevice;
-            VkBuffer vertexBuffer;
-            VkDeviceMemory vertexBufferMemory;
-            VkBuffer indexBuffer;
-            VkDeviceMemory indexBufferMemory;
-            uint32_t vertexCount;
-            std::vector<uint32_t> indicesModel;
+        void createIndexBuffers(const std::vector<uint32_t> &indices);
 
-            VkImageView textureImageView;
-            
+        void createTextureImageView(char const *filePath);
+
+        void createTextureSampler();
+
+        BuffkinzDevice &buffkinzDevice;
+        VkBuffer vertexBuffer;
+        VkDeviceMemory vertexBufferMemory;
+        VkBuffer indexBuffer;
+        VkDeviceMemory indexBufferMemory;
+        uint32_t vertexCount;
+        std::vector<uint32_t> indicesModel;
+
+        VkImageView textureImageView;
+
     };
 }
