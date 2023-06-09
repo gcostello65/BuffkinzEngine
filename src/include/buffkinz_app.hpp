@@ -26,35 +26,20 @@ namespace buffkinz {
 
             void run();
 
-            VulkanInit vulkan;
+            std::unique_ptr<VulkanInit> vulkan;
 
         private: 
             void loadGameObjects(std::vector<std::string> objFilePaths);
-            void createPipeline();
-            void createDescriptorSetLayout();
-            void createDescriptorPool();
-            void createDescriptorSets();
             void drawFrame();
             void recordCommandBuffer(int imageIndex);
-            void createUniformBuffers();
             void updateUniformBuffer(int imageIndex, GameObject &object);
             void renderGameObjects(VkCommandBuffer commandBuffer, VkDescriptorSet descriptorSet, int imageIndex);
-            
-
-            std::vector<VkBuffer> uniformBuffers;
-            std::vector<VkDeviceMemory> uniformBuffersMemory;
-            std::vector<void*> uniformBuffersMapped;
+            void createDescriptorSets();
 
             std::vector<GameObject> gameObjects;
-            VkDescriptorSetLayout descriptorSetLayout;
-            VkDescriptorPool descriptorPool;
-
-            std::vector<VkDescriptorSet> descriptorSets;
             const std::string MODEL_PATH = "../model/env.obj";
-            int32_t vertexOffset;
-            uint32_t indexOffset;
             Scene::Camera camera{};
-
+            std::vector<VkDescriptorSet> descriptorSets;
             UserInputController controller;
     };
 }

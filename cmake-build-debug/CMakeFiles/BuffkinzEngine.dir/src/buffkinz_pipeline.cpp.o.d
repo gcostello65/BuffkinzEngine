@@ -1,8 +1,8 @@
 CMakeFiles/BuffkinzEngine.dir/src/buffkinz_pipeline.cpp.o: \
   /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/buffkinz_pipeline.cpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_pipeline.hpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_device.hpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_window.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_pipeline.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_device.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_window.hpp \
   /opt/homebrew/include/GLFW/glfw3.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/stddef.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config \
@@ -375,7 +375,7 @@ CMakeFiles/BuffkinzEngine.dir/src/buffkinz_pipeline.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/vector \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__bit_reference \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__split_buffer \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_model.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_model.hpp \
   /opt/homebrew/include/glm/glm.hpp \
   /opt/homebrew/include/glm/detail/_fixes.hpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/cmath \

@@ -1,7 +1,7 @@
 CMakeFiles/BuffkinzEngine.dir/src/main.cpp.o: \
   /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/main.cpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_app.hpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_window.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_app.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_window.hpp \
   /opt/homebrew/include/GLFW/glfw3.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/stddef.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config \
@@ -371,9 +371,9 @@ CMakeFiles/BuffkinzEngine.dir/src/main.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/_types/_wctrans_t.h \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/user_input_controller.hpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_model.hpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_device.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/user_input_controller.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_model.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_device.hpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/vector \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__bit_reference \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__split_buffer \
@@ -533,10 +533,11 @@ CMakeFiles/BuffkinzEngine.dir/src/main.cpp.o: \
   /opt/homebrew/include/glm/vector_relational.hpp \
   /opt/homebrew/include/glm/integer.hpp \
   /opt/homebrew/include/glm/detail/func_integer.inl \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/scene.hpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_pipeline.hpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_swap_chain.hpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/game_object.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/scene.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_pipeline.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_swap_chain.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/game_object.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/vulkan/vulkan_init.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iostream \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/ios \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__locale \

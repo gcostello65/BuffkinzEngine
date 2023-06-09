@@ -1,8 +1,8 @@
 CMakeFiles/BuffkinzEngine.dir/src/buffkinz_swap_chain.cpp.o: \
   /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/buffkinz_swap_chain.cpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_swap_chain.hpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_device.hpp \
-  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/include/buffkinz_window.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_swap_chain.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_device.hpp \
+  /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/src/include/buffkinz_window.hpp \
   /opt/homebrew/include/GLFW/glfw3.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/stddef.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config \

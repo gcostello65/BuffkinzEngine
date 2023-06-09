@@ -1,6 +1,5 @@
 #include <buffkinz_app.hpp>
 #include "user_input_controller.hpp"
-#include "vulkan_init.h"
 
 #include <stdexcept>
 #include <array>
@@ -36,25 +35,21 @@ namespace std {
 namespace buffkinz {
 
     BuffkinzApp::BuffkinzApp() {
-        vulkan = VulkanInit();
+        vulkan = std::make_unique<VulkanInit>();
         loadGameObjects({"../model/sir_buffkinz2_more_geometry.obj"});
+        createDescriptorSets();
         camera.position = glm::vec3(0.0f, 0.0f, 0.0f);
         camera.lookDir = glm::vec3(0.0f, 0.0f, 1.0f);
         camera.up = glm::vec3(0.0f, 1.0f, 0.0f);
-
-        //Uniform buffers should be done on a scene by scene level.
-        createUniformBuffers();
-        createDescriptorPool();
-        createDescriptorSets();
     }
 
     BuffkinzApp::~BuffkinzApp() {
-        vkDestroyDescriptorPool(vulkan.device.device(), descriptorPool, nullptr);
+        vkDestroyDescriptorPool(vulkan->device.device(), vulkan->descriptorPool, nullptr);
 
-        vkDestroyDescriptorSetLayout(vulkan.device.device(), descriptorSetLayout, nullptr);
-        for (size_t i = 0; i < vulkan.swapChain->imageCount(); i++) {
-            vkDestroyBuffer(vulkan.device.device(), uniformBuffers[i], nullptr);
-            vkFreeMemory(vulkan.device.device(), uniformBuffersMemory[i], nullptr);
+        vkDestroyDescriptorSetLayout(vulkan->device.device(), vulkan->descriptorSetLayout, nullptr);
+        for (size_t i = 0; i < vulkan->swapChain->imageCount(); i++) {
+            vkDestroyBuffer(vulkan->device.device(), vulkan->uniformBuffers[i], nullptr);
+            vkFreeMemory(vulkan->device.device(), vulkan->uniformBuffersMemory[i], nullptr);
         }
     }
 
@@ -62,18 +57,18 @@ namespace buffkinz {
 
         auto currentTime = std::chrono::high_resolution_clock::now();
         float frameTime = 0.0f;
-        while (!vulkan.window.shouldClose()) {
+        while (!vulkan->window.shouldClose()) {
             glfwPollEvents();
             auto newTime = std::chrono::high_resolution_clock::now();
             frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
             currentTime = newTime;
 
-            glfwSetInputMode(vulkan.window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            glfwSetInputMode(vulkan->window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-            controller.keyMovement(vulkan.window.getWindow(), (float &) frameTime, camera);
+            controller.keyMovement(vulkan->window.getWindow(), (float &) frameTime, camera);
 
             drawFrame();
-            vkDeviceWaitIdle(vulkan.device.device());
+            vkDeviceWaitIdle(vulkan->device.device());
         }
     }
 
@@ -140,7 +135,7 @@ namespace buffkinz {
 
 
             auto object = GameObject::createGameObject();
-            auto buffkinzModel = std::make_shared<BuffkinzModel>(buffkinzDevice, vertices, indices,
+            auto buffkinzModel = std::make_shared<BuffkinzModel>(vulkan->device, vertices, indices,
                                                                  "../model/sir_buff_2.png");
             object.model = buffkinzModel;
 //                    object.position = glm::vec3(0.0f, 5.0f * (float)k, 5.0f * (float)l);
@@ -152,88 +147,25 @@ namespace buffkinz {
 //        }
     }
 
-    void BuffkinzApp::createDescriptorSetLayout() {
-        VkDescriptorSetLayoutBinding uboLayoutBinding{};
-        uboLayoutBinding.binding = 0;
-        uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-        uboLayoutBinding.descriptorCount = 1;
-        uboLayoutBinding.stageFlags = VK_SHADER_STAGE_ALL;
-        uboLayoutBinding.pImmutableSamplers = nullptr; // Optional
-
-        VkDescriptorSetLayoutBinding samplerLayoutBinding{};
-        samplerLayoutBinding.binding = 1;
-        samplerLayoutBinding.descriptorCount = 1;
-        samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        samplerLayoutBinding.pImmutableSamplers = nullptr;
-        samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-
-        std::array<VkDescriptorSetLayoutBinding, 2> bindings = {uboLayoutBinding, samplerLayoutBinding};
-
-        VkDescriptorSetLayoutCreateInfo layoutInfo{};
-        layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
-        layoutInfo.pBindings = bindings.data();
-
-        if (vkCreateDescriptorSetLayout(buffkinzDevice.device(), &layoutInfo, nullptr, &descriptorSetLayout) !=
-            VK_SUCCESS) {
-            throw std::runtime_error("failed to create descriptor set layout!");
-        }
-    }
-
-    void BuffkinzApp::createUniformBuffers() {
-        VkDeviceSize bufferSize = buffkinzDevice.properties.limits.minUniformBufferOffsetAlignment * 100;
-        std::cout << "Image count: " + std::to_string(static_cast<int>(buffkinzSwapChain->imageCount())) + "\n";
-        uniformBuffers.resize(buffkinzSwapChain->imageCount());
-        uniformBuffersMemory.resize(buffkinzSwapChain->imageCount());
-        uniformBuffersMapped.resize(buffkinzSwapChain->imageCount());
-
-        for (size_t i = 0; i < buffkinzSwapChain->imageCount(); i++) {
-            buffkinzDevice.createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                                        uniformBuffers[i], uniformBuffersMemory[i]);
-
-            vkMapMemory(buffkinzDevice.device(), uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
-        }
-    }
-
-    void BuffkinzApp::createDescriptorPool() {
-        std::array<VkDescriptorPoolSize, 2> poolSizes{};
-        poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-        poolSizes[0].descriptorCount = static_cast<uint32_t>(buffkinzSwapChain->imageCount());
-        poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSizes[1].descriptorCount = static_cast<uint32_t>(buffkinzSwapChain->imageCount());
-
-        VkDescriptorPoolCreateInfo poolInfo{};
-        poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
-        poolInfo.pPoolSizes = poolSizes.data();
-        poolInfo.maxSets = static_cast<uint32_t>(buffkinzSwapChain->imageCount());
-
-        if (vkCreateDescriptorPool(buffkinzDevice.device(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create descriptor pool!");
-        }
-
-    }
-
     void BuffkinzApp::createDescriptorSets() {
-        std::vector<VkDescriptorSetLayout> layouts(buffkinzSwapChain->imageCount(), descriptorSetLayout);
+        std::vector<VkDescriptorSetLayout> layouts(vulkan->swapChain->imageCount(), vulkan->descriptorSetLayout);
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        allocInfo.descriptorPool = descriptorPool;
-        allocInfo.descriptorSetCount = static_cast<uint32_t>(buffkinzSwapChain->imageCount());
+        allocInfo.descriptorPool = vulkan->descriptorPool;
+        allocInfo.descriptorSetCount = static_cast<uint32_t>(vulkan->swapChain->imageCount());
         allocInfo.pSetLayouts = layouts.data();
 
-        descriptorSets.resize(buffkinzSwapChain->imageCount());
-        if (vkAllocateDescriptorSets(buffkinzDevice.device(), &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
+        descriptorSets.resize(vulkan->swapChain->imageCount());
+        if (vkAllocateDescriptorSets(vulkan->device.device(), &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
             throw std::runtime_error("failed to allocate descriptor sets!");
         }
 
-        std::cout << "image number: " << buffkinzSwapChain->imageCount() << std::endl;
-        for (size_t i = 0; i < buffkinzSwapChain->imageCount(); i++) {
+        std::cout << "image number: " << vulkan->swapChain->imageCount() << std::endl;
+        for (size_t i = 0; i < vulkan->swapChain->imageCount(); i++) {
             VkDescriptorBufferInfo bufferInfo{};
-            bufferInfo.buffer = uniformBuffers[i];
+            bufferInfo.buffer = vulkan->uniformBuffers[i];
             bufferInfo.offset = 0;
-            bufferInfo.range = buffkinzDevice.properties.limits.minUniformBufferOffsetAlignment;
+            bufferInfo.range = vulkan->device.properties.limits.minUniformBufferOffsetAlignment;
 
             VkDescriptorImageInfo imageInfo{};
             imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -261,28 +193,26 @@ namespace buffkinz {
             descriptorWrites[1].descriptorCount = 1;
             descriptorWrites[1].pImageInfo = &imageInfo;
 
-            vkUpdateDescriptorSets(buffkinzDevice.device(), static_cast<uint32_t>(descriptorWrites.size()),
+            vkUpdateDescriptorSets(vulkan->device.device(), static_cast<uint32_t>(descriptorWrites.size()),
                                    descriptorWrites.data(), 0, nullptr);
         }
-
-
     }
 
     void BuffkinzApp::recordCommandBuffer(int imageIndex) {
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
-        if (vkBeginCommandBuffer(commandBuffers[imageIndex], &beginInfo) != VK_SUCCESS) {
+        if (vkBeginCommandBuffer(vulkan->commandBuffers[imageIndex], &beginInfo) != VK_SUCCESS) {
             throw std::runtime_error("failed to begin recording command buffer");
         }
 
 
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        renderPassInfo.renderPass = buffkinzSwapChain->getRenderPass();
-        renderPassInfo.framebuffer = buffkinzSwapChain->getFrameBuffer(imageIndex);
+        renderPassInfo.renderPass = vulkan->swapChain->getRenderPass();
+        renderPassInfo.framebuffer = vulkan->swapChain->getFrameBuffer(imageIndex);
         renderPassInfo.renderArea.offset = {0, 0};
-        renderPassInfo.renderArea.extent = buffkinzSwapChain->getSwapChainExtent();
+        renderPassInfo.renderArea.extent = vulkan->swapChain->getSwapChainExtent();
 
         std::array<VkClearValue, 2> clearValues{};
         clearValues[0].color = {114.f / 255.f, 149.f / 255.f, 183.f / 255.f, 1.0f};
@@ -290,37 +220,37 @@ namespace buffkinz {
         renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
         renderPassInfo.pClearValues = clearValues.data();
 
-        vkCmdBeginRenderPass(commandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdBeginRenderPass(vulkan->commandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = static_cast<float>(buffkinzSwapChain->getSwapChainExtent().width);
-        viewport.height = static_cast<float>(buffkinzSwapChain->getSwapChainExtent().height);
+        viewport.width = static_cast<float>(vulkan->swapChain->getSwapChainExtent().width);
+        viewport.height = static_cast<float>(vulkan->swapChain->getSwapChainExtent().height);
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
-        VkRect2D scissor{{0, 0}, buffkinzSwapChain->getSwapChainExtent()};
-        vkCmdSetViewport(commandBuffers[imageIndex], 0, 1, &viewport);
-        vkCmdSetScissor(commandBuffers[imageIndex], 0, 1, &scissor);
+        VkRect2D scissor{{0, 0}, vulkan->swapChain->getSwapChainExtent()};
+        vkCmdSetViewport(vulkan->commandBuffers[imageIndex], 0, 1, &viewport);
+        vkCmdSetScissor(vulkan->commandBuffers[imageIndex], 0, 1, &scissor);
 
-//        buffkinzPipeline->bind(commandBuffers[imageIndex]);
+//        vulkan->pipeline->bind(vulkan->commandBuffers[imageIndex]);
 
-//        buffkinzModel->bind(commandBuffers[imageIndex]);
-//        buffkinzModel->draw(commandBuffers[imageIndex], 0, 0);
-        renderGameObjects(commandBuffers[imageIndex], descriptorSets[imageIndex], imageIndex);
+//        buffkinzModel->bind(vulkan->commandBuffers[imageIndex]);
+//        buffkinzModel->draw(vulkan->commandBuffers[imageIndex], 0, 0);
+        renderGameObjects(vulkan->commandBuffers[imageIndex], descriptorSets[imageIndex], imageIndex);
 
-        vkCmdEndRenderPass(commandBuffers[imageIndex]);
-        if (vkEndCommandBuffer(commandBuffers[imageIndex]) != VK_SUCCESS) {
+        vkCmdEndRenderPass(vulkan->commandBuffers[imageIndex]);
+        if (vkEndCommandBuffer(vulkan->commandBuffers[imageIndex]) != VK_SUCCESS) {
             throw std::runtime_error("failed to record command buffer");
         }
     }
 
     void BuffkinzApp::renderGameObjects(VkCommandBuffer commandBuffer, VkDescriptorSet descriptorSet, int imageIndex) {
-        buffkinzPipeline->bind(commandBuffer);
+        vulkan->pipeline->bind(commandBuffer);
         for (auto &obj: gameObjects) {
             updateUniformBuffer(imageIndex, obj);
-            uint32_t dynamicOffset = obj.getId() * buffkinzDevice.properties.limits.minUniformBufferOffsetAlignment;
-            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1,
+            uint32_t dynamicOffset = obj.getId() * vulkan->device.properties.limits.minUniformBufferOffsetAlignment;
+            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkan->pipelineLayout, 0, 1,
                                     &descriptorSet, 1,
                                     &dynamicOffset);
 
@@ -349,7 +279,7 @@ namespace buffkinz {
         object.ubo.view = glm::lookAt(camera.position, camera.position + camera.lookDir, camera.up);
 
         object.ubo.proj = glm::perspective(glm::radians(60.0f),
-                                           buffkinzSwapChain->width() / (float) buffkinzSwapChain->height(), 0.1f,
+                                           vulkan->swapChain->width() / (float) vulkan->swapChain->height(), 0.1f,
                                            100.0f);
 
         object.ubo.proj[1][1] *= -1;
@@ -362,17 +292,17 @@ namespace buffkinz {
 //        camera.lookDir = glm::vec3(result.x, result.y, result.z);
         object.ubo.viewDir = camera.lookDir;
 
-        memcpy((char *) uniformBuffersMapped[imageIndex] +
-               buffkinzDevice.properties.limits.minUniformBufferOffsetAlignment * object.getId(), &object.ubo,
+        memcpy((char *) vulkan->uniformBuffersMapped[imageIndex] +
+               vulkan->device.properties.limits.minUniformBufferOffsetAlignment * object.getId(), &object.ubo,
                sizeof(object.ubo));
     }
 
     void BuffkinzApp::drawFrame() {
         uint32_t imageIndex;
-        auto result = buffkinzSwapChain->acquireNextImage(&imageIndex);
+        auto result = vulkan->swapChain->acquireNextImage(&imageIndex);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR) {
-            vulkan.recreateSwapChain();
+            vulkan->recreateSwapChain();
             return;
         }
 
@@ -386,10 +316,10 @@ namespace buffkinz {
         VkSubmitInfo submitInfo{};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-        result = buffkinzSwapChain->submitCommandBuffers(&commandBuffers[imageIndex], &imageIndex);
-        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || buffkinzWindow.wasWindowResized()) {
-            buffkinzWindow.resetWindowResizedFlag();
-            vulkan.recreateSwapChain();
+        result = vulkan->swapChain->submitCommandBuffers(&vulkan->commandBuffers[imageIndex], &imageIndex);
+        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || vulkan->window.wasWindowResized()) {
+            vulkan->window.resetWindowResizedFlag();
+            vulkan->recreateSwapChain();
             return;
         }
         if (result != VK_SUCCESS) {
