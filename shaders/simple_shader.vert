@@ -25,7 +25,7 @@ void main() {
 
     gl_Position = positionTrans;
 
-    vec3 light = vec3(0.0, 0.0, -90.0);
+    vec3 light = vec3(0.0, 0.0, -40.0);
     lightTrans = mat3(ubo.lightTransform) * light;
 
 

@@ -21,9 +21,9 @@ layout (location = 0) out vec4 outColor;
 
 void main() {
     vec3 H1 = normalize((lightTrans - vec3(positionTrans)) + ubo.viewDir);
-    vec3 H2 = normalize(vec3(0.0, 20.0,-20.0) + ubo.viewDir);
+//    vec3 H2 = normalize(vec3(0.0, 20.0,-20.0) + ubo.viewDir);
     float shade = clamp(dot(normalize(normalTrans), normalize(lightTrans - vec3(positionTrans))), 0.0, 1.0) +
         clamp((dot(normalize(normalTrans), normalize(vec3(0.0, 0.0,-20.0)))), 0.0, 1.0);
-    float spec = clamp(pow(dot(normalize(normalTrans), H1), 100), 0.0, 1.0) + clamp(pow(dot(normalize(normalTrans), H2), 20), 0.0, 1.0);
-    outColor = texture(texSampler, fragTexCoord) * shade + texture(texSampler, fragTexCoord) * spec + 0.2 * vec4(1.0, 1.0, 1.0, 1.0f);
+    float spec = clamp(pow(dot(normalize(normalTrans), H1), 1000), 0.0, 1.0);
+    outColor = texture(texSampler, fragTexCoord) * shade + texture(texSampler, fragTexCoord) * spec + 0.1 * vec4(1.0, 1.0, 1.0, 1.0f);
 }
