@@ -36,7 +36,7 @@ namespace buffkinz {
 
     BuffkinzApp::BuffkinzApp() {
         vulkan = std::make_unique<VulkanInit>();
-        loadGameObjects({"../model/sir_buffkinz2_more_geometry.obj"});
+        loadGameObjects({"../model/model/armor_2021.obj"});
         createDescriptorSets();
         camera.position = glm::vec3(0.0f, 0.0f, 0.0f);
         camera.lookDir = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -80,6 +80,7 @@ namespace buffkinz {
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
         std::string warn, err;
+        std::vector<std::string> texturePaths;
         int i = 0;
 
         for (std::string objFile: objFilePaths) {
@@ -130,18 +131,23 @@ namespace buffkinz {
                     }
 
                     indices.push_back(uniqueVertices[vertex]);
+
                 }
+                i++;
             }
 
 
             auto object = GameObject::createGameObject();
+            for (tinyobj::material_t mat : materials) {
+                texturePaths.push_back(mat.diffuse_texname);
+            }
             auto buffkinzModel = std::make_shared<BuffkinzModel>(vulkan->device, vertices, indices,
-                                                                 "../model/sir_buff_2.png");
+                                                                 texturePaths);
             object.model = buffkinzModel;
 //                    object.position = glm::vec3(0.0f, 5.0f * (float)k, 5.0f * (float)l);
             object.position = glm::vec3(0.0f, i * 20.0f, 5.0f);
             gameObjects.push_back(std::move(object));
-            i++;
+
         }
 //            }
 //        }
@@ -233,10 +239,6 @@ namespace buffkinz {
         vkCmdSetViewport(vulkan->commandBuffers[imageIndex], 0, 1, &viewport);
         vkCmdSetScissor(vulkan->commandBuffers[imageIndex], 0, 1, &scissor);
 
-//        vulkan->pipeline->bind(vulkan->commandBuffers[imageIndex]);
-
-//        buffkinzModel->bind(vulkan->commandBuffers[imageIndex]);
-//        buffkinzModel->draw(vulkan->commandBuffers[imageIndex], 0, 0);
         renderGameObjects(vulkan->commandBuffers[imageIndex], descriptorSets[imageIndex], imageIndex);
 
         vkCmdEndRenderPass(vulkan->commandBuffers[imageIndex]);
@@ -265,14 +267,8 @@ namespace buffkinz {
         auto currentTime = std::chrono::high_resolution_clock::now();
         float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
-//        if (object.getId() == 1) {
         object.ubo.model = glm::scale(glm::translate(glm::mat4(1.0f), object.position), glm::vec3(1.0f, 1.0f, 1.0f)) *
                            glm::rotate(glm::mat4(1.0f), glm::degrees(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-//        } else {
-//            object.ubo.model = glm::translate(glm::mat4(1.0f), object.position);
-//                    * glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-//        }
-
         object.ubo.lightTransform = glm::rotate(glm::mat4(1.0f), time * glm::radians(45.0f),
                                                 glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -284,12 +280,6 @@ namespace buffkinz {
 
         object.ubo.proj[1][1] *= -1;
 
-//        std::cout << "rotation angle: " << camera.rotAngle << std::endl;
-//        glm::quat rotationQuat = glm::angleAxis(camera.rotAngle, camera.rotationAxis);
-//
-//        glm::quat result = glm::inverse(rotationQuat) * camera.lookDir * rotationQuat;
-//
-//        camera.lookDir = glm::vec3(result.x, result.y, result.z);
         object.ubo.viewDir = camera.lookDir;
 
         memcpy((char *) vulkan->uniformBuffersMapped[imageIndex] +

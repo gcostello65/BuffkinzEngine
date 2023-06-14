@@ -14,16 +14,18 @@ layout(set = 0, binding = 0) uniform UniformBufferObject {
     vec3 viewDir;
 } ubo;
 
-layout(binding = 1) uniform sampler2D texSampler;
-
+layout(binding = 1) uniform sampler2DArray texSampler;
 
 layout (location = 0) out vec4 outColor;
 
 void main() {
     vec3 H1 = normalize((lightTrans - vec3(positionTrans)) + ubo.viewDir);
-    vec3 H2 = normalize(vec3(0.0, 20.0,-20.0) + ubo.viewDir);
+//    vec3 H2 = normalize(vec3(0.0, 0.0,-20.0) + ubo.viewDir);
     float shade = clamp(dot(normalize(normalTrans), normalize(lightTrans - vec3(positionTrans))), 0.0, 1.0) +
         clamp((dot(normalize(normalTrans), normalize(vec3(0.0, 0.0,-20.0)))), 0.0, 1.0);
-    float spec = clamp(pow(dot(normalize(normalTrans), H1), 100), 0.0, 1.0) + clamp(pow(dot(normalize(normalTrans), H2), 20), 0.0, 1.0);
-    outColor = texture(texSampler, fragTexCoord) * shade + texture(texSampler, fragTexCoord) * spec + 0.2 * vec4(1.0, 1.0, 1.0, 1.0f);
+    float spec = pow(clamp(dot(normalize(normalTrans), H1), 0.0, 1.0), 32);
+    outColor = texture(texSampler, vec3(fragTexCoord, 1)) * shade;
+//    outColor = vec4(1.0, 1.0, 1.0, 1.0) * shade;
+
+    //+ texture(texSampler, vec3(fragTexCoord.xy, 0)) * 0.8 * spec + 0.2 * vec4(1.0, 1.0, 1.0, 1.0f);
 }

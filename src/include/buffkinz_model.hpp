@@ -37,7 +37,7 @@ namespace buffkinz {
         };
 
         BuffkinzModel(BuffkinzDevice &buffkinzDevice, const std::vector<Vertex> &vertices,
-                      const std::vector<uint32_t> &indices, const char *filePath);
+                      const std::vector<uint32_t> &indices, std::vector<std::string> filePaths);
 
         ~BuffkinzModel();
 
@@ -55,7 +55,7 @@ namespace buffkinz {
 
         void createIndexBuffers(const std::vector<uint32_t> &indices);
 
-        void createTextureImageView(char const *filePath);
+        void createTextureImageView(std::vector<std::string> filePaths);
 
         void createTextureSampler();
 

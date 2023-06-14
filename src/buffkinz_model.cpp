@@ -6,17 +6,16 @@
 #include <glm/gtx/hash.hpp>
 
 namespace buffkinz {
-    BuffkinzModel::BuffkinzModel(BuffkinzDevice& device, const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices, const char* filePath) : buffkinzDevice{device} {
+    BuffkinzModel::BuffkinzModel(BuffkinzDevice& device, const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices, std::vector<std::string> filePaths) : buffkinzDevice{device} {
         createVertexBuffers(vertices);
         createIndexBuffers(indices);
 
         buffkinzDevice.createTextureImage();
-        createTextureImageView(filePath);
+
+        createTextureImageView(filePaths);
         createTextureSampler();
         indicesModel = indices;
     }
-
-
 
     BuffkinzModel::~BuffkinzModel() {
         vkDestroyBuffer(buffkinzDevice.device(), vertexBuffer, nullptr);
@@ -29,30 +28,39 @@ namespace buffkinz {
 
     }
 
-    void BuffkinzModel::createTextureImageView(char const* filePath) {
+    void BuffkinzModel::createTextureImageView(std::vector<std::string> filePaths) {
         int texWidth, texHeight, texChannels;
-        stbi_uc* pixels = stbi_load(filePath, &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
-        VkDeviceSize imageSize = texWidth * texHeight * 4;
+        uint32_t offset = 0;
+        stbi_uc *pixels;
+        for (std::string path : filePaths) {
+            pixels = stbi_load(path.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+            VkDeviceSize imageSize = texWidth * texHeight * 4;
+            if (!pixels) {
+                throw std::runtime_error("failed to load texture image!");
+            }
 
-        memcpy(buffkinzDevice.getTextureData(), pixels, static_cast<size_t>(imageSize));
-        buffkinzDevice.transitionImageLayout(buffkinzDevice.textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-        buffkinzDevice.copyBufferToImage(buffkinzDevice.textureStagingBuffer, buffkinzDevice.textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight), 1);
-        buffkinzDevice.transitionImageLayout(buffkinzDevice.textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-        if (!pixels) {
-            throw std::runtime_error("failed to load texture image!");
+            memcpy(buffkinzDevice.getTextureData(), pixels, static_cast<size_t>(imageSize));
+            offset ++;
         }
+            buffkinzDevice.transitionImageLayout(buffkinzDevice.textureImage, VK_FORMAT_R8G8B8A8_SRGB,
+                                                 VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
+
+            buffkinzDevice.copyBufferToImage(buffkinzDevice.textureStagingBuffer, buffkinzDevice.textureImage,
+                                             static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight), 1);
+            buffkinzDevice.transitionImageLayout(buffkinzDevice.textureImage, VK_FORMAT_R8G8B8A8_SRGB,
+                                                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
 
         VkImageViewCreateInfo viewInfo{};
         viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        viewInfo.image = buffkinzDevice.getTextureImage();
-        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        viewInfo.image = buffkinzDevice.textureImage;
+        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
         viewInfo.format = VK_FORMAT_R8G8B8A8_SRGB;
-        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        viewInfo.subresourceRange.baseMipLevel = 0;
+        viewInfo.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
         viewInfo.subresourceRange.levelCount = 1;
-        viewInfo.subresourceRange.baseArrayLayer = 0;
-        viewInfo.subresourceRange.layerCount = 1;
+        // TODO: Make the layer count a global constant of some sort for each model.
+        viewInfo.subresourceRange.layerCount = 100;
+
 
         if (vkCreateImageView(buffkinzDevice.device(), &viewInfo, nullptr, &textureImageView) != VK_SUCCESS) {
             throw std::runtime_error("failed to create texture image view!");
@@ -65,13 +73,9 @@ namespace buffkinz {
         samplerInfo.magFilter = VK_FILTER_LINEAR;
         samplerInfo.minFilter = VK_FILTER_LINEAR;
 
-        samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-
-        samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 
         samplerInfo.anisotropyEnable = VK_TRUE;
         samplerInfo.maxAnisotropy = buffkinzDevice.properties.limits.maxSamplerAnisotropy;

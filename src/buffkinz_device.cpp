@@ -475,15 +475,16 @@ namespace buffkinz {
 
     void BuffkinzDevice::createTextureImage() {
 
-        createBuffer(4194304 * 12, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, textureStagingBuffer, textureStagingBufferMemory);
+        createBuffer(1000000000, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, textureStagingBuffer, textureStagingBufferMemory);
 
-        vkMapMemory(device_, textureStagingBufferMemory, 0, 4194304 * 12, 0, &textureData);
+        vkMapMemory(device_, textureStagingBufferMemory, 0, 1000000000, 0, &textureData);
 
-        createImage(1024, 1024, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, textureImage, textureImageMemory);
+        createImage(2048, 2048, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, textureImage, textureImageMemory);
 
     }
 
-    void BuffkinzDevice::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) {
+    void BuffkinzDevice::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout,
+                                               VkImageLayout newLayout, int index) {
         VkCommandBuffer commandBuffer = beginSingleTimeCommands();
         VkImageMemoryBarrier barrier{};
         barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -496,7 +497,7 @@ namespace buffkinz {
         barrier.subresourceRange.baseMipLevel = 0;
         barrier.subresourceRange.levelCount = 1;
         barrier.subresourceRange.baseArrayLayer = 0;
-        barrier.subresourceRange.layerCount = 1;
+        barrier.subresourceRange.layerCount = 100;
         barrier.srcAccessMask = 0; // TODO
         barrier.dstAccessMask = 0; // TODO
 
@@ -538,7 +539,8 @@ namespace buffkinz {
         imageInfo.extent.height = height;
         imageInfo.extent.depth = 1;
         imageInfo.mipLevels = 1;
-        imageInfo.arrayLayers = 1;
+        // TODO: Make the layer count a global constant of some sort for each model.
+        imageInfo.arrayLayers = 100;
         imageInfo.format = format;
         imageInfo.tiling = tiling;
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -581,26 +583,31 @@ namespace buffkinz {
             VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount) {
         VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 
-        VkBufferImageCopy region{};
-        region.bufferOffset = 0;
-        region.bufferRowLength = 0;
-        region.bufferImageHeight = 0;
+        std::vector<VkBufferImageCopy> bufferCopyRegions;
 
-        region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        region.imageSubresource.mipLevel = 0;
-        region.imageSubresource.baseArrayLayer = 0;
-        region.imageSubresource.layerCount = layerCount;
+        for (int i = 0; i < layerCount; i++) {
+            VkBufferImageCopy region{};
+            region.bufferOffset = i * width * height * 4;
+//            region.bufferRowLength = 0;
+//            region.bufferImageHeight = 0;
 
-        region.imageOffset = {0, 0, 0};
-        region.imageExtent = {width, height, 1};
+            region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            region.imageSubresource.mipLevel = 0;
+            region.imageSubresource.baseArrayLayer = i;
+            region.imageSubresource.layerCount = 1;
+
+            region.imageOffset = {0, 0, 0};
+            region.imageExtent = {width, height, 1};
+            bufferCopyRegions.push_back(region);
+        }
 
         vkCmdCopyBufferToImage(
                 commandBuffer,
                 buffer,
                 image,
                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                1,
-                &region);
+                bufferCopyRegions.size(),
+                bufferCopyRegions.data());
         endSingleTimeCommands(commandBuffer);
     }
 
