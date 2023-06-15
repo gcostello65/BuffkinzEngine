@@ -100,8 +100,11 @@ namespace buffkinz {
             std::unordered_map<BuffkinzModel::Vertex, uint32_t> uniqueVertices{};
 
             for (const auto &shape: shapes) {
+                int k = 0;
                 for (const auto &index: shape.mesh.indices) {
                     BuffkinzModel::Vertex vertex{};
+                    vertex.matId = shape.mesh.material_ids[k];
+                    k++;
                     vertex.position = {
                             attrib.vertices[3 * index.vertex_index + 0],
                             attrib.vertices[3 * index.vertex_index + 1],
@@ -145,7 +148,7 @@ namespace buffkinz {
                                                                  texturePaths);
             object.model = buffkinzModel;
 //                    object.position = glm::vec3(0.0f, 5.0f * (float)k, 5.0f * (float)l);
-            object.position = glm::vec3(0.0f, i * 20.0f, 5.0f);
+            object.position = glm::vec3(0.0f, 0.0f, 5.0f);
             gameObjects.push_back(std::move(object));
 
         }
@@ -173,10 +176,19 @@ namespace buffkinz {
             bufferInfo.offset = 0;
             bufferInfo.range = vulkan->device.properties.limits.minUniformBufferOffsetAlignment;
 
-            VkDescriptorImageInfo imageInfo{};
-            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-            imageInfo.imageView = gameObjects[0].model->getTextureImageView();
-            imageInfo.sampler = gameObjects[0].model->textureSampler;
+            VkDescriptorImageInfo descriptorImageInfos[16];
+            for (int j = 0; j < 16; j++) {
+                VkDescriptorImageInfo imageInfo{};
+                imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                if (gameObjects[0].model->getTextures().size() > j) {
+                    imageInfo.imageView = gameObjects[0].model->getTextures()[j].textureImageView;
+                    imageInfo.sampler = gameObjects[0].model->getTextures()[j].sampler;
+                } else {
+                    imageInfo.imageView = gameObjects[0].model->getTextures()[0].textureImageView;
+                    imageInfo.sampler = gameObjects[0].model->getTextures()[0].sampler;
+                }
+                descriptorImageInfos[j] = imageInfo;
+            }
 
             std::array<VkWriteDescriptorSet, 2> descriptorWrites{};
             descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -196,8 +208,8 @@ namespace buffkinz {
             descriptorWrites[1].dstBinding = 1;
             descriptorWrites[1].dstArrayElement = 0;
             descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            descriptorWrites[1].descriptorCount = 1;
-            descriptorWrites[1].pImageInfo = &imageInfo;
+            descriptorWrites[1].descriptorCount = 16;
+            descriptorWrites[1].pImageInfo = descriptorImageInfos;
 
             vkUpdateDescriptorSets(vulkan->device.device(), static_cast<uint32_t>(descriptorWrites.size()),
                                    descriptorWrites.data(), 0, nullptr);

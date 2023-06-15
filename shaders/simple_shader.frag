@@ -5,6 +5,7 @@ layout (location = 1) in vec2 fragTexCoord;
 layout (location = 2) in vec3 normalTrans;
 layout (location = 3) in vec4 positionTrans;
 layout (location = 4) in vec3 lightTrans;
+layout (location = 5) flat in uint matId;
 
 layout(set = 0, binding = 0) uniform UniformBufferObject {
     mat4 model;
@@ -14,7 +15,7 @@ layout(set = 0, binding = 0) uniform UniformBufferObject {
     vec3 viewDir;
 } ubo;
 
-layout(binding = 1) uniform sampler2DArray texSampler;
+layout(binding = 1) uniform sampler2D texSampler[16];
 
 layout (location = 0) out vec4 outColor;
 
@@ -24,8 +25,5 @@ void main() {
     float shade = clamp(dot(normalize(normalTrans), normalize(lightTrans - vec3(positionTrans))), 0.0, 1.0) +
         clamp((dot(normalize(normalTrans), normalize(vec3(0.0, 0.0,-20.0)))), 0.0, 1.0);
     float spec = pow(clamp(dot(normalize(normalTrans), H1), 0.0, 1.0), 32);
-    outColor = texture(texSampler, vec3(fragTexCoord, 1)) * shade;
-//    outColor = vec4(1.0, 1.0, 1.0, 1.0) * shade;
-
-    //+ texture(texSampler, vec3(fragTexCoord.xy, 0)) * 0.8 * spec + 0.2 * vec4(1.0, 1.0, 1.0, 1.0f);
+    outColor = texture(texSampler[matId], fragTexCoord) * shade + texture(texSampler[matId], fragTexCoord) * 0.8 * spec + 0.2 * vec4(1.0, 1.0, 1.0, 1.0f);
 }

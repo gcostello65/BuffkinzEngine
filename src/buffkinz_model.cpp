@@ -10,10 +10,8 @@ namespace buffkinz {
         createVertexBuffers(vertices);
         createIndexBuffers(indices);
 
-        buffkinzDevice.createTextureImage();
-
         createTextureImageView(filePaths);
-        createTextureSampler();
+
         indicesModel = indices;
     }
 
@@ -22,60 +20,70 @@ namespace buffkinz {
         vkFreeMemory(buffkinzDevice.device(), vertexBufferMemory, nullptr);
         vkDestroyBuffer(buffkinzDevice.device(), indexBuffer, nullptr);
         vkFreeMemory(buffkinzDevice.device(), indexBufferMemory, nullptr);
-        vkDestroyImageView(buffkinzDevice.device(), textureImageView, nullptr);
-        vkDestroySampler(buffkinzDevice.device(), textureSampler, nullptr);
-        vkDestroyImageView(buffkinzDevice.device(), textureImageView, nullptr);
+//        vkDestroyImageView(buffkinzDevice.device(), textureImageView, nullptr);
+////        vkDestroySampler(buffkinzDevice.device(), , nullptr);
+//        vkDestroyImageView(buffkinzDevice.device(), textureImageView, nullptr);
 
     }
 
     void BuffkinzModel::createTextureImageView(std::vector<std::string> filePaths) {
         int texWidth, texHeight, texChannels;
-        uint32_t offset = 0;
         stbi_uc *pixels;
+        // TODO: add check to make sure that the model does not contauin more than 16 textures
         for (std::string path : filePaths) {
+            Texture texture{};
             pixels = stbi_load(path.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
             VkDeviceSize imageSize = texWidth * texHeight * 4;
             if (!pixels) {
                 throw std::runtime_error("failed to load texture image!");
             }
 
+            texture.width = texWidth;
+            texture.height = texHeight;
+            texture.size = texWidth * texHeight * 4;
+
+            texture.textureImage = buffkinzDevice.createTextureImage(texture.width, texture.height);
+
             memcpy(buffkinzDevice.getTextureData(), pixels, static_cast<size_t>(imageSize));
-            offset ++;
-        }
-            buffkinzDevice.transitionImageLayout(buffkinzDevice.textureImage, VK_FORMAT_R8G8B8A8_SRGB,
+            buffkinzDevice.transitionImageLayout(texture.textureImage, VK_FORMAT_R8G8B8A8_SRGB,
                                                  VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
 
-            buffkinzDevice.copyBufferToImage(buffkinzDevice.textureStagingBuffer, buffkinzDevice.textureImage,
+            buffkinzDevice.copyBufferToImage(buffkinzDevice.textureStagingBuffer, texture.textureImage,
                                              static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight), 1);
-            buffkinzDevice.transitionImageLayout(buffkinzDevice.textureImage, VK_FORMAT_R8G8B8A8_SRGB,
+            buffkinzDevice.transitionImageLayout(texture.textureImage, VK_FORMAT_R8G8B8A8_SRGB,
                                                  VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                                  VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
 
-        VkImageViewCreateInfo viewInfo{};
-        viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        viewInfo.image = buffkinzDevice.textureImage;
-        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
-        viewInfo.format = VK_FORMAT_R8G8B8A8_SRGB;
-        viewInfo.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
-        viewInfo.subresourceRange.levelCount = 1;
-        // TODO: Make the layer count a global constant of some sort for each model.
-        viewInfo.subresourceRange.layerCount = 100;
+
+            VkImageViewCreateInfo viewInfo{};
+            viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+            viewInfo.image = texture.textureImage;
+            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            viewInfo.format = VK_FORMAT_R8G8B8A8_SRGB;
+            viewInfo.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
+            viewInfo.subresourceRange.levelCount = 1;
+            // TODO: Make the layer count a global constant of some sort for each model.
+            viewInfo.subresourceRange.layerCount = 1;
 
 
-        if (vkCreateImageView(buffkinzDevice.device(), &viewInfo, nullptr, &textureImageView) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create texture image view!");
+            if (vkCreateImageView(buffkinzDevice.device(), &viewInfo, nullptr, &texture.textureImageView) != VK_SUCCESS) {
+                throw std::runtime_error("failed to create texture image view!");
+            }
+
+            createTextureSampler(texture);
+            textures.push_back(texture);
         }
     }
 
-    void BuffkinzModel::createTextureSampler() {
+    void BuffkinzModel::createTextureSampler(Texture &texture) {
         VkSamplerCreateInfo samplerInfo{};
         samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
         samplerInfo.magFilter = VK_FILTER_LINEAR;
         samplerInfo.minFilter = VK_FILTER_LINEAR;
 
-        samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-        samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+        samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+        samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
 
         samplerInfo.anisotropyEnable = VK_TRUE;
         samplerInfo.maxAnisotropy = buffkinzDevice.properties.limits.maxSamplerAnisotropy;
@@ -91,7 +99,7 @@ namespace buffkinz {
         samplerInfo.minLod = 0.0f;
         samplerInfo.maxLod = 0.0f;
 
-        if (vkCreateSampler(buffkinzDevice.device(), &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS) {
+        if (vkCreateSampler(buffkinzDevice.device(), &samplerInfo, nullptr, &texture.sampler) != VK_SUCCESS) {
             throw std::runtime_error("failed to create texture sampler!");
         }
     }
@@ -153,7 +161,7 @@ namespace buffkinz {
     }
     
     std::vector<VkVertexInputAttributeDescription> BuffkinzModel::Vertex::getAttribueDescriptions() {
-         std::vector<VkVertexInputAttributeDescription> attributeDescriptions(4);
+         std::vector<VkVertexInputAttributeDescription> attributeDescriptions(5);
          attributeDescriptions[0].binding = 0;
          attributeDescriptions[0].location = 0;
          attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
@@ -173,6 +181,11 @@ namespace buffkinz {
         attributeDescriptions[3].location = 3;
         attributeDescriptions[3].format = VK_FORMAT_R32G32_SFLOAT;
         attributeDescriptions[3].offset = offsetof(Vertex, texCoord);
+
+        attributeDescriptions[4].binding = 0;
+        attributeDescriptions[4].location = 4;
+        attributeDescriptions[4].format = VK_FORMAT_R32_UINT;
+        attributeDescriptions[4].offset = offsetof(Vertex, matId);
 
          return attributeDescriptions;
     }

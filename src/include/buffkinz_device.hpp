@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+
 namespace buffkinz {
 
     struct SwapChainSupportDetails {
@@ -75,7 +76,7 @@ namespace buffkinz {
         void copyBufferToImage(
                 VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
 
-        void createTextureImage();
+        VkImage createTextureImage(int width, int height);
 
         void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout,
                                    int index);

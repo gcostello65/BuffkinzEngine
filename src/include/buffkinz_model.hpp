@@ -25,10 +25,13 @@ namespace buffkinz {
             glm::vec3 color;
             glm::vec3 normal;
             glm::vec2 texCoord;
+            glm::uint32_t matId;
 
             static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
 
             static std::vector<VkVertexInputAttributeDescription> getAttribueDescriptions();
+
+
 
             bool operator==(const Vertex &other) const {
                 return position == other.position && color == other.color && normal == other.normal && texCoord == other.texCoord;
@@ -36,6 +39,16 @@ namespace buffkinz {
 
         };
 
+        struct Texture {
+            VkImage textureImage;
+            VkImageView textureImageView;
+            VkSampler sampler;
+            int width;
+            int height;
+            int size;
+        };
+
+        std::vector<Texture> getTextures() {return textures;}
         BuffkinzModel(BuffkinzDevice &buffkinzDevice, const std::vector<Vertex> &vertices,
                       const std::vector<uint32_t> &indices, std::vector<std::string> filePaths);
 
@@ -47,8 +60,6 @@ namespace buffkinz {
 
         VkImageView getTextureImageView() { return textureImageView; }
 
-        VkSampler textureSampler;
-
     private:
 
         void createVertexBuffers(const std::vector<Vertex> &vertices);
@@ -57,7 +68,7 @@ namespace buffkinz {
 
         void createTextureImageView(std::vector<std::string> filePaths);
 
-        void createTextureSampler();
+        void createTextureSampler(Texture &texture);
 
         BuffkinzDevice &buffkinzDevice;
         VkBuffer vertexBuffer;
@@ -66,6 +77,7 @@ namespace buffkinz {
         VkDeviceMemory indexBufferMemory;
         uint32_t vertexCount;
         std::vector<uint32_t> indicesModel;
+        std::vector<Texture> textures;
 
         VkImageView textureImageView;
 
