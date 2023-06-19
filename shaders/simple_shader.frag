@@ -24,6 +24,6 @@ void main() {
 //    vec3 H2 = normalize(vec3(0.0, 0.0,-20.0) + ubo.viewDir);
     float shade = clamp(dot(normalize(normalTrans), normalize(lightTrans - vec3(positionTrans))), 0.0, 1.0) +
         clamp((dot(normalize(normalTrans), normalize(vec3(0.0, 0.0,-20.0)))), 0.0, 1.0);
-    float spec = pow(clamp(dot(normalize(normalTrans), H1), 0.0, 1.0), 32);
+    float spec = pow(clamp(dot(normalize(normalTrans), H1), 0.0, 1.0), 100);
     outColor = texture(texSampler[matId], fragTexCoord) * shade + texture(texSampler[matId], fragTexCoord) * 0.8 * spec + 0.2 * vec4(1.0, 1.0, 1.0, 1.0f);
 }

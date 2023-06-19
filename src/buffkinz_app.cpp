@@ -36,6 +36,7 @@ namespace buffkinz {
 
     BuffkinzApp::BuffkinzApp() {
         vulkan = std::make_unique<VulkanInit>();
+//        loadGameObjects({"../model/model/armor_2021.obj"});
         loadGameObjects({"../model/model/armor_2021.obj"});
         createDescriptorSets();
         camera.position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -47,7 +48,7 @@ namespace buffkinz {
         vkDestroyDescriptorPool(vulkan->device.device(), vulkan->descriptorPool, nullptr);
 
         vkDestroyDescriptorSetLayout(vulkan->device.device(), vulkan->descriptorSetLayout, nullptr);
-        for (size_t i = 0; i < vulkan->swapChain->imageCount(); i++) {
+        for (size_t i = 0; i < 16; i++) {
             vkDestroyBuffer(vulkan->device.device(), vulkan->uniformBuffers[i], nullptr);
             vkFreeMemory(vulkan->device.device(), vulkan->uniformBuffersMemory[i], nullptr);
         }
@@ -84,6 +85,7 @@ namespace buffkinz {
         int i = 0;
 
         for (std::string objFile: objFilePaths) {
+            auto object = GameObject::createGameObject();
 
 //            for (int k = 0; k < 2; k++) {
 //                for (int l = 0; l < 2; l++) {
@@ -98,13 +100,13 @@ namespace buffkinz {
             }
 
             std::unordered_map<BuffkinzModel::Vertex, uint32_t> uniqueVertices{};
+            std::cout << "Max sampled images: " << vulkan->device.properties.limits.maxPerStageDescriptorSamplers << std::endl;
 
             for (const auto &shape: shapes) {
-                int k = 0;
+                texturePaths.clear();
                 for (const auto &index: shape.mesh.indices) {
                     BuffkinzModel::Vertex vertex{};
-                    vertex.matId = shape.mesh.material_ids[k];
-                    k++;
+                    vertex.matId = 1;
                     vertex.position = {
                             attrib.vertices[3 * index.vertex_index + 0],
                             attrib.vertices[3 * index.vertex_index + 1],
@@ -137,16 +139,18 @@ namespace buffkinz {
 
                 }
                 i++;
-            }
 
+                texturePaths.push_back(materials[shape.mesh.material_ids[0]].diffuse_texname);
+                if (!materials[shape.mesh.material_ids[0]].bump_texname.empty()) {
+                    texturePaths.push_back(materials[shape.mesh.material_ids[0]].bump_texname);
+                } else {
+                    texturePaths.push_back(materials[shape.mesh.material_ids[0]].diffuse_texname);
+                }
 
-            auto object = GameObject::createGameObject();
-            for (tinyobj::material_t mat : materials) {
-                texturePaths.push_back(mat.diffuse_texname);
+                auto buffkinzModel = std::make_shared<BuffkinzModel>(vulkan->device, vertices, indices,
+                                                                     texturePaths);
+                object.models.push_back(buffkinzModel);
             }
-            auto buffkinzModel = std::make_shared<BuffkinzModel>(vulkan->device, vertices, indices,
-                                                                 texturePaths);
-            object.model = buffkinzModel;
 //                    object.position = glm::vec3(0.0f, 5.0f * (float)k, 5.0f * (float)l);
             object.position = glm::vec3(0.0f, 0.0f, 5.0f);
             gameObjects.push_back(std::move(object));
@@ -157,20 +161,20 @@ namespace buffkinz {
     }
 
     void BuffkinzApp::createDescriptorSets() {
-        std::vector<VkDescriptorSetLayout> layouts(vulkan->swapChain->imageCount(), vulkan->descriptorSetLayout);
+        std::vector<VkDescriptorSetLayout> layouts(16, vulkan->descriptorSetLayout);
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
         allocInfo.descriptorPool = vulkan->descriptorPool;
-        allocInfo.descriptorSetCount = static_cast<uint32_t>(vulkan->swapChain->imageCount());
+        allocInfo.descriptorSetCount = static_cast<uint32_t>(16);
         allocInfo.pSetLayouts = layouts.data();
 
-        descriptorSets.resize(vulkan->swapChain->imageCount());
+        descriptorSets.resize(16);
         if (vkAllocateDescriptorSets(vulkan->device.device(), &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
             throw std::runtime_error("failed to allocate descriptor sets!");
         }
 
         std::cout << "image number: " << vulkan->swapChain->imageCount() << std::endl;
-        for (size_t i = 0; i < vulkan->swapChain->imageCount(); i++) {
+        for (size_t i = 0; i < gameObjects[0].models.size(); i++) {
             VkDescriptorBufferInfo bufferInfo{};
             bufferInfo.buffer = vulkan->uniformBuffers[i];
             bufferInfo.offset = 0;
@@ -180,12 +184,12 @@ namespace buffkinz {
             for (int j = 0; j < 16; j++) {
                 VkDescriptorImageInfo imageInfo{};
                 imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-                if (gameObjects[0].model->getTextures().size() > j) {
-                    imageInfo.imageView = gameObjects[0].model->getTextures()[j].textureImageView;
-                    imageInfo.sampler = gameObjects[0].model->getTextures()[j].sampler;
+                if (gameObjects[0].models[i]->getTextures().size() > j) {
+                    imageInfo.imageView = gameObjects[0].models[i]->getTextures()[j].textureImageView;
+                    imageInfo.sampler = gameObjects[0].models[i]->getTextures()[j].sampler;
                 } else {
-                    imageInfo.imageView = gameObjects[0].model->getTextures()[0].textureImageView;
-                    imageInfo.sampler = gameObjects[0].model->getTextures()[0].sampler;
+                    imageInfo.imageView = gameObjects[0].models[i]->getTextures()[0].textureImageView;
+                    imageInfo.sampler = gameObjects[0].models[i]->getTextures()[0].sampler;
                 }
                 descriptorImageInfos[j] = imageInfo;
             }
@@ -251,7 +255,7 @@ namespace buffkinz {
         vkCmdSetViewport(vulkan->commandBuffers[imageIndex], 0, 1, &viewport);
         vkCmdSetScissor(vulkan->commandBuffers[imageIndex], 0, 1, &scissor);
 
-        renderGameObjects(vulkan->commandBuffers[imageIndex], descriptorSets[imageIndex], imageIndex);
+        renderGameObjects(vulkan->commandBuffers[imageIndex], descriptorSets, 0);
 
         vkCmdEndRenderPass(vulkan->commandBuffers[imageIndex]);
         if (vkEndCommandBuffer(vulkan->commandBuffers[imageIndex]) != VK_SUCCESS) {
@@ -259,17 +263,21 @@ namespace buffkinz {
         }
     }
 
-    void BuffkinzApp::renderGameObjects(VkCommandBuffer commandBuffer, VkDescriptorSet descriptorSet, int imageIndex) {
+    void BuffkinzApp::renderGameObjects(VkCommandBuffer commandBuffer, std::vector<VkDescriptorSet> descriptorSets, int imageIndex) {
         vulkan->pipeline->bind(commandBuffer);
         for (auto &obj: gameObjects) {
-            updateUniformBuffer(imageIndex, obj);
-            uint32_t dynamicOffset = obj.getId() * vulkan->device.properties.limits.minUniformBufferOffsetAlignment;
-            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkan->pipelineLayout, 0, 1,
-                                    &descriptorSet, 1,
-                                    &dynamicOffset);
+            int i = 0;
+            for (auto &model : obj.models) {
+                updateUniformBuffer(i, obj);
+                uint32_t dynamicOffset = obj.getId() * vulkan->device.properties.limits.minUniformBufferOffsetAlignment;
+                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, vulkan->pipelineLayout, 0, 1,
+                                        &descriptorSets[i], 1,
+                                        &dynamicOffset);
 
-            obj.model->bind(commandBuffer);
-            obj.model->draw(commandBuffer, 0, 0);
+                model->bind(commandBuffer);
+                model->draw(commandBuffer, 0, 0);
+                i++;
+            }
         }
     }
 

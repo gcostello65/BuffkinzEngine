@@ -28,8 +28,8 @@ void main() {
     gl_Position = positionTrans;
 
     vec3 light = vec3(0.0, 0.0, -90.0);
-//    lightTrans = mat3(ubo.lightTransform) * light;
-    lightTrans = light;
+    lightTrans = mat3(ubo.lightTransform) * light;
+//    lightTrans = light;
 
     mat3 transformNormal = transpose(inverse(mat3(ubo.model)));
     normalTrans = transformNormal * normal;

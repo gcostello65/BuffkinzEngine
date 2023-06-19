@@ -33,7 +33,7 @@ namespace buffkinz {
             void drawFrame();
             void recordCommandBuffer(int imageIndex);
             void updateUniformBuffer(int imageIndex, GameObject &object);
-            void renderGameObjects(VkCommandBuffer commandBuffer, VkDescriptorSet descriptorSet, int imageIndex);
+            void renderGameObjects(VkCommandBuffer commandBuffer, std::vector<VkDescriptorSet> descriptorSets, int imageIndex);
             void createDescriptorSets();
 
             std::vector<GameObject> gameObjects;

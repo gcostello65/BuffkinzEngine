@@ -120,11 +120,11 @@ void VulkanInit::createDescriptorSetLayout() {
 
 void VulkanInit::createUniformBuffers() {
     VkDeviceSize bufferSize = device.properties.limits.minUniformBufferOffsetAlignment * 100;
-    uniformBuffers.resize(swapChain->imageCount());
-    uniformBuffersMemory.resize(swapChain->imageCount());
-    uniformBuffersMapped.resize(swapChain->imageCount());
+    uniformBuffers.resize(swapChain->imageCount() * 100);
+    uniformBuffersMemory.resize(swapChain->imageCount() * 100);
+    uniformBuffersMapped.resize(swapChain->imageCount() * 100);
 
-    for (size_t i = 0; i < swapChain->imageCount(); i++) {
+    for (size_t i = 0; i < swapChain->imageCount() * 100; i++) {
         device.createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                                     VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                                     uniformBuffers[i], uniformBuffersMemory[i]);
@@ -136,15 +136,15 @@ void VulkanInit::createUniformBuffers() {
 void VulkanInit::createDescriptorPool() {
     std::array<VkDescriptorPoolSize, 2> poolSizes{};
     poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-    poolSizes[0].descriptorCount = static_cast<uint32_t>(swapChain->imageCount());
+    poolSizes[0].descriptorCount = static_cast<uint32_t>(swapChain->imageCount() * 100);
     poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    poolSizes[1].descriptorCount = static_cast<uint32_t>(swapChain->imageCount() * 16);
+    poolSizes[1].descriptorCount = static_cast<uint32_t>(swapChain->imageCount() * 100);
 
     VkDescriptorPoolCreateInfo poolInfo{};
     poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
     poolInfo.pPoolSizes = poolSizes.data();
-    poolInfo.maxSets = static_cast<uint32_t>(swapChain->imageCount());
+    poolInfo.maxSets = static_cast<uint32_t>(swapChain->imageCount() * 100);
 
     if (vkCreateDescriptorPool(device.device(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
         throw std::runtime_error("failed to create descriptor pool!");

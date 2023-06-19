@@ -25,7 +25,7 @@ namespace buffkinz {
 
         id_t getId() {return id;}
 
-        std::shared_ptr<BuffkinzModel> model{};
+        std::vector<std::shared_ptr<BuffkinzModel>> models{};
         glm::vec3 position{};
         glm::vec3 color{};
         UniformBufferObject ubo;

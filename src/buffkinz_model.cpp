@@ -32,6 +32,7 @@ namespace buffkinz {
         // TODO: add check to make sure that the model does not contauin more than 16 textures
         for (std::string path : filePaths) {
             Texture texture{};
+            texture.filePath = path;
             pixels = stbi_load(path.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
             VkDeviceSize imageSize = texWidth * texHeight * 4;
             if (!pixels) {

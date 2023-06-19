@@ -43,6 +43,7 @@ namespace buffkinz {
             VkImage textureImage;
             VkImageView textureImageView;
             VkSampler sampler;
+            std::string filePath;
             int width;
             int height;
             int size;
