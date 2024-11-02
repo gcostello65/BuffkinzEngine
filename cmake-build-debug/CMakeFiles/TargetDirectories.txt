@@ -1,4 +1,12 @@
-/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug/CMakeFiles/BuffkinzEngine.dir
-/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug/CMakeFiles/shaders.dir
-/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/BuffkinzEngine/cmake-build-debug/CMakeFiles/BuffkinzRenderer.dir
+C:/BuffkinzEngine/cmake-build-debug/CMakeFiles/INSTALL.dir
+C:/BuffkinzEngine/cmake-build-debug/CMakeFiles/ALL_BUILD.dir
+C:/BuffkinzEngine/cmake-build-debug/CMakeFiles/ZERO_CHECK.dir
+C:/BuffkinzEngine/cmake-build-debug/lib/glfw-3.4/CMakeFiles/uninstall.dir
+C:/BuffkinzEngine/cmake-build-debug/lib/glfw-3.4/CMakeFiles/INSTALL.dir
+C:/BuffkinzEngine/cmake-build-debug/lib/glfw-3.4/CMakeFiles/ALL_BUILD.dir
+C:/BuffkinzEngine/cmake-build-debug/lib/glfw-3.4/src/CMakeFiles/glfw.dir
+C:/BuffkinzEngine/cmake-build-debug/lib/glfw-3.4/src/CMakeFiles/update_mappings.dir
+C:/BuffkinzEngine/cmake-build-debug/lib/glfw-3.4/src/CMakeFiles/INSTALL.dir
+C:/BuffkinzEngine/cmake-build-debug/lib/glfw-3.4/docs/CMakeFiles/INSTALL.dir
+C:/BuffkinzEngine/cmake-build-debug/lib/glm-1.0.1-light/CMakeFiles/INSTALL.dir

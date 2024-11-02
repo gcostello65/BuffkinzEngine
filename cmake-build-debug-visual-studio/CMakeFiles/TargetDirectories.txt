@@ -1,0 +1,12 @@
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/CMakeFiles/BuffkinzRenderer.dir
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/CMakeFiles/INSTALL.dir
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/CMakeFiles/ALL_BUILD.dir
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/CMakeFiles/ZERO_CHECK.dir
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/lib/glfw-3.4/CMakeFiles/uninstall.dir
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/lib/glfw-3.4/CMakeFiles/INSTALL.dir
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/lib/glfw-3.4/CMakeFiles/ALL_BUILD.dir
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/lib/glfw-3.4/src/CMakeFiles/glfw.dir
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/lib/glfw-3.4/src/CMakeFiles/update_mappings.dir
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/lib/glfw-3.4/src/CMakeFiles/INSTALL.dir
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/lib/glfw-3.4/docs/CMakeFiles/INSTALL.dir
+C:/BuffkinzEngine/cmake-build-debug-visual-studio/lib/glm-1.0.1-light/CMakeFiles/INSTALL.dir
