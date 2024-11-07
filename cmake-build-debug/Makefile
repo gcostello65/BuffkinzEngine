@@ -57,10 +57,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/gregcostello/Documents/dev/c++/BuffkinzEngine
+CMAKE_SOURCE_DIR = /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -85,11 +85,56 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug/CMakeFiles /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug/CMakeFiles /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/gregcostello/Documents/dev/c++/BuffkinzEngine/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -117,205 +162,63 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named BuffkinzEngine
+# Target rules for targets named BuffkinzRenderer
 
 # Build rule for target.
-BuffkinzEngine: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 BuffkinzEngine
-.PHONY : BuffkinzEngine
+BuffkinzRenderer: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 BuffkinzRenderer
+.PHONY : BuffkinzRenderer
 
 # fast build rule for target.
-BuffkinzEngine/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/build
-.PHONY : BuffkinzEngine/fast
+BuffkinzRenderer/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/build
+.PHONY : BuffkinzRenderer/fast
 
 #=============================================================================
-# Target rules for targets named shaders
+# Target rules for targets named uninstall
 
 # Build rule for target.
-shaders: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 shaders
-.PHONY : shaders
+uninstall: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 uninstall
+.PHONY : uninstall
 
 # fast build rule for target.
-shaders/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/shaders.dir/build.make CMakeFiles/shaders.dir/build
-.PHONY : shaders/fast
+uninstall/fast:
+	$(MAKE) $(MAKESILENT) -f lib/glfw-3.4/CMakeFiles/uninstall.dir/build.make lib/glfw-3.4/CMakeFiles/uninstall.dir/build
+.PHONY : uninstall/fast
 
-src/buffkinz_app.o: src/buffkinz_app.cpp.o
-.PHONY : src/buffkinz_app.o
+#=============================================================================
+# Target rules for targets named glfw
 
-# target to build an object file
-src/buffkinz_app.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_app.cpp.o
-.PHONY : src/buffkinz_app.cpp.o
+# Build rule for target.
+glfw: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 glfw
+.PHONY : glfw
 
-src/buffkinz_app.i: src/buffkinz_app.cpp.i
-.PHONY : src/buffkinz_app.i
+# fast build rule for target.
+glfw/fast:
+	$(MAKE) $(MAKESILENT) -f lib/glfw-3.4/src/CMakeFiles/glfw.dir/build.make lib/glfw-3.4/src/CMakeFiles/glfw.dir/build
+.PHONY : glfw/fast
 
-# target to preprocess a source file
-src/buffkinz_app.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_app.cpp.i
-.PHONY : src/buffkinz_app.cpp.i
+#=============================================================================
+# Target rules for targets named update_mappings
 
-src/buffkinz_app.s: src/buffkinz_app.cpp.s
-.PHONY : src/buffkinz_app.s
+# Build rule for target.
+update_mappings: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 update_mappings
+.PHONY : update_mappings
 
-# target to generate assembly for a file
-src/buffkinz_app.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_app.cpp.s
-.PHONY : src/buffkinz_app.cpp.s
-
-src/buffkinz_device.o: src/buffkinz_device.cpp.o
-.PHONY : src/buffkinz_device.o
-
-# target to build an object file
-src/buffkinz_device.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_device.cpp.o
-.PHONY : src/buffkinz_device.cpp.o
-
-src/buffkinz_device.i: src/buffkinz_device.cpp.i
-.PHONY : src/buffkinz_device.i
-
-# target to preprocess a source file
-src/buffkinz_device.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_device.cpp.i
-.PHONY : src/buffkinz_device.cpp.i
-
-src/buffkinz_device.s: src/buffkinz_device.cpp.s
-.PHONY : src/buffkinz_device.s
-
-# target to generate assembly for a file
-src/buffkinz_device.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_device.cpp.s
-.PHONY : src/buffkinz_device.cpp.s
-
-src/buffkinz_model.o: src/buffkinz_model.cpp.o
-.PHONY : src/buffkinz_model.o
-
-# target to build an object file
-src/buffkinz_model.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_model.cpp.o
-.PHONY : src/buffkinz_model.cpp.o
-
-src/buffkinz_model.i: src/buffkinz_model.cpp.i
-.PHONY : src/buffkinz_model.i
-
-# target to preprocess a source file
-src/buffkinz_model.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_model.cpp.i
-.PHONY : src/buffkinz_model.cpp.i
-
-src/buffkinz_model.s: src/buffkinz_model.cpp.s
-.PHONY : src/buffkinz_model.s
-
-# target to generate assembly for a file
-src/buffkinz_model.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_model.cpp.s
-.PHONY : src/buffkinz_model.cpp.s
-
-src/buffkinz_pipeline.o: src/buffkinz_pipeline.cpp.o
-.PHONY : src/buffkinz_pipeline.o
-
-# target to build an object file
-src/buffkinz_pipeline.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_pipeline.cpp.o
-.PHONY : src/buffkinz_pipeline.cpp.o
-
-src/buffkinz_pipeline.i: src/buffkinz_pipeline.cpp.i
-.PHONY : src/buffkinz_pipeline.i
-
-# target to preprocess a source file
-src/buffkinz_pipeline.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_pipeline.cpp.i
-.PHONY : src/buffkinz_pipeline.cpp.i
-
-src/buffkinz_pipeline.s: src/buffkinz_pipeline.cpp.s
-.PHONY : src/buffkinz_pipeline.s
-
-# target to generate assembly for a file
-src/buffkinz_pipeline.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_pipeline.cpp.s
-.PHONY : src/buffkinz_pipeline.cpp.s
-
-src/buffkinz_swap_chain.o: src/buffkinz_swap_chain.cpp.o
-.PHONY : src/buffkinz_swap_chain.o
-
-# target to build an object file
-src/buffkinz_swap_chain.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_swap_chain.cpp.o
-.PHONY : src/buffkinz_swap_chain.cpp.o
-
-src/buffkinz_swap_chain.i: src/buffkinz_swap_chain.cpp.i
-.PHONY : src/buffkinz_swap_chain.i
-
-# target to preprocess a source file
-src/buffkinz_swap_chain.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_swap_chain.cpp.i
-.PHONY : src/buffkinz_swap_chain.cpp.i
-
-src/buffkinz_swap_chain.s: src/buffkinz_swap_chain.cpp.s
-.PHONY : src/buffkinz_swap_chain.s
-
-# target to generate assembly for a file
-src/buffkinz_swap_chain.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_swap_chain.cpp.s
-.PHONY : src/buffkinz_swap_chain.cpp.s
-
-src/buffkinz_window.o: src/buffkinz_window.cpp.o
-.PHONY : src/buffkinz_window.o
-
-# target to build an object file
-src/buffkinz_window.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_window.cpp.o
-.PHONY : src/buffkinz_window.cpp.o
-
-src/buffkinz_window.i: src/buffkinz_window.cpp.i
-.PHONY : src/buffkinz_window.i
-
-# target to preprocess a source file
-src/buffkinz_window.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_window.cpp.i
-.PHONY : src/buffkinz_window.cpp.i
-
-src/buffkinz_window.s: src/buffkinz_window.cpp.s
-.PHONY : src/buffkinz_window.s
-
-# target to generate assembly for a file
-src/buffkinz_window.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/buffkinz_window.cpp.s
-.PHONY : src/buffkinz_window.cpp.s
-
-src/game_object.o: src/game_object.cpp.o
-.PHONY : src/game_object.o
-
-# target to build an object file
-src/game_object.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/game_object.cpp.o
-.PHONY : src/game_object.cpp.o
-
-src/game_object.i: src/game_object.cpp.i
-.PHONY : src/game_object.i
-
-# target to preprocess a source file
-src/game_object.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/game_object.cpp.i
-.PHONY : src/game_object.cpp.i
-
-src/game_object.s: src/game_object.cpp.s
-.PHONY : src/game_object.s
-
-# target to generate assembly for a file
-src/game_object.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/game_object.cpp.s
-.PHONY : src/game_object.cpp.s
+# fast build rule for target.
+update_mappings/fast:
+	$(MAKE) $(MAKESILENT) -f lib/glfw-3.4/src/CMakeFiles/update_mappings.dir/build.make lib/glfw-3.4/src/CMakeFiles/update_mappings.dir/build
+.PHONY : update_mappings/fast
 
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -323,7 +226,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -331,80 +234,32 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
-src/renderer.o: src/renderer.cpp.o
-.PHONY : src/renderer.o
+src/vulkan_objects/VulkanInstanceManager.o: src/vulkan_objects/VulkanInstanceManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanInstanceManager.o
 
 # target to build an object file
-src/renderer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/renderer.cpp.o
-.PHONY : src/renderer.cpp.o
+src/vulkan_objects/VulkanInstanceManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanInstanceManager.cpp.o
 
-src/renderer.i: src/renderer.cpp.i
-.PHONY : src/renderer.i
-
-# target to preprocess a source file
-src/renderer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/renderer.cpp.i
-.PHONY : src/renderer.cpp.i
-
-src/renderer.s: src/renderer.cpp.s
-.PHONY : src/renderer.s
-
-# target to generate assembly for a file
-src/renderer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/renderer.cpp.s
-.PHONY : src/renderer.cpp.s
-
-src/scene.o: src/scene.cpp.o
-.PHONY : src/scene.o
-
-# target to build an object file
-src/scene.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/scene.cpp.o
-.PHONY : src/scene.cpp.o
-
-src/scene.i: src/scene.cpp.i
-.PHONY : src/scene.i
+src/vulkan_objects/VulkanInstanceManager.i: src/vulkan_objects/VulkanInstanceManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanInstanceManager.i
 
 # target to preprocess a source file
-src/scene.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/scene.cpp.i
-.PHONY : src/scene.cpp.i
+src/vulkan_objects/VulkanInstanceManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanInstanceManager.cpp.i
 
-src/scene.s: src/scene.cpp.s
-.PHONY : src/scene.s
-
-# target to generate assembly for a file
-src/scene.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/scene.cpp.s
-.PHONY : src/scene.cpp.s
-
-src/user_input_controller.o: src/user_input_controller.cpp.o
-.PHONY : src/user_input_controller.o
-
-# target to build an object file
-src/user_input_controller.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/user_input_controller.cpp.o
-.PHONY : src/user_input_controller.cpp.o
-
-src/user_input_controller.i: src/user_input_controller.cpp.i
-.PHONY : src/user_input_controller.i
-
-# target to preprocess a source file
-src/user_input_controller.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/user_input_controller.cpp.i
-.PHONY : src/user_input_controller.cpp.i
-
-src/user_input_controller.s: src/user_input_controller.cpp.s
-.PHONY : src/user_input_controller.s
+src/vulkan_objects/VulkanInstanceManager.s: src/vulkan_objects/VulkanInstanceManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanInstanceManager.s
 
 # target to generate assembly for a file
-src/user_input_controller.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzEngine.dir/build.make CMakeFiles/BuffkinzEngine.dir/src/user_input_controller.cpp.s
-.PHONY : src/user_input_controller.cpp.s
+src/vulkan_objects/VulkanInstanceManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanInstanceManager.cpp.s
 
 # Help Target
 help:
@@ -413,42 +268,21 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... shaders"
-	@echo "... BuffkinzEngine"
-	@echo "... src/buffkinz_app.o"
-	@echo "... src/buffkinz_app.i"
-	@echo "... src/buffkinz_app.s"
-	@echo "... src/buffkinz_device.o"
-	@echo "... src/buffkinz_device.i"
-	@echo "... src/buffkinz_device.s"
-	@echo "... src/buffkinz_model.o"
-	@echo "... src/buffkinz_model.i"
-	@echo "... src/buffkinz_model.s"
-	@echo "... src/buffkinz_pipeline.o"
-	@echo "... src/buffkinz_pipeline.i"
-	@echo "... src/buffkinz_pipeline.s"
-	@echo "... src/buffkinz_swap_chain.o"
-	@echo "... src/buffkinz_swap_chain.i"
-	@echo "... src/buffkinz_swap_chain.s"
-	@echo "... src/buffkinz_window.o"
-	@echo "... src/buffkinz_window.i"
-	@echo "... src/buffkinz_window.s"
-	@echo "... src/game_object.o"
-	@echo "... src/game_object.i"
-	@echo "... src/game_object.s"
+	@echo "... uninstall"
+	@echo "... update_mappings"
+	@echo "... BuffkinzRenderer"
+	@echo "... glfw"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/renderer.o"
-	@echo "... src/renderer.i"
-	@echo "... src/renderer.s"
-	@echo "... src/scene.o"
-	@echo "... src/scene.i"
-	@echo "... src/scene.s"
-	@echo "... src/user_input_controller.o"
-	@echo "... src/user_input_controller.i"
-	@echo "... src/user_input_controller.s"
+	@echo "... src/vulkan_objects/VulkanInstanceManager.o"
+	@echo "... src/vulkan_objects/VulkanInstanceManager.i"
+	@echo "... src/vulkan_objects/VulkanInstanceManager.s"
 .PHONY : help
 
 

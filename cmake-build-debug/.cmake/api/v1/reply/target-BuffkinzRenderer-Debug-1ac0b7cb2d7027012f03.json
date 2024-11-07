@@ -59,7 +59,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : " -O3 -std=c++17   -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -mmacosx-version-min=14.3 -fcolor-diagnostics"
+					"fragment" : " -O3 -std=c++17 -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -mmacosx-version-min=14.3 -fcolor-diagnostics"
 				}
 			],
 			"includes" : 
@@ -94,7 +94,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-O3 -std=c++17   -g",
+				"fragment" : "-O3 -std=c++17 -g",
 				"role" : "flags"
 			},
 			{
