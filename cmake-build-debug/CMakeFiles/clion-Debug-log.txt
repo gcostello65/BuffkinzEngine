@@ -1,10 +1,4 @@
-"C:\Program Files\JetBrains\CLion 2024.1.1\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -S C:\BuffkinzEngine -B C:\BuffkinzEngine\cmake-build-debug
-CMake Warning (dev) at CMakeLists.txt:1 (project):
-  cmake_minimum_required() should be called prior to this top-level project()
-  call.  Please see the cmake-commands(7) manual for usage documentation of
-  both commands.
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine -B /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug
 CMake Warning (dev) at CMakeLists.txt:1 (project):
   Policy CMP0048 is not set: project() command manages VERSION variables.
   Run "cmake --help-policy CMP0048" for policy details.  Use the cmake_policy
@@ -18,13 +12,10 @@ CMake Warning (dev) at CMakeLists.txt:1 (project):
     CMAKE_PROJECT_VERSION_PATCH
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
--- Selecting Windows SDK version 10.0.22621.0 to target Windows 10.0.19045.
--- Including Win32 support
+-- Including Cocoa support
 -- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
 -- Documentation generation requires Doxygen 1.9.8 or later
 -- Found Vulkan, Including and Linking now
--- Configuring done (0.2s)
--- Generating done (0.2s)
--- Build files have been written to: C:/BuffkinzEngine/cmake-build-debug
-C compiler MSVC used by CMake is not compatible with the configured toolchain MinGW. Configure profile...
-C++ compiler MSVC used by CMake is not compatible with the configured toolchain MinGW. Configure profile...
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug

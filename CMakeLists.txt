@@ -7,11 +7,11 @@ find_package(Vulkan REQUIRED)
 
 add_subdirectory(lib/glfw-3.4)
 SET(GLM_TEST_ENABLE OFF CACHE BOOL "GLM Build unit tests")
-add_subdirectory(lib/glm-1.0.1-light      EXCLUDE_FROM_ALL)
+add_subdirectory(lib/glm      EXCLUDE_FROM_ALL)
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
-)
+        src/vulkan_objects/VulkanInstanceManager.cpp src/vulkan_objects/VulkanInstanceManager.h)
 
 if (VULKAN_FOUND)
     message(STATUS "Found Vulkan, Including and Linking now")

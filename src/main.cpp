@@ -8,13 +8,14 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
-#include <stdexcept>
 #include <cstdlib>
+
+#include "vulkan_objects/VulkanInstanceManager.h"
 
 class HelloTriangleApplication {
 public:
+    VulkanInstanceManager vulkanInstanceManager;
     void run() {
-
         initWindow();
         initVulkan();
         mainLoop();
@@ -25,7 +26,7 @@ private:
     GLFWwindow* window;
 
     void initVulkan() {
-
+        vulkanInstanceManager.createInstance();
     }
 
     void mainLoop() {
