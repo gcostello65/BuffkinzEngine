@@ -5,7 +5,55 @@
 #include "VulkanInstanceManager.h"
 #include <stdexcept>
 #include <iostream>
-#include <vector>
+
+void VulkanInstanceManager::manageValidationLayers(VkInstanceCreateInfo &createInfo) {
+    static const std::vector<const char *> validationLayers = {
+            "VK_LAYER_KHRONOS_validation"
+    };
+
+#ifdef NDEBUG
+    const bool enableValidationLayers = false;
+#else
+    const bool enableValidationLayers = true;
+#endif
+
+    if (enableValidationLayers && !checkValidationLayerSupport(validationLayers)) {
+        throw std::runtime_error("validation layers requested, but not available!");
+    }
+
+    if (enableValidationLayers) {
+        createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+        createInfo.ppEnabledLayerNames = validationLayers.data();
+    } else {
+        createInfo.enabledLayerCount = 0;
+    }
+}
+
+bool VulkanInstanceManager::checkValidationLayerSupport(const std::vector<const char *> &validationLayers) {
+    uint32_t layerCount;
+    vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+
+    std::vector<VkLayerProperties> availableLayers(layerCount);
+    vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+    for (const char *layerName: validationLayers) {
+        bool layerFound = false;
+
+        for (const auto &layerProperties: availableLayers) {
+            std::cout << layerProperties.layerName << std::endl;
+            if (strcmp(layerName, layerProperties.layerName) == 0) {
+                layerFound = true;
+                break;
+            }
+        }
+
+        if (!layerFound) {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 void VulkanInstanceManager::createInstance() {
 
@@ -25,14 +73,14 @@ void VulkanInstanceManager::createInstance() {
     createInfo.pApplicationInfo = &appInfo;
 
     uint32_t glfwExtensionCount = 0;
-    const char** glfwExtensions;
+    const char **glfwExtensions;
 
     glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
     // Specify your additional extensions
     // Look into why this works and the specific extensions in vulkan
     // This is needed in order to allow vulkan to use the moltenvk driver which is now portable? Look into this
-    std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+    std::vector<const char *> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
     extensions.push_back("VK_KHR_portability_enumeration"); // Example additional extension
     extensions.push_back("VK_KHR_get_physical_device_properties2"); // Example additional extension
 
@@ -41,7 +89,7 @@ void VulkanInstanceManager::createInstance() {
 
     createInfo.flags = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 
-    createInfo.enabledLayerCount = 0;
+    manageValidationLayers(createInfo);
 
     VkResult result = vkCreateInstance(&createInfo, nullptr, &instance);
 
@@ -56,8 +104,12 @@ void VulkanInstanceManager::createInstance() {
 
     std::cout << "Here is the code for result: " << result << std::endl;
     // End debug
-    
+
     if (result != VK_SUCCESS) {
         throw std::runtime_error("failed to create instance!");
     }
+}
+
+void VulkanInstanceManager::handleMessageCallbacks() {
+    // TODO: Go back to the Message Callback handling in the vulkan tutorial to make the validation layers more specific rather than spam
 }

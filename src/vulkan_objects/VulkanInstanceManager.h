@@ -7,13 +7,23 @@
 
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
+#include <vector>
 
 
 class VulkanInstanceManager {
 public:
     VkInstance instance;
+
     void createInstance();
-    GLFWwindow* glfWwindow;
+    void handleMessageCallbacks();
+
+    GLFWwindow *glfWwindow;
+
+
+private:
+    static void manageValidationLayers(VkInstanceCreateInfo &createInfo);
+
+    static bool checkValidationLayerSupport(const std::vector<const char*> &validationLayers);
 };
 
 

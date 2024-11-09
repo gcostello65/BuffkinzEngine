@@ -11,10 +11,12 @@
 #include <cstdlib>
 
 #include "vulkan_objects/VulkanInstanceManager.h"
+#include "vulkan_objects/VulkanDeviceManager.h"
 
 class HelloTriangleApplication {
 public:
     VulkanInstanceManager vulkanInstanceManager;
+    VulkanDeviceManager vulkanDeviceManager;
     void run() {
         initWindow();
         initVulkan();
@@ -27,6 +29,10 @@ private:
 
     void initVulkan() {
         vulkanInstanceManager.createInstance();
+        vulkanInstanceManager.handleMessageCallbacks();
+        vulkanDeviceManager.setInstance(vulkanInstanceManager.instance);
+        vulkanDeviceManager.pickPhysicalDevice();
+        vulkanDeviceManager.createLogicalDevice();
     }
 
     void mainLoop() {
@@ -37,6 +43,9 @@ private:
     }
 
     void cleanup() {
+        vkDestroyDevice(vulkanDeviceManager.device, nullptr);
+        vkDestroyInstance(vulkanInstanceManager.instance, nullptr);
+
         glfwDestroyWindow(window);
 
         glfwTerminate();

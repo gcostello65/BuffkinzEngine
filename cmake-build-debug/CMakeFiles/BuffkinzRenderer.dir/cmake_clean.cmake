@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "BuffkinzRenderer.pdb"
   "CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.o"
   "CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.o.d"
+  "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanDeviceManager.cpp.o"
+  "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanDeviceManager.cpp.o.d"
   "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.o"
   "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.o.d"
 )

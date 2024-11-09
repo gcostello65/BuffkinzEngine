@@ -1,2 +1,2 @@
 # Buffkinz
-Creating a 3D game engine and adding some computer vision image processing
+Creating a rendering engine and implementing algorithms that I am interested in. Trying to get into computer graphics :)

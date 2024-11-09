@@ -90,14 +90,11 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -mmacosx-version-min=14.3 -fPIC -fcolor-diagnostics"
+					"fragment" : "-g -std=c99 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -mmacosx-version-min=14.3 -fPIC -fcolor-diagnostics"
 				},
 				{
 					"backtrace" : 3,
 					"fragment" : "-Wall"
-				},
-				{
-					"fragment" : "-std=c99"
 				}
 			],
 			"defines" : 

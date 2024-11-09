@@ -1,4 +1,10 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine -B /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug
+/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine -B /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug
+CMake Warning (dev) at CMakeLists.txt:1 (project):
+  cmake_minimum_required() should be called prior to this top-level project()
+  call.  Please see the cmake-commands(7) manual for usage documentation of
+  both commands.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
 CMake Warning (dev) at CMakeLists.txt:1 (project):
   Policy CMP0048 is not set: project() command manages VERSION variables.
   Run "cmake --help-policy CMP0048" for policy details.  Use the cmake_policy
@@ -16,6 +22,6 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
 -- Documentation generation requires Doxygen 1.9.8 or later
 -- Found Vulkan, Including and Linking now
--- Configuring done
--- Generating done
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
 -- Build files have been written to: /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug

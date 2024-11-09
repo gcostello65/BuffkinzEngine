@@ -126,14 +126,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "BuffkinzRenderer::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-BuffkinzRenderer-Debug-1ac0b7cb2d7027012f03.json",
+					"jsonFile" : "target-BuffkinzRenderer-Debug-cdd772c4ac1a0eee0374.json",
 					"name" : "BuffkinzRenderer",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 2,
 					"id" : "glfw::@b2a432fffaf8de0f0139",
-					"jsonFile" : "target-glfw-Debug-94bac71eb7fb86641fbc.json",
+					"jsonFile" : "target-glfw-Debug-2e8a1ca694fbb1bb88e1.json",
 					"name" : "glfw",
 					"projectIndex" : 1
 				},
@@ -163,6 +163,6 @@
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 4
+		"minor" : 7
 	}
 }
