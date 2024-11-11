@@ -285,6 +285,30 @@ src/vulkan_objects/VulkanInstanceManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.s
 .PHONY : src/vulkan_objects/VulkanInstanceManager.cpp.s
 
+src/vulkan_objects/VulkanWindowManager.o: src/vulkan_objects/VulkanWindowManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanWindowManager.o
+
+# target to build an object file
+src/vulkan_objects/VulkanWindowManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanWindowManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanWindowManager.cpp.o
+
+src/vulkan_objects/VulkanWindowManager.i: src/vulkan_objects/VulkanWindowManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanWindowManager.i
+
+# target to preprocess a source file
+src/vulkan_objects/VulkanWindowManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanWindowManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanWindowManager.cpp.i
+
+src/vulkan_objects/VulkanWindowManager.s: src/vulkan_objects/VulkanWindowManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanWindowManager.s
+
+# target to generate assembly for a file
+src/vulkan_objects/VulkanWindowManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanWindowManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanWindowManager.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -310,6 +334,9 @@ help:
 	@echo "... src/vulkan_objects/VulkanInstanceManager.o"
 	@echo "... src/vulkan_objects/VulkanInstanceManager.i"
 	@echo "... src/vulkan_objects/VulkanInstanceManager.s"
+	@echo "... src/vulkan_objects/VulkanWindowManager.o"
+	@echo "... src/vulkan_objects/VulkanWindowManager.i"
+	@echo "... src/vulkan_objects/VulkanWindowManager.s"
 .PHONY : help
 
 

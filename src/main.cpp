@@ -12,11 +12,15 @@
 
 #include "vulkan_objects/VulkanInstanceManager.h"
 #include "vulkan_objects/VulkanDeviceManager.h"
+#include "vulkan_objects/VulkanWindowManager.h"
 
 class HelloTriangleApplication {
 public:
+    //TODO: Update all of the public members in the managers to have proper abstraction and getters and setters. Not great to have everything publicly exposed.
     VulkanInstanceManager vulkanInstanceManager;
     VulkanDeviceManager vulkanDeviceManager;
+    VulkanWindowManager vulkanWindowManager;
+
     void run() {
         initWindow();
         initVulkan();
@@ -30,7 +34,9 @@ private:
     void initVulkan() {
         vulkanInstanceManager.createInstance();
         vulkanInstanceManager.handleMessageCallbacks();
+        vulkanWindowManager.createSurface(vulkanInstanceManager.instance, window);
         vulkanDeviceManager.setInstance(vulkanInstanceManager.instance);
+        vulkanDeviceManager.setSurface(vulkanWindowManager.surface);
         vulkanDeviceManager.pickPhysicalDevice();
         vulkanDeviceManager.createLogicalDevice();
     }
@@ -43,6 +49,7 @@ private:
     }
 
     void cleanup() {
+        vkDestroySurfaceKHR(vulkanInstanceManager.instance, vulkanWindowManager.surface, nullptr);
         vkDestroyDevice(vulkanDeviceManager.device, nullptr);
         vkDestroyInstance(vulkanInstanceManager.instance, nullptr);
 

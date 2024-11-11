@@ -11,9 +11,10 @@
 
 struct QueueFamilyIndices {
     std::optional<uint32_t> graphicsFamily;
+    std::optional<uint32_t> presentFamily;
 
     bool isComplete() {
-        return graphicsFamily.has_value();
+        return graphicsFamily.has_value() && presentFamily.has_value();
     }
 };
 
@@ -23,14 +24,19 @@ public:
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice device;
     VkQueue graphicsQueue;
+    VkQueue presentQueue;
+    VkSurfaceKHR surface;
     void pickPhysicalDevice();
     void setInstance(VkInstance &vkInstance);
     void createLogicalDevice();
+    void setSurface(VkSurfaceKHR &surface);
 
 private:
     bool isDeviceSuitable(VkPhysicalDevice device);
 
     QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+
+    bool checkAvailableExtensions(VkPhysicalDevice &device, std::vector<const char *> const &deviceExtensions);
 };
 
 

@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/main.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.o.d"
   "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanDeviceManager.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanDeviceManager.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanDeviceManager.cpp.o.d"
   "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanInstanceManager.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.o.d"
+  "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanWindowManager.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanWindowManager.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanWindowManager.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

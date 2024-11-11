@@ -15,7 +15,9 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/vulkan_objects/VulkanInstanceManager.cpp src/vulkan_objects/VulkanInstanceManager.h
         src/vulkan_objects/VulkanDeviceManager.cpp
-        src/vulkan_objects/VulkanDeviceManager.h)
+        src/vulkan_objects/VulkanDeviceManager.h
+        src/vulkan_objects/VulkanWindowManager.cpp
+        src/vulkan_objects/VulkanWindowManager.h)
 
 if (VULKAN_FOUND)
     message(STATUS "Found Vulkan, Including and Linking now")
