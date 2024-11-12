@@ -1,5 +1,0 @@
-# CMake generation dependency list for this directory.
-C:/BuffkinzEngine/lib/glfw-3.4/docs/CMakeLists.txt
-C:/Program Files/JetBrains/CLion 2024.1.1/bin/cmake/win/x64/share/cmake-3.28/Modules/FindDoxygen.cmake
-C:/Program Files/JetBrains/CLion 2024.1.1/bin/cmake/win/x64/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake
-C:/Program Files/JetBrains/CLion 2024.1.1/bin/cmake/win/x64/share/cmake-3.28/Modules/FindPackageMessage.cmake

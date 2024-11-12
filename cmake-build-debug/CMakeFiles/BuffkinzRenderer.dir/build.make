@@ -139,13 +139,28 @@ CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.s:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanSwapchainManager.cpp -o CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.s
 
+CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o: CMakeFiles/BuffkinzRenderer.dir/flags.make
+CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o: /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanPipelineManager.cpp
+CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o: CMakeFiles/BuffkinzRenderer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o -MF CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o.d -o CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o -c /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanPipelineManager.cpp
+
+CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanPipelineManager.cpp > CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.i
+
+CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanPipelineManager.cpp -o CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.s
+
 # Object files for target BuffkinzRenderer
 BuffkinzRenderer_OBJECTS = \
 "CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.o" \
 "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.o" \
 "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanDeviceManager.cpp.o" \
 "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanWindowManager.cpp.o" \
-"CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.o"
+"CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.o" \
+"CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o"
 
 # External object files for target BuffkinzRenderer
 BuffkinzRenderer_EXTERNAL_OBJECTS =
@@ -155,11 +170,12 @@ BuffkinzRenderer: CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInsta
 BuffkinzRenderer: CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanDeviceManager.cpp.o
 BuffkinzRenderer: CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanWindowManager.cpp.o
 BuffkinzRenderer: CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.o
+BuffkinzRenderer: CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o
 BuffkinzRenderer: CMakeFiles/BuffkinzRenderer.dir/build.make
 BuffkinzRenderer: /usr/local/lib/libvulkan.dylib
 BuffkinzRenderer: lib/glfw-3.4/src/libglfw3.a
 BuffkinzRenderer: CMakeFiles/BuffkinzRenderer.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable BuffkinzRenderer"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable BuffkinzRenderer"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/BuffkinzRenderer.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

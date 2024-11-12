@@ -175,6 +175,19 @@ BuffkinzRenderer/fast:
 .PHONY : BuffkinzRenderer/fast
 
 #=============================================================================
+# Target rules for targets named shaders
+
+# Build rule for target.
+shaders: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 shaders
+.PHONY : shaders
+
+# fast build rule for target.
+shaders/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/shaders.dir/build.make CMakeFiles/shaders.dir/build
+.PHONY : shaders/fast
+
+#=============================================================================
 # Target rules for targets named uninstall
 
 # Build rule for target.
@@ -285,6 +298,30 @@ src/vulkan_objects/VulkanInstanceManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.s
 .PHONY : src/vulkan_objects/VulkanInstanceManager.cpp.s
 
+src/vulkan_objects/VulkanPipelineManager.o: src/vulkan_objects/VulkanPipelineManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanPipelineManager.o
+
+# target to build an object file
+src/vulkan_objects/VulkanPipelineManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanPipelineManager.cpp.o
+
+src/vulkan_objects/VulkanPipelineManager.i: src/vulkan_objects/VulkanPipelineManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanPipelineManager.i
+
+# target to preprocess a source file
+src/vulkan_objects/VulkanPipelineManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanPipelineManager.cpp.i
+
+src/vulkan_objects/VulkanPipelineManager.s: src/vulkan_objects/VulkanPipelineManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanPipelineManager.s
+
+# target to generate assembly for a file
+src/vulkan_objects/VulkanPipelineManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanPipelineManager.cpp.s
+
 src/vulkan_objects/VulkanSwapchainManager.o: src/vulkan_objects/VulkanSwapchainManager.cpp.o
 .PHONY : src/vulkan_objects/VulkanSwapchainManager.o
 
@@ -345,6 +382,7 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... shaders"
 	@echo "... uninstall"
 	@echo "... update_mappings"
 	@echo "... BuffkinzRenderer"
@@ -358,6 +396,9 @@ help:
 	@echo "... src/vulkan_objects/VulkanInstanceManager.o"
 	@echo "... src/vulkan_objects/VulkanInstanceManager.i"
 	@echo "... src/vulkan_objects/VulkanInstanceManager.s"
+	@echo "... src/vulkan_objects/VulkanPipelineManager.o"
+	@echo "... src/vulkan_objects/VulkanPipelineManager.i"
+	@echo "... src/vulkan_objects/VulkanPipelineManager.s"
 	@echo "... src/vulkan_objects/VulkanSwapchainManager.o"
 	@echo "... src/vulkan_objects/VulkanSwapchainManager.i"
 	@echo "... src/vulkan_objects/VulkanSwapchainManager.s"

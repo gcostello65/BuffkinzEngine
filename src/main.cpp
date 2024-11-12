@@ -14,6 +14,7 @@
 #include "vulkan_objects/VulkanDeviceManager.h"
 #include "vulkan_objects/VulkanWindowManager.h"
 #include "vulkan_objects/VulkanSwapChainManager.h"
+#include "vulkan_objects/VulkanPipelineManager.h"
 
 class HelloTriangleApplication {
 public:
@@ -22,6 +23,7 @@ public:
     VulkanDeviceManager vulkanDeviceManager;
     VulkanWindowManager vulkanWindowManager;
     VulkanSwapChainManager vulkanSwapChainManager;
+    VulkanPipelineManager vulkanPipelineManager;
 
     void run() {
         initWindow();
@@ -49,6 +51,7 @@ private:
         vulkanSwapChainManager.setDeviceManager(&vulkanDeviceManager);
         vulkanSwapChainManager.createSwapChain();
         vulkanSwapChainManager.createImageViews();
+        vulkanPipelineManager.createGraphicsPipeline();
     }
 
     void mainLoop() {

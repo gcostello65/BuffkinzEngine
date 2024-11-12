@@ -45,7 +45,7 @@ CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.o: \
   /usr/local/include/vk_video/vulkan_video_codec_h265std_decode.h \
   /usr/local/include/vk_video/vulkan_video_codec_av1std.h \
   /usr/local/include/vk_video/vulkan_video_codec_av1std_decode.h \
-  /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/lib/glfw-3.4/include/GLFW/glfw3.h \
+  /opt/homebrew/include/GLFW/glfw3.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gl.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/OpenGL.framework/Headers/gltypes.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/OpenGL.framework/Headers/OpenGLAvailability.h \
@@ -870,4 +870,5 @@ CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.o: \
   /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanDeviceManager.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/usr/include/c++/v1/optional \
   /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanWindowManager.h \
-  /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanSwapChainManager.h
+  /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanSwapChainManager.h \
+  /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanPipelineManager.h

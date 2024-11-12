@@ -77,6 +77,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/BuffkinzRenderer.dir/DependInfo.cmake"
+  "CMakeFiles/shaders.dir/DependInfo.cmake"
   "lib/glfw-3.4/CMakeFiles/uninstall.dir/DependInfo.cmake"
   "lib/glfw-3.4/src/CMakeFiles/glfw.dir/DependInfo.cmake"
   "lib/glfw-3.4/src/CMakeFiles/update_mappings.dir/DependInfo.cmake"
