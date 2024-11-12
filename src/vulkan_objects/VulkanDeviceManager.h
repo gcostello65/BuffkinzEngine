@@ -31,12 +31,15 @@ public:
     void createLogicalDevice();
     void setSurface(VkSurfaceKHR &surface);
 
+    QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+
 private:
     bool isDeviceSuitable(VkPhysicalDevice device);
 
-    QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
-
     bool checkAvailableExtensions(VkPhysicalDevice &device, std::vector<const char *> const &deviceExtensions);
+    const std::vector<const char*> deviceExtensions = {
+            VK_KHR_SWAPCHAIN_EXTENSION_NAME
+    };
 };
 
 

@@ -13,6 +13,7 @@
 #include "vulkan_objects/VulkanInstanceManager.h"
 #include "vulkan_objects/VulkanDeviceManager.h"
 #include "vulkan_objects/VulkanWindowManager.h"
+#include "vulkan_objects/VulkanSwapChainManager.h"
 
 class HelloTriangleApplication {
 public:
@@ -20,6 +21,7 @@ public:
     VulkanInstanceManager vulkanInstanceManager;
     VulkanDeviceManager vulkanDeviceManager;
     VulkanWindowManager vulkanWindowManager;
+    VulkanSwapChainManager vulkanSwapChainManager;
 
     void run() {
         initWindow();
@@ -32,6 +34,7 @@ private:
     GLFWwindow* window;
 
     void initVulkan() {
+        // TODO: make all of the public handles to member objects getters
         vulkanInstanceManager.createInstance();
         vulkanInstanceManager.handleMessageCallbacks();
         vulkanWindowManager.createSurface(vulkanInstanceManager.instance, window);
@@ -39,6 +42,13 @@ private:
         vulkanDeviceManager.setSurface(vulkanWindowManager.surface);
         vulkanDeviceManager.pickPhysicalDevice();
         vulkanDeviceManager.createLogicalDevice();
+        vulkanSwapChainManager.setPhysicalDevice(vulkanDeviceManager.physicalDevice);
+        vulkanSwapChainManager.setDevice(vulkanDeviceManager.device);
+        vulkanSwapChainManager.setSurface(vulkanWindowManager.surface);
+        vulkanSwapChainManager.setWindow(window);
+        vulkanSwapChainManager.setDeviceManager(&vulkanDeviceManager);
+        vulkanSwapChainManager.createSwapChain();
+        vulkanSwapChainManager.createImageViews();
     }
 
     void mainLoop() {
@@ -49,6 +59,10 @@ private:
     }
 
     void cleanup() {
+        for (auto imageView : vulkanSwapChainManager.imageViews) {
+            vkDestroyImageView(vulkanDeviceManager.device, imageView, nullptr);
+        }
+        vkDestroySwapchainKHR(vulkanDeviceManager.device, vulkanSwapChainManager.swapChain, nullptr);
         vkDestroySurfaceKHR(vulkanInstanceManager.instance, vulkanWindowManager.surface, nullptr);
         vkDestroyDevice(vulkanDeviceManager.device, nullptr);
         vkDestroyInstance(vulkanInstanceManager.instance, nullptr);

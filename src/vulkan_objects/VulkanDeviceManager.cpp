@@ -3,6 +3,7 @@
 //
 
 #include <stdexcept>
+#include <iostream>
 #include <vector>
 #include <set>
 #include "VulkanDeviceManager.h"
@@ -17,11 +18,12 @@ void VulkanDeviceManager::pickPhysicalDevice() {
         throw std::runtime_error("failed to find GPUs with Vulkan support!");
     }
 
-    // Otherwise, make an array to hold all of the available devices
+    // Otherwise, make an array to hold all the available devices
     std::vector<VkPhysicalDevice> devices(deviceCount);
     vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
-    // Iterate through all of the devices and see which ones are suitable. Pick the first suitable one
+    //TODO: Fix the isDeviceSuitable to make sure that it checks for swapchain support. Current design has a chicken before the egg approach to check if physicalDevice is suitable for swapchain
+    // Iterate through all the devices and see which ones are suitable. Pick the first suitable one
     for (const auto &device: devices) {
         if (isDeviceSuitable(device)) {
             physicalDevice = device;
@@ -34,13 +36,8 @@ void VulkanDeviceManager::setInstance(VkInstance &vkInstance) {
     this->instance = vkInstance;
 }
 
-// TODO: Make a more robust method for picking the gpu to use in the physical device
+// TODO: Make a more robust method for picking the gpu to use in the physical physicalDevice
 bool VulkanDeviceManager::isDeviceSuitable(VkPhysicalDevice device) {
-
-    // In the future this could hold more extension requirements so add here when needed
-    const std::vector<const char*> deviceExtensions = {
-            VK_KHR_SWAPCHAIN_EXTENSION_NAME
-    };
 
     QueueFamilyIndices indices = findQueueFamilies(device);
 
@@ -59,7 +56,12 @@ bool VulkanDeviceManager::checkAvailableExtensions(VkPhysicalDevice &device, std
 
     std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
 
-    // LEFT OFF HERE: about to iterate through all of the device extensions and make sure swapchain is supported.
+    // LEFT OFF HERE: about to iterate through all the physicalDevice extensions and make sure swapchain is supported.
+    for (const auto &extension : extensionProperties) {
+        requiredExtensions.erase(extension.extensionName);
+    }
+
+    return requiredExtensions.empty();
 }
 
 QueueFamilyIndices VulkanDeviceManager::findQueueFamilies(VkPhysicalDevice device) {
@@ -96,7 +98,7 @@ QueueFamilyIndices VulkanDeviceManager::findQueueFamilies(VkPhysicalDevice devic
 }
 
 void VulkanDeviceManager::createLogicalDevice() {
-    // TODO: Consider making indices a class member variable so that it is not instantiated twice. No need for two calls to this method for same device
+    // TODO: Consider making indices a class member variable so that it is not instantiated twice. No need for two calls to this method for same physicalDevice
     QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
 
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
@@ -114,7 +116,7 @@ void VulkanDeviceManager::createLogicalDevice() {
         queueCreateInfos.push_back(queueCreateInfo);
     }
 
-    // Seting up the struct to hold all the info for creating a physical device
+    // Seting up the struct to hold all the info for creating a physical physicalDevice
     VkPhysicalDeviceFeatures deviceFeatures{};
 
     VkDeviceCreateInfo createInfo{};
@@ -126,6 +128,9 @@ void VulkanDeviceManager::createLogicalDevice() {
     // Adding the portability extension since this is needed for macOS support
     std::vector<const char *> extensions;
     extensions.push_back("VK_KHR_portability_subset"); // Example additional extension
+    for (const auto& extension : deviceExtensions) {
+        extensions.push_back(extension);
+    }
 
     createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
     createInfo.ppEnabledExtensionNames = extensions.data();
@@ -142,12 +147,12 @@ void VulkanDeviceManager::createLogicalDevice() {
 //        createInfo.enabledLayerCount = 0;
 //    }
 
-    // Create the physical device
+    // Create the physical physicalDevice
     if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create logical device!");
+        throw std::runtime_error("failed to create logical physicalDevice!");
     }
 
-    // Allocating the device queues
+    // Allocating the physicalDevice queues
     // NOTE: May be a better way to set these queues up since they may be the same queue, in that case this is not optimal
     vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
     vkGetDeviceQueue(device, indices.presentFamily.value(), 0, &presentQueue);

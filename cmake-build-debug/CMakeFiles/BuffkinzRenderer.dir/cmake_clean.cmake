@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanDeviceManager.cpp.o.d"
   "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.o"
   "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.o.d"
+  "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.o"
+  "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.o.d"
   "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanWindowManager.cpp.o"
   "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanWindowManager.cpp.o.d"
 )

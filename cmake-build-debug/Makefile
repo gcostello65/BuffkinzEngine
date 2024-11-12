@@ -285,6 +285,30 @@ src/vulkan_objects/VulkanInstanceManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.s
 .PHONY : src/vulkan_objects/VulkanInstanceManager.cpp.s
 
+src/vulkan_objects/VulkanSwapchainManager.o: src/vulkan_objects/VulkanSwapchainManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanSwapchainManager.o
+
+# target to build an object file
+src/vulkan_objects/VulkanSwapchainManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanSwapchainManager.cpp.o
+
+src/vulkan_objects/VulkanSwapchainManager.i: src/vulkan_objects/VulkanSwapchainManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanSwapchainManager.i
+
+# target to preprocess a source file
+src/vulkan_objects/VulkanSwapchainManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanSwapchainManager.cpp.i
+
+src/vulkan_objects/VulkanSwapchainManager.s: src/vulkan_objects/VulkanSwapchainManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanSwapchainManager.s
+
+# target to generate assembly for a file
+src/vulkan_objects/VulkanSwapchainManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanSwapchainManager.cpp.s
+
 src/vulkan_objects/VulkanWindowManager.o: src/vulkan_objects/VulkanWindowManager.cpp.o
 .PHONY : src/vulkan_objects/VulkanWindowManager.o
 
@@ -334,6 +358,9 @@ help:
 	@echo "... src/vulkan_objects/VulkanInstanceManager.o"
 	@echo "... src/vulkan_objects/VulkanInstanceManager.i"
 	@echo "... src/vulkan_objects/VulkanInstanceManager.s"
+	@echo "... src/vulkan_objects/VulkanSwapchainManager.o"
+	@echo "... src/vulkan_objects/VulkanSwapchainManager.i"
+	@echo "... src/vulkan_objects/VulkanSwapchainManager.s"
 	@echo "... src/vulkan_objects/VulkanWindowManager.o"
 	@echo "... src/vulkan_objects/VulkanWindowManager.i"
 	@echo "... src/vulkan_objects/VulkanWindowManager.s"
