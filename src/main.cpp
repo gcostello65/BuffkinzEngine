@@ -51,6 +51,7 @@ private:
         vulkanSwapChainManager.setDeviceManager(&vulkanDeviceManager);
         vulkanSwapChainManager.createSwapChain();
         vulkanSwapChainManager.createImageViews();
+        vulkanPipelineManager.setDevice(vulkanDeviceManager.device);
         vulkanPipelineManager.createGraphicsPipeline();
     }
 
