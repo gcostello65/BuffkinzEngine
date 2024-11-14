@@ -52,6 +52,7 @@ private:
         vulkanSwapChainManager.createSwapChain();
         vulkanSwapChainManager.createImageViews();
         vulkanPipelineManager.setDevice(vulkanDeviceManager.device);
+        vulkanPipelineManager.createRenderPass();
         vulkanPipelineManager.createGraphicsPipeline();
     }
 
@@ -66,6 +67,7 @@ private:
         for (auto imageView : vulkanSwapChainManager.imageViews) {
             vkDestroyImageView(vulkanDeviceManager.device, imageView, nullptr);
         }
+        vkDestroyPipelineLayout(vulkanDeviceManager.device, vulkanPipelineManager.pipelineLayout, nullptr);
         vkDestroySwapchainKHR(vulkanDeviceManager.device, vulkanSwapChainManager.swapChain, nullptr);
         vkDestroySurfaceKHR(vulkanInstanceManager.instance, vulkanWindowManager.surface, nullptr);
         vkDestroyDevice(vulkanDeviceManager.device, nullptr);

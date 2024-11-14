@@ -10,6 +10,9 @@
 
 class VulkanPipelineManager {
 public:
+    VkPipelineLayout pipelineLayout;
+
+    void createRenderPass();
 
     void createGraphicsPipeline();
 
