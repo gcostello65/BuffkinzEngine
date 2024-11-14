@@ -22,7 +22,13 @@ add_executable(${PROJECT_NAME} ${VERT_SHADERS}
         src/vulkan_objects/VulkanSwapchainManager.cpp
         src/vulkan_objects/VulkanSwapChainManager.h
         src/vulkan_objects/VulkanPipelineManager.cpp
-        src/vulkan_objects/VulkanPipelineManager.h)
+        src/vulkan_objects/VulkanPipelineManager.h
+        src/vulkan_objects/VulkanBufferManager.cpp
+        src/vulkan_objects/VulkanBufferManager.h
+        src/vulkan_objects/VulkanPoolManager.cpp
+        src/vulkan_objects/VulkanPoolManager.h
+        src/vulkan_objects/VulkanCommandModule.cpp
+        src/vulkan_objects/VulkanCommandModule.h)
 
 find_package(Vulkan REQUIRED)
 

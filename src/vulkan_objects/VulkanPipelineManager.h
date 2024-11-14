@@ -7,10 +7,13 @@
 
 #include <vulkan/vulkan_core.h>
 #include <vector>
+#include "VulkanSwapChainManager.h"
 
 class VulkanPipelineManager {
 public:
     VkPipelineLayout pipelineLayout;
+    VkRenderPass renderPass;
+    VkPipeline graphicsPipeline;
 
     void createRenderPass();
 
@@ -24,8 +27,13 @@ public:
         this->device = device;
     }
 
+    void setSwapChainHandle(VulkanSwapChainManager &handle) {
+        vulkanSwapchainManager = handle;
+    }
+
 private:
     VkDevice device;
+    VulkanSwapChainManager vulkanSwapchainManager;
 };
 
 

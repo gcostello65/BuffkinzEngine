@@ -26,6 +26,8 @@ public:
     VkQueue graphicsQueue;
     VkQueue presentQueue;
     VkSurfaceKHR surface;
+    QueueFamilyIndices indices;
+
     void pickPhysicalDevice();
     void setInstance(VkInstance &vkInstance);
     void createLogicalDevice();

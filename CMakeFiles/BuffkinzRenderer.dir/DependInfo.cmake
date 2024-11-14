@@ -9,9 +9,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/main.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.o.d"
+  "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanBufferManager.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanBufferManager.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanBufferManager.cpp.o.d"
+  "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanCommandModule.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanCommandModule.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanCommandModule.cpp.o.d"
   "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanDeviceManager.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanDeviceManager.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanDeviceManager.cpp.o.d"
   "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanInstanceManager.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanInstanceManager.cpp.o.d"
   "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanPipelineManager.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.o.d"
+  "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanPoolManager.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPoolManager.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPoolManager.cpp.o.d"
   "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanSwapchainManager.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanSwapchainManager.cpp.o.d"
   "/Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/vulkan_objects/VulkanWindowManager.cpp" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanWindowManager.cpp.o" "gcc" "CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanWindowManager.cpp.o.d"
   )

@@ -128,7 +128,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "BuffkinzRenderer::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-BuffkinzRenderer-Debug-24a9e46db8d774c49d1e.json",
+					"jsonFile" : "target-BuffkinzRenderer-Debug-f5d1368d31848fcb874f.json",
 					"name" : "BuffkinzRenderer",
 					"projectIndex" : 0
 				},
@@ -142,7 +142,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "shaders::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-shaders-Debug-e2a5f34ab4d5f8e70471.json",
+					"jsonFile" : "target-shaders-Debug-cff1b0f0459c0666dbfe.json",
 					"name" : "shaders",
 					"projectIndex" : 0
 				},

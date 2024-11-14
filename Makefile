@@ -250,6 +250,54 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/vulkan_objects/VulkanBufferManager.o: src/vulkan_objects/VulkanBufferManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanBufferManager.o
+
+# target to build an object file
+src/vulkan_objects/VulkanBufferManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanBufferManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanBufferManager.cpp.o
+
+src/vulkan_objects/VulkanBufferManager.i: src/vulkan_objects/VulkanBufferManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanBufferManager.i
+
+# target to preprocess a source file
+src/vulkan_objects/VulkanBufferManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanBufferManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanBufferManager.cpp.i
+
+src/vulkan_objects/VulkanBufferManager.s: src/vulkan_objects/VulkanBufferManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanBufferManager.s
+
+# target to generate assembly for a file
+src/vulkan_objects/VulkanBufferManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanBufferManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanBufferManager.cpp.s
+
+src/vulkan_objects/VulkanCommandModule.o: src/vulkan_objects/VulkanCommandModule.cpp.o
+.PHONY : src/vulkan_objects/VulkanCommandModule.o
+
+# target to build an object file
+src/vulkan_objects/VulkanCommandModule.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanCommandModule.cpp.o
+.PHONY : src/vulkan_objects/VulkanCommandModule.cpp.o
+
+src/vulkan_objects/VulkanCommandModule.i: src/vulkan_objects/VulkanCommandModule.cpp.i
+.PHONY : src/vulkan_objects/VulkanCommandModule.i
+
+# target to preprocess a source file
+src/vulkan_objects/VulkanCommandModule.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanCommandModule.cpp.i
+.PHONY : src/vulkan_objects/VulkanCommandModule.cpp.i
+
+src/vulkan_objects/VulkanCommandModule.s: src/vulkan_objects/VulkanCommandModule.cpp.s
+.PHONY : src/vulkan_objects/VulkanCommandModule.s
+
+# target to generate assembly for a file
+src/vulkan_objects/VulkanCommandModule.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanCommandModule.cpp.s
+.PHONY : src/vulkan_objects/VulkanCommandModule.cpp.s
+
 src/vulkan_objects/VulkanDeviceManager.o: src/vulkan_objects/VulkanDeviceManager.cpp.o
 .PHONY : src/vulkan_objects/VulkanDeviceManager.o
 
@@ -322,6 +370,30 @@ src/vulkan_objects/VulkanPipelineManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPipelineManager.cpp.s
 .PHONY : src/vulkan_objects/VulkanPipelineManager.cpp.s
 
+src/vulkan_objects/VulkanPoolManager.o: src/vulkan_objects/VulkanPoolManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanPoolManager.o
+
+# target to build an object file
+src/vulkan_objects/VulkanPoolManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPoolManager.cpp.o
+.PHONY : src/vulkan_objects/VulkanPoolManager.cpp.o
+
+src/vulkan_objects/VulkanPoolManager.i: src/vulkan_objects/VulkanPoolManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanPoolManager.i
+
+# target to preprocess a source file
+src/vulkan_objects/VulkanPoolManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPoolManager.cpp.i
+.PHONY : src/vulkan_objects/VulkanPoolManager.cpp.i
+
+src/vulkan_objects/VulkanPoolManager.s: src/vulkan_objects/VulkanPoolManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanPoolManager.s
+
+# target to generate assembly for a file
+src/vulkan_objects/VulkanPoolManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/vulkan_objects/VulkanPoolManager.cpp.s
+.PHONY : src/vulkan_objects/VulkanPoolManager.cpp.s
+
 src/vulkan_objects/VulkanSwapchainManager.o: src/vulkan_objects/VulkanSwapchainManager.cpp.o
 .PHONY : src/vulkan_objects/VulkanSwapchainManager.o
 
@@ -390,6 +462,12 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/vulkan_objects/VulkanBufferManager.o"
+	@echo "... src/vulkan_objects/VulkanBufferManager.i"
+	@echo "... src/vulkan_objects/VulkanBufferManager.s"
+	@echo "... src/vulkan_objects/VulkanCommandModule.o"
+	@echo "... src/vulkan_objects/VulkanCommandModule.i"
+	@echo "... src/vulkan_objects/VulkanCommandModule.s"
 	@echo "... src/vulkan_objects/VulkanDeviceManager.o"
 	@echo "... src/vulkan_objects/VulkanDeviceManager.i"
 	@echo "... src/vulkan_objects/VulkanDeviceManager.s"
@@ -399,6 +477,9 @@ help:
 	@echo "... src/vulkan_objects/VulkanPipelineManager.o"
 	@echo "... src/vulkan_objects/VulkanPipelineManager.i"
 	@echo "... src/vulkan_objects/VulkanPipelineManager.s"
+	@echo "... src/vulkan_objects/VulkanPoolManager.o"
+	@echo "... src/vulkan_objects/VulkanPoolManager.i"
+	@echo "... src/vulkan_objects/VulkanPoolManager.s"
 	@echo "... src/vulkan_objects/VulkanSwapchainManager.o"
 	@echo "... src/vulkan_objects/VulkanSwapchainManager.i"
 	@echo "... src/vulkan_objects/VulkanSwapchainManager.s"

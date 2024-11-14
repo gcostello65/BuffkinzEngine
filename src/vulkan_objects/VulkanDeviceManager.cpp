@@ -65,7 +65,6 @@ bool VulkanDeviceManager::checkAvailableExtensions(VkPhysicalDevice &device, std
 }
 
 QueueFamilyIndices VulkanDeviceManager::findQueueFamilies(VkPhysicalDevice device) {
-    QueueFamilyIndices indices;
     // Logic to find queue family indices to populate struct with
     uint32_t queueFamilyCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
@@ -99,7 +98,7 @@ QueueFamilyIndices VulkanDeviceManager::findQueueFamilies(VkPhysicalDevice devic
 
 void VulkanDeviceManager::createLogicalDevice() {
     // TODO: Consider making indices a class member variable so that it is not instantiated twice. No need for two calls to this method for same physicalDevice
-    QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
+    indices = findQueueFamilies(physicalDevice);
 
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
     std::set<uint32_t> uniqueQueues = {indices.graphicsFamily.value(), indices.presentFamily.value()};

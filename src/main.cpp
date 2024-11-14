@@ -15,6 +15,8 @@
 #include "vulkan_objects/VulkanWindowManager.h"
 #include "vulkan_objects/VulkanSwapChainManager.h"
 #include "vulkan_objects/VulkanPipelineManager.h"
+#include "vulkan_objects/VulkanBufferManager.h"
+#include "vulkan_objects/VulkanCommandModule.h"
 
 class HelloTriangleApplication {
 public:
@@ -24,6 +26,9 @@ public:
     VulkanWindowManager vulkanWindowManager;
     VulkanSwapChainManager vulkanSwapChainManager;
     VulkanPipelineManager vulkanPipelineManager;
+    VulkanBufferManager vulkanBufferManager;
+    VulkanPoolManager vulkanPoolManager;
+    VulkanCommandModule vulkanCommandModule;
 
     void run() {
         initWindow();
@@ -52,8 +57,17 @@ private:
         vulkanSwapChainManager.createSwapChain();
         vulkanSwapChainManager.createImageViews();
         vulkanPipelineManager.setDevice(vulkanDeviceManager.device);
+        vulkanPipelineManager.setSwapChainHandle(vulkanSwapChainManager);
         vulkanPipelineManager.createRenderPass();
         vulkanPipelineManager.createGraphicsPipeline();
+        vulkanBufferManager.setSwapChainManager(vulkanSwapChainManager);
+        vulkanBufferManager.setDeviceManager(&vulkanDeviceManager);
+        vulkanBufferManager.setPipelineManager(&vulkanPipelineManager);
+        vulkanPoolManager.createCommandPool();
+        vulkanBufferManager.setPoolManager(&vulkanPoolManager);
+        vulkanBufferManager.createFrameBuffers();
+        vulkanBufferManager.createCommandBuffer();
+        vulkanCommandModule.recordCommandBuffer(vulkanBufferManager.commandBuffer, 0);
     }
 
     void mainLoop() {
@@ -67,7 +81,12 @@ private:
         for (auto imageView : vulkanSwapChainManager.imageViews) {
             vkDestroyImageView(vulkanDeviceManager.device, imageView, nullptr);
         }
+        for (auto framebuffer : vulkanBufferManager.swapChainFramebuffers) {
+            vkDestroyFramebuffer(vulkanDeviceManager.device, framebuffer, nullptr);
+        }
+        vkDestroyPipeline(vulkanDeviceManager.device, vulkanPipelineManager.graphicsPipeline, nullptr);
         vkDestroyPipelineLayout(vulkanDeviceManager.device, vulkanPipelineManager.pipelineLayout, nullptr);
+        vkDestroyRenderPass(vulkanDeviceManager.device, vulkanPipelineManager.renderPass, nullptr);
         vkDestroySwapchainKHR(vulkanDeviceManager.device, vulkanSwapChainManager.swapChain, nullptr);
         vkDestroySurfaceKHR(vulkanInstanceManager.instance, vulkanWindowManager.surface, nullptr);
         vkDestroyDevice(vulkanDeviceManager.device, nullptr);
