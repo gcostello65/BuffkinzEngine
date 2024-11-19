@@ -11,9 +11,13 @@
 class VulkanPoolManager {
 public:
     VkCommandPool commandPool;
-    VulkanDeviceManager *vulkanDeviceManager;
 
+    void setDeviceManager(VulkanDeviceManager *deviceManager) {
+        vulkanDeviceManager = deviceManager;
+    }
     void createCommandPool();
+private:
+    VulkanDeviceManager *vulkanDeviceManager;
 };
 
 

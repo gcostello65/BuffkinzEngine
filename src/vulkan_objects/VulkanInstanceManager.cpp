@@ -81,6 +81,7 @@ void VulkanInstanceManager::createInstance() {
     // Look into why this works and the specific extensions in vulkan
     // This is needed in order to allow vulkan to use the moltenvk driver which is now portable? Look into this
     std::vector<const char *> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+
     extensions.push_back("VK_KHR_portability_enumeration"); // Example additional extension
     extensions.push_back("VK_KHR_get_physical_device_properties2"); // Example additional extension
 

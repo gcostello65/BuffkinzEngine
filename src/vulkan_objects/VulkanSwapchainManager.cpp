@@ -3,7 +3,6 @@
 //
 
 #include "VulkanSwapChainManager.h"
-#include "VulkanDeviceManager.h"
 
 void VulkanSwapChainManager::createSwapChain() {
     SwapChainSupportDetails details = querySwapChainSupport();

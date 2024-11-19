@@ -42,6 +42,7 @@ private:
 
     void initVulkan() {
         // TODO: make all of the public handles to member objects getters
+        // TODO: I should really just make one common config class that has all of these handles that I can add to each class and reference pointers
         vulkanInstanceManager.createInstance();
         vulkanInstanceManager.handleMessageCallbacks();
         vulkanWindowManager.createSurface(vulkanInstanceManager.instance, window);
@@ -63,10 +64,14 @@ private:
         vulkanBufferManager.setSwapChainManager(vulkanSwapChainManager);
         vulkanBufferManager.setDeviceManager(&vulkanDeviceManager);
         vulkanBufferManager.setPipelineManager(&vulkanPipelineManager);
+        vulkanPoolManager.setDeviceManager(&vulkanDeviceManager);
         vulkanPoolManager.createCommandPool();
         vulkanBufferManager.setPoolManager(&vulkanPoolManager);
         vulkanBufferManager.createFrameBuffers();
         vulkanBufferManager.createCommandBuffer();
+        vulkanCommandModule.setPipelineManager(&vulkanPipelineManager);
+        vulkanCommandModule.setSwapChainManager(&vulkanSwapChainManager);
+        vulkanCommandModule.setBufferManager(&vulkanBufferManager);
         vulkanCommandModule.recordCommandBuffer(vulkanBufferManager.commandBuffer, 0);
     }
 

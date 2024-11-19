@@ -1,4 +1,4 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine -B /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine
+/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -S /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine -B /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine
 CMake Warning (dev) at CMakeLists.txt:1 (project):
   cmake_minimum_required() should be called prior to this top-level project()
   call.  Please see the cmake-commands(7) manual for usage documentation of
@@ -18,6 +18,18 @@ CMake Warning (dev) at CMakeLists.txt:1 (project):
     CMAKE_PROJECT_VERSION_PATCH
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
+-- The C compiler identification is AppleClang 15.0.0.15000309
+-- The CXX compiler identification is AppleClang 15.0.0.15000309
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
 -- Including Cocoa support
 -- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
 -- Documentation generation requires Doxygen 1.9.8 or later
@@ -26,6 +38,6 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- FILE NAME: shader.frag, /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/shaders/bin
 -- FOUND SHADER
 -- FILE NAME: shader.vert, /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine/src/shaders/bin
--- Configuring done (0.2s)
+-- Configuring done (0.6s)
 -- Generating done (0.0s)
 -- Build files have been written to: /Users/gregcostello/Documents/dev/vulkan/BuffkinzEngine
