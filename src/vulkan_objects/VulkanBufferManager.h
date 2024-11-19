@@ -14,7 +14,7 @@
 class VulkanBufferManager {
 public:
     std::vector<VkFramebuffer> swapChainFramebuffers;
-    VulkanSwapChainManager vulkanSwapChainManager;
+    VulkanSwapChainManager *vulkanSwapChainManager;
     // Probably best practice to make all of these object members pointers since there will be a copy everytime... Might need to refactor
     VulkanDeviceManager *vulkanDeviceManager;
     VulkanPipelineManager *vulkanPipelineManager;
@@ -23,7 +23,7 @@ public:
 
     void createFrameBuffers();
     void createCommandBuffer();
-    void setSwapChainManager(VulkanSwapChainManager &swapChainManager) {
+    void setSwapChainManager(VulkanSwapChainManager *swapChainManager) {
         vulkanSwapChainManager = swapChainManager;
     }
 

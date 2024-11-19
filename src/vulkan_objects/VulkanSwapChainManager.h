@@ -48,7 +48,7 @@ private:
     VkPresentModeKHR choosePresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
     VkExtent2D chooseExtent(const VkSurfaceCapabilitiesKHR &capabilities);
 
-    void gatherSwapChainImages();
+    void gatherSwapChainImages(uint32_t imageCount);
 };
 
 

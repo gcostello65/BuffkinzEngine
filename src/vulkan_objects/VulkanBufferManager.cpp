@@ -7,13 +7,13 @@
 void VulkanBufferManager::createFrameBuffers() {
     // This note goes for all public member references. I know this is not the best practice, but I am trying to iterate quickly to learn vulkan
     // Not working on writing the best c++ code at this point. That will come in a large refactoring pass.
-    swapChainFramebuffers.resize(vulkanSwapChainManager.imageViews.size());
+    swapChainFramebuffers.resize(vulkanSwapChainManager->imageViews.size());
 
     // Creating one frame buffer per swapchain image since we can be rendering to any of the swapchain images and need a frame buffer for each
     // We then pick the frame buffer that has been rendered to in order to display
-    for (size_t i = 0; i < vulkanSwapChainManager.imageViews.size(); i++) {
+    for (size_t i = 0; i < vulkanSwapChainManager->imageViews.size(); i++) {
         VkImageView attachments[] = {
-                vulkanSwapChainManager.imageViews[i]
+                vulkanSwapChainManager->imageViews[i]
         };
 
         VkFramebufferCreateInfo framebufferInfo{};
@@ -21,8 +21,8 @@ void VulkanBufferManager::createFrameBuffers() {
         framebufferInfo.renderPass = vulkanPipelineManager->renderPass;
         framebufferInfo.attachmentCount = 1;
         framebufferInfo.pAttachments = attachments;
-        framebufferInfo.width = vulkanSwapChainManager.swapChainExtent.width;
-        framebufferInfo.height = vulkanSwapChainManager.swapChainExtent.height;
+        framebufferInfo.width = vulkanSwapChainManager->swapChainExtent.width;
+        framebufferInfo.height = vulkanSwapChainManager->swapChainExtent.height;
         framebufferInfo.layers = 1;
 
         if (vkCreateFramebuffer(vulkanDeviceManager->device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {

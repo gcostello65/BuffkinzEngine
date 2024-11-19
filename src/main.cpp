@@ -61,7 +61,7 @@ private:
         vulkanPipelineManager.setSwapChainHandle(vulkanSwapChainManager);
         vulkanPipelineManager.createRenderPass();
         vulkanPipelineManager.createGraphicsPipeline();
-        vulkanBufferManager.setSwapChainManager(vulkanSwapChainManager);
+        vulkanBufferManager.setSwapChainManager(&vulkanSwapChainManager);
         vulkanBufferManager.setDeviceManager(&vulkanDeviceManager);
         vulkanBufferManager.setPipelineManager(&vulkanPipelineManager);
         vulkanPoolManager.setDeviceManager(&vulkanDeviceManager);

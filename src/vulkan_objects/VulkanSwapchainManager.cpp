@@ -63,11 +63,11 @@ void VulkanSwapChainManager::createSwapChain() {
     if (vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapChain) != VK_SUCCESS) {
         throw std::runtime_error("failed to create swap chain!");
     }
+
+    gatherSwapChainImages(imageCount);
 }
 
-void VulkanSwapChainManager::gatherSwapChainImages() {
-    uint32_t imageCount;
-
+void VulkanSwapChainManager::gatherSwapChainImages(uint32_t imageCount) {
     vkGetSwapchainImagesKHR(device, swapChain, &imageCount, nullptr);
     swapChainImages.resize(imageCount);
     vkGetSwapchainImagesKHR(device, swapChain, &imageCount, swapChainImages.data());
@@ -199,5 +199,6 @@ void VulkanSwapChainManager::createImageViews() {
         if (vkCreateImageView(device, &createInfo, nullptr, &imageViews[i]) != VK_SUCCESS) {
             throw std::runtime_error("Could not create the image views for the swapchain images");
         }
+        i++;
     }
 }
