@@ -12,6 +12,12 @@
 
 class VulkanCommandModule {
 public:
+    VkSemaphore imageAvailableSemaphore;
+    VkSemaphore renderFinishedSemaphore;
+    VkFence inFlightFence;
+
+    void createSyncObjects();
+    void drawFrame();
     void setPipelineManager(VulkanPipelineManager *pipelineManager) {
         vulkanPipelineManager = pipelineManager;
     }
@@ -23,11 +29,17 @@ public:
     void setSwapChainManager(VulkanSwapChainManager *swapChainManager) {
         vulkanSwapChainManager = swapChainManager;
     }
+
+    void setDeviceManager(VulkanDeviceManager *deviceManager) {
+        vulkanDeviceManager = deviceManager;
+    }
     void recordCommandBuffer(VkCommandBuffer &commandBuffer, uint32_t imageIndex);
 private:
     VulkanPipelineManager *vulkanPipelineManager;
     VulkanBufferManager *vulkanBufferManager;
     VulkanSwapChainManager *vulkanSwapChainManager;
+    VulkanDeviceManager *vulkanDeviceManager;
+
 };
 
 

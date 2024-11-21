@@ -30,6 +30,7 @@ public:
     VulkanPoolManager vulkanPoolManager;
     VulkanCommandModule vulkanCommandModule;
 
+
     void run() {
         initWindow();
         initVulkan();
@@ -72,14 +73,18 @@ private:
         vulkanCommandModule.setPipelineManager(&vulkanPipelineManager);
         vulkanCommandModule.setSwapChainManager(&vulkanSwapChainManager);
         vulkanCommandModule.setBufferManager(&vulkanBufferManager);
+        vulkanCommandModule.setDeviceManager(&vulkanDeviceManager);
         vulkanCommandModule.recordCommandBuffer(vulkanBufferManager.commandBuffer, 0);
+        vulkanCommandModule.createSyncObjects();
     }
 
     void mainLoop() {
         while (!glfwWindowShouldClose(window)) {
-
             glfwPollEvents();
+            vulkanCommandModule.drawFrame();
         }
+
+        vkDeviceWaitIdle(vulkanDeviceManager.device);
     }
 
     void cleanup() {
@@ -89,6 +94,10 @@ private:
         for (auto framebuffer : vulkanBufferManager.swapChainFramebuffers) {
             vkDestroyFramebuffer(vulkanDeviceManager.device, framebuffer, nullptr);
         }
+        vkDestroySemaphore(vulkanDeviceManager.device, vulkanCommandModule.imageAvailableSemaphore, nullptr);
+        vkDestroySemaphore(vulkanDeviceManager.device, vulkanCommandModule.renderFinishedSemaphore, nullptr);
+        vkDestroyFence(vulkanDeviceManager.device, vulkanCommandModule.inFlightFence, nullptr);
+        vkDestroyCommandPool(vulkanDeviceManager.device, vulkanPoolManager.commandPool, nullptr);
         vkDestroyPipeline(vulkanDeviceManager.device, vulkanPipelineManager.graphicsPipeline, nullptr);
         vkDestroyPipelineLayout(vulkanDeviceManager.device, vulkanPipelineManager.pipelineLayout, nullptr);
         vkDestroyRenderPass(vulkanDeviceManager.device, vulkanPipelineManager.renderPass, nullptr);
