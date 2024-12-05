@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include "../engine_objects/Scene.h"
 
 // This is just the shader loader from vulkan tutorial, we should make something way more robust to allow multiple shaders and dynamic loading
 std::vector<char> VulkanPipelineManager::readFile(const std::basic_string<char> &filename) {
@@ -69,12 +70,15 @@ void VulkanPipelineManager::createGraphicsPipeline() {
 
     // Currently no vertex data until we start specifying meshes and such, hardcoding this to have nothing for now
     // This stores the per vertex or per instance data and I should do some more research on this in the future
+    std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions = Vertex::getAttributeDescriptions();
+    VkVertexInputBindingDescription bindingDescription = Vertex::getBindingDescription();
+
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertexInputInfo.vertexBindingDescriptionCount = 0;
-    vertexInputInfo.pVertexBindingDescriptions = nullptr; // Optional
-    vertexInputInfo.vertexAttributeDescriptionCount = 0;
-    vertexInputInfo.pVertexAttributeDescriptions = nullptr; // Optional
+    vertexInputInfo.vertexBindingDescriptionCount = 1;
+    vertexInputInfo.pVertexBindingDescriptions = &bindingDescription; // Optional
+    vertexInputInfo.vertexAttributeDescriptionCount = attributeDescriptions.size();
+    vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data(); // Optional
 
     // This struct sets up the geometry that will be used and if primitive restart should be used (Lookup primitive restart)
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{};

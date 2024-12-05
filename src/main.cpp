@@ -17,8 +17,9 @@
 #include "vulkan_objects/VulkanPipelineManager.h"
 #include "vulkan_objects/VulkanBufferManager.h"
 #include "vulkan_objects/VulkanCommandModule.h"
+#include "engine_objects/Scene.h"
 
-class HelloTriangleApplication {
+class VulkanInit {
 public:
     //TODO: Update all of the public members in the managers to have proper abstraction and getters and setters. Not great to have everything publicly exposed.
     VulkanInstanceManager vulkanInstanceManager;
@@ -30,10 +31,14 @@ public:
     VulkanPoolManager vulkanPoolManager;
     VulkanCommandModule vulkanCommandModule;
 
+    Scene scene;
+
 
     void run() {
         initWindow();
         initVulkan();
+
+        scene.loadScene("./assets/glTF/Sponza.gltf");
         mainLoop();
         cleanup();
     }
@@ -69,19 +74,20 @@ private:
         vulkanPoolManager.createCommandPool();
         vulkanBufferManager.setPoolManager(&vulkanPoolManager);
         vulkanBufferManager.createFrameBuffers();
-        vulkanBufferManager.createCommandBuffer();
+        vulkanBufferManager.createCommandBuffers();
         vulkanCommandModule.setPipelineManager(&vulkanPipelineManager);
         vulkanCommandModule.setSwapChainManager(&vulkanSwapChainManager);
         vulkanCommandModule.setBufferManager(&vulkanBufferManager);
         vulkanCommandModule.setDeviceManager(&vulkanDeviceManager);
-        vulkanCommandModule.recordCommandBuffer(vulkanBufferManager.commandBuffer, 0);
         vulkanCommandModule.createSyncObjects();
+
+        scene.vulkanBufferManager = &vulkanBufferManager;
     }
 
     void mainLoop() {
         while (!glfwWindowShouldClose(window)) {
             glfwPollEvents();
-            vulkanCommandModule.drawFrame();
+            vulkanCommandModule.drawFrame(&scene);
         }
 
         vkDeviceWaitIdle(vulkanDeviceManager.device);
@@ -94,9 +100,14 @@ private:
         for (auto framebuffer : vulkanBufferManager.swapChainFramebuffers) {
             vkDestroyFramebuffer(vulkanDeviceManager.device, framebuffer, nullptr);
         }
-        vkDestroySemaphore(vulkanDeviceManager.device, vulkanCommandModule.imageAvailableSemaphore, nullptr);
-        vkDestroySemaphore(vulkanDeviceManager.device, vulkanCommandModule.renderFinishedSemaphore, nullptr);
-        vkDestroyFence(vulkanDeviceManager.device, vulkanCommandModule.inFlightFence, nullptr);
+
+        for (int i = 0; i < vulkanBufferManager.MAX_FRAMES_IN_FLIGHT; i++) {
+            vkDestroySemaphore(vulkanDeviceManager.device, vulkanCommandModule.imageAvailableSemaphores[i], nullptr);
+            vkDestroySemaphore(vulkanDeviceManager.device, vulkanCommandModule.renderFinishedSemaphores[i], nullptr);
+            vkDestroyFence(vulkanDeviceManager.device, vulkanCommandModule.inFlightFences[i], nullptr);
+        }
+        vkDestroyBuffer(vulkanDeviceManager.device, scene.vertexBuffer, nullptr);
+        vkFreeMemory(vulkanDeviceManager.device, scene.vertexBufferMemory, nullptr);
         vkDestroyCommandPool(vulkanDeviceManager.device, vulkanPoolManager.commandPool, nullptr);
         vkDestroyPipeline(vulkanDeviceManager.device, vulkanPipelineManager.graphicsPipeline, nullptr);
         vkDestroyPipelineLayout(vulkanDeviceManager.device, vulkanPipelineManager.pipelineLayout, nullptr);
@@ -115,12 +126,12 @@ private:
         glfwInit();
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        window = glfwCreateWindow(800, 600, "Vulkan", nullptr, nullptr);
+        window = glfwCreateWindow(1920, 1080, "Vulkan", nullptr, nullptr);
     }
 };
 
 int main() {
-    HelloTriangleApplication app;
+    VulkanInit app;
 
     try {
         app.run();

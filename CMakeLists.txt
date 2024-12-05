@@ -28,18 +28,20 @@ add_executable(${PROJECT_NAME} ${VERT_SHADERS}
         src/vulkan_objects/VulkanPoolManager.cpp
         src/vulkan_objects/VulkanPoolManager.h
         src/vulkan_objects/VulkanCommandModule.cpp
-        src/vulkan_objects/VulkanCommandModule.h)
+        src/vulkan_objects/VulkanCommandModule.h
+        src/engine_objects/Scene.cpp
+        src/engine_objects/Scene.h)
 
 find_package(Vulkan REQUIRED)
+find_package(glm REQUIRED)
 
 add_subdirectory(lib/glfw-3.4)
 SET(GLM_TEST_ENABLE OFF CACHE BOOL "GLM Build unit tests")
-add_subdirectory(lib/glm      EXCLUDE_FROM_ALL)
 
 if (VULKAN_FOUND)
     message(STATUS "Found Vulkan, Including and Linking now")
-    include_directories(${Vulkan_INCLUDE_DIRS})
-    target_link_libraries (${PROJECT_NAME} ${Vulkan_LIBRARIES} glfw)
+    include_directories(${Vulkan_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/include)
+    target_link_libraries (${PROJECT_NAME} ${Vulkan_LIBRARIES} glfw ${CMAKE_CURRENT_SOURCE_DIR}/lib/assimp/bin/libassimp.dylib glm::glm)
 endif (VULKAN_FOUND)
 
 execute_process(

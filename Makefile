@@ -226,6 +226,30 @@ update_mappings/fast:
 	$(MAKE) $(MAKESILENT) -f lib/glfw-3.4/src/CMakeFiles/update_mappings.dir/build.make lib/glfw-3.4/src/CMakeFiles/update_mappings.dir/build
 .PHONY : update_mappings/fast
 
+src/engine_objects/Scene.o: src/engine_objects/Scene.cpp.o
+.PHONY : src/engine_objects/Scene.o
+
+# target to build an object file
+src/engine_objects/Scene.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/engine_objects/Scene.cpp.o
+.PHONY : src/engine_objects/Scene.cpp.o
+
+src/engine_objects/Scene.i: src/engine_objects/Scene.cpp.i
+.PHONY : src/engine_objects/Scene.i
+
+# target to preprocess a source file
+src/engine_objects/Scene.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/engine_objects/Scene.cpp.i
+.PHONY : src/engine_objects/Scene.cpp.i
+
+src/engine_objects/Scene.s: src/engine_objects/Scene.cpp.s
+.PHONY : src/engine_objects/Scene.s
+
+# target to generate assembly for a file
+src/engine_objects/Scene.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BuffkinzRenderer.dir/build.make CMakeFiles/BuffkinzRenderer.dir/src/engine_objects/Scene.cpp.s
+.PHONY : src/engine_objects/Scene.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -459,6 +483,9 @@ help:
 	@echo "... update_mappings"
 	@echo "... BuffkinzRenderer"
 	@echo "... glfw"
+	@echo "... src/engine_objects/Scene.o"
+	@echo "... src/engine_objects/Scene.i"
+	@echo "... src/engine_objects/Scene.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

@@ -9,15 +9,18 @@
 #include <stdexcept>
 #include "VulkanPipelineManager.h"
 #include "VulkanBufferManager.h"
+#include "../engine_objects/Scene.h"
 
 class VulkanCommandModule {
 public:
-    VkSemaphore imageAvailableSemaphore;
-    VkSemaphore renderFinishedSemaphore;
-    VkFence inFlightFence;
+    const static int MAX_FRAMES_IN_FLIGHT = 2;
+    std::vector<VkSemaphore> imageAvailableSemaphores;
+    std::vector<VkSemaphore> renderFinishedSemaphores;
+    std::vector<VkFence> inFlightFences;
+    uint32_t currentFrame = 0;
 
     void createSyncObjects();
-    void drawFrame();
+    void drawFrame(Scene *scene);
     void setPipelineManager(VulkanPipelineManager *pipelineManager) {
         vulkanPipelineManager = pipelineManager;
     }
@@ -33,13 +36,13 @@ public:
     void setDeviceManager(VulkanDeviceManager *deviceManager) {
         vulkanDeviceManager = deviceManager;
     }
-    void recordCommandBuffer(VkCommandBuffer &commandBuffer, uint32_t imageIndex);
 private:
     VulkanPipelineManager *vulkanPipelineManager;
     VulkanBufferManager *vulkanBufferManager;
     VulkanSwapChainManager *vulkanSwapChainManager;
     VulkanDeviceManager *vulkanDeviceManager;
 
+    void recordCommandBuffer(VkCommandBuffer &commandBuffer, uint32_t imageIndex, Scene *scene);
 };
 
 

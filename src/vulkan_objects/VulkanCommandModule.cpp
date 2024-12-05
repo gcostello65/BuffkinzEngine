@@ -4,7 +4,7 @@
 
 #include "VulkanCommandModule.h"
 
-void VulkanCommandModule::recordCommandBuffer(VkCommandBuffer &commandBuffer, uint32_t imageIndex) {
+void VulkanCommandModule::recordCommandBuffer(VkCommandBuffer &commandBuffer, uint32_t imageIndex, Scene* scene) {
     VkCommandBufferBeginInfo beginInfo{};
 
     // Look into the flags that can show how the command buffer will be used
@@ -46,7 +46,12 @@ void VulkanCommandModule::recordCommandBuffer(VkCommandBuffer &commandBuffer, ui
     scissor.extent = vulkanSwapChainManager->swapChainExtent;
     vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-    vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+    // Here is where we set the buffer to be bound to the pipeline
+    VkBuffer vertexBuffers[] = {scene->vertexBuffer};
+    VkDeviceSize offsets[] = {0}; // TODO: Lookup what this can be used for in the future
+    vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+
+    vkCmdDraw(commandBuffer, scene->vertices.size(), 1, 0, 0);
 
     vkCmdEndRenderPass(commandBuffer);
 
@@ -56,6 +61,10 @@ void VulkanCommandModule::recordCommandBuffer(VkCommandBuffer &commandBuffer, ui
 }
 
 void VulkanCommandModule::createSyncObjects() {
+    imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+    renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+    inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
+
     VkSemaphoreCreateInfo semaphoreInfo{};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
@@ -63,41 +72,46 @@ void VulkanCommandModule::createSyncObjects() {
     fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-    if (vkCreateSemaphore(vulkanDeviceManager->device, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
-        vkCreateSemaphore(vulkanDeviceManager->device, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS ||
-        vkCreateFence(vulkanDeviceManager->device, &fenceCreateInfo, nullptr, &inFlightFence) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create semaphores!");
+    for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        if (vkCreateSemaphore(vulkanDeviceManager->device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) !=
+            VK_SUCCESS ||
+            vkCreateSemaphore(vulkanDeviceManager->device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) !=
+            VK_SUCCESS ||
+            vkCreateFence(vulkanDeviceManager->device, &fenceCreateInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+            throw std::runtime_error("failed to create semaphores!");
+        }
     }
 }
 
-void VulkanCommandModule::drawFrame() {
-    vkWaitForFences(vulkanDeviceManager->device, 1, &inFlightFence, VK_TRUE, UINT64_MAX);
+void VulkanCommandModule::drawFrame(Scene* scene) {
 
-    vkResetFences(vulkanDeviceManager->device, 1, &inFlightFence);
+    vkWaitForFences(vulkanDeviceManager->device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+
+    vkResetFences(vulkanDeviceManager->device, 1, &inFlightFences[currentFrame]);
     uint32_t imageIndex;
-    vkAcquireNextImageKHR(vulkanDeviceManager->device, vulkanSwapChainManager->swapChain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+    vkAcquireNextImageKHR(vulkanDeviceManager->device, vulkanSwapChainManager->swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
-    vkResetCommandBuffer(vulkanBufferManager->commandBuffer, 0);
+    vkResetCommandBuffer(vulkanBufferManager->commandBuffers[currentFrame], 0);
 
-    recordCommandBuffer(vulkanBufferManager->commandBuffer, imageIndex);
+    recordCommandBuffer(vulkanBufferManager->commandBuffers[currentFrame], imageIndex, scene);
 
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-    VkSemaphore waitSemaphores[] = {imageAvailableSemaphore};
+    VkSemaphore waitSemaphores[] = {imageAvailableSemaphores[currentFrame]};
     VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
     submitInfo.waitSemaphoreCount = 1;
     submitInfo.pWaitSemaphores = waitSemaphores;
     submitInfo.pWaitDstStageMask = waitStages;
 
     submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &vulkanBufferManager->commandBuffer;
+    submitInfo.pCommandBuffers = &vulkanBufferManager->commandBuffers[currentFrame];
 
-    VkSemaphore signalSemaphores[] = {renderFinishedSemaphore};
+    VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
 
-    if (vkQueueSubmit(vulkanDeviceManager->graphicsQueue, 1, &submitInfo, inFlightFence) != VK_SUCCESS) {
+    if (vkQueueSubmit(vulkanDeviceManager->graphicsQueue, 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
         throw std::runtime_error("failed to submit draw command buffer!");
     }
 
@@ -114,4 +128,6 @@ void VulkanCommandModule::drawFrame() {
 
     presentInfo.pResults = nullptr; // Optional
     vkQueuePresentKHR(vulkanDeviceManager->presentQueue, &presentInfo);
+
+    currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }
