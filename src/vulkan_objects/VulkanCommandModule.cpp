@@ -46,12 +46,13 @@ void VulkanCommandModule::recordCommandBuffer(VkCommandBuffer &commandBuffer, ui
     scissor.extent = vulkanSwapChainManager->swapChainExtent;
     vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-    // Here is where we set the buffer to be bound to the pipeline
+    // Here is where we set the buffers to be bound to the pipeline
     VkBuffer vertexBuffers[] = {scene->vertexBuffer};
     VkDeviceSize offsets[] = {0}; // TODO: Lookup what this can be used for in the future
     vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+    vkCmdBindIndexBuffer(commandBuffer, scene->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
 
-    vkCmdDraw(commandBuffer, scene->vertices.size(), 1, 0, 0);
+    vkCmdDrawIndexed(commandBuffer, scene->indices.size(), 1, 0, 0, 0);
 
     vkCmdEndRenderPass(commandBuffer);
 

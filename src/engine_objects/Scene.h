@@ -16,10 +16,15 @@ class Scene {
 public:
     VkBuffer vertexBuffer;
     VkDeviceMemory vertexBufferMemory;
+
+    VkBuffer indexBuffer;
+    VkDeviceMemory indexBufferMemory;
+
     VulkanBufferManager* vulkanBufferManager;
 
     // TEMPORARY VARIABLE
     std::vector<Vertex> vertices;
+    std::vector<uint32_t> indices;
 
     std::vector<aiMesh*> meshes;
     std::vector<aiMaterial*> materials;

@@ -108,6 +108,8 @@ private:
         }
         vkDestroyBuffer(vulkanDeviceManager.device, scene.vertexBuffer, nullptr);
         vkFreeMemory(vulkanDeviceManager.device, scene.vertexBufferMemory, nullptr);
+        vkDestroyBuffer(vulkanDeviceManager.device, scene.indexBuffer, nullptr);
+        vkFreeMemory(vulkanDeviceManager.device, scene.indexBufferMemory, nullptr);
         vkDestroyCommandPool(vulkanDeviceManager.device, vulkanPoolManager.commandPool, nullptr);
         vkDestroyPipeline(vulkanDeviceManager.device, vulkanPipelineManager.graphicsPipeline, nullptr);
         vkDestroyPipelineLayout(vulkanDeviceManager.device, vulkanPipelineManager.pipelineLayout, nullptr);

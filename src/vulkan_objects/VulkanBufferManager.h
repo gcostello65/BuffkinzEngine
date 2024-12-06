@@ -61,6 +61,8 @@ public:
     void createFrameBuffers();
     void createCommandBuffers();
     void createVertexBuffer(uint32_t vertexCount, VkBuffer *vertexBuffer, VkDeviceMemory *vertexBufferMemory, const std::vector<Vertex>* vertices);
+    void createIndexBuffer(uint32_t indexCount, VkBuffer *indexBuffer, VkDeviceMemory *indexBufferMemory, const std::vector<uint32_t>* indices);
+
 
     uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
     void setSwapChainManager(VulkanSwapChainManager *swapChainManager) {
@@ -78,6 +80,11 @@ public:
     void setPoolManager(VulkanPoolManager *vulkanPoolManager) {
         this->vulkanPoolManager = vulkanPoolManager;
     }
+
+    void createBuffer(VkDeviceSize size, VkDeviceMemory &bufferMemory, VkBufferUsageFlags usage,
+                      VkMemoryPropertyFlags properties, VkBuffer *bufferHandle);
+
+    void copyBuffer(VkBuffer sourceBuffer, VkBuffer destinationBuffer, VkDeviceSize size);
 };
 
 
